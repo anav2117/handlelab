@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HandleLab Pro - Compartir</title>
+    <title>HandleLab Pro - Entrenamiento Estructurado</title>
     <style>
         body { background: #060810; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .box { width: 90%; max-width: 400px; border: 2px solid #ff6600; padding: 20px; border-radius: 25px; background: rgba(20,20,25,0.9); text-align: center; }
-        input { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 12px; margin-bottom: 10px; width: 100%; box-sizing: border-box; border-radius: 8px; }
+        input, select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 12px; margin-bottom: 10px; width: 100%; box-sizing: border-box; border-radius: 8px; }
         #timer { font-size: 3rem; color: #ff6600; font-weight: bold; }
         #counter { font-size: 1.5rem; color: #ff9933; margin: 10px 0; }
         .btn { background: #ff6600; color: black; padding: 15px; border-radius: 12px; border: none; font-weight: bold; width: 100%; cursor: pointer; margin-top: 5px; }
@@ -19,7 +19,11 @@
     <div class="box">
         <h1>HandleLab</h1>
         <input type="text" id="username" placeholder="Nombre del jugador" onchange="usuario = this.value">
-        <input type="number" id="custom-time" value="60">
+        <select id="programa">
+            <option value="60">Calentamiento (60s)</option>
+            <option value="120">Intensidad Media (120s)</option>
+            <option value="180">Élite (180s)</option>
+        </select>
         <div id="timer">00:00</div>
         <div id="counter">Botes: 0</div>
         <button class="btn" onclick="iniciarEntrenamiento()">INICIAR ENTRENAMIENTO</button>
@@ -34,12 +38,9 @@
         window.onload = mostrarHistorial;
 
         const motivaciones = [
-            "¡Mantén la mirada al frente, no mires el balón!",
-            "¡Trabaja con la punta de los dedos!",
-            "¡Baja el centro de gravedad, mantente fuerte!",
-            "¡Control total del balón!",
-            "¡Sigue trabajando ese crossover!",
-            "¡Eso es, explota en cada bote!"
+            "¡Mantén la mirada al frente!", "¡Trabaja con la punta de los dedos!",
+            "¡Baja el centro de gravedad!", "¡Control total!",
+            "¡Explota en cada bote!"
         ];
 
         function playSound() {
@@ -58,16 +59,14 @@
 
         function iniciarEntrenamiento() {
             botes = 0;
-            let tiempo = parseInt(document.getElementById('custom-time').value);
+            let tiempo = parseInt(document.getElementById('programa').value);
             document.getElementById('counter').innerText = "Botes: 0";
             
             timer = setInterval(() => {
                 botes++;
                 playSound();
                 document.getElementById('counter').innerText = "Botes: " + botes;
-                if (botes > 0 && botes % 25 === 0) { 
-                    coachSay(motivaciones[Math.floor(Math.random() * motivaciones.length)]);
-                }
+                if (botes % 25 === 0) coachSay(motivaciones[Math.floor(Math.random() * motivaciones.length)]);
                 if (--tiempo <= 0) {
                     clearInterval(timer);
                     guardarSesion();
@@ -77,13 +76,10 @@
         }
 
         function compartirResultados() {
-            const tiempo = document.getElementById('custom-time').value;
-            const texto = `🏀 ¡HandleLab! Mi sesión de hoy: ${botes} botes en ${tiempo} segundos. ¡Atrévete a superarme!`;
-            if (navigator.share) {
-                navigator.share({ title: 'Mi récord HandleLab', text: texto });
-            } else {
-                prompt("Copia este mensaje para compartir:", texto);
-            }
+            const programa = document.getElementById('programa').options[document.getElementById('programa').selectedIndex].text;
+            const texto = `🏀 ¡HandleLab! Sesión: ${programa}. Logré: ${botes} botes. ¡Atrévete a superarme!`;
+            if (navigator.share) { navigator.share({ title: 'Mi récord HandleLab', text: texto }); } 
+            else { prompt("Copia esto:", texto); }
         }
 
         function guardarSesion() {
@@ -104,3 +100,4 @@
     </script>
 </body>
 </html>
+
