@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>HandleLab Pro - Interactive</title>
+    <title>HandleLab Pro - Basketball Edition</title>
     <style>
         body { background: #060810; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .box { width: 90%; max-width: 400px; border: 2px solid #ff6600; padding: 20px; border-radius: 25px; background: rgba(20,20,25,0.9); text-align: center; }
@@ -15,7 +15,7 @@
 <body>
     <div class="box">
         <h1>HandleLab</h1>
-        <input type="text" id="username" placeholder="Tu nombre" onchange="usuario = this.value">
+        <input type="text" id="username" placeholder="Nombre del jugador" onchange="usuario = this.value">
         <input type="number" id="custom-time" value="60">
         <div id="timer">00:00</div>
         <div id="counter">Botes: 0</div>
@@ -25,7 +25,15 @@
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let botes = 0, usuario = "Invitado", timer = null;
-        const motivaciones = ["¡Vamos, sigue así!", "¡Más fuerte!", "¡No pares!", "¡Excelente ritmo!"];
+        
+        const motivaciones = [
+            "¡Mantén la mirada al frente, no mires el balón!",
+            "¡Trabaja con la punta de los dedos!",
+            "¡Baja el centro de gravedad, mantente fuerte!",
+            "¡Control total del balón!",
+            "¡Sigue trabajando ese crossover!",
+            "¡Eso es, explota en cada bote!"
+        ];
 
         function playSound() {
             const osc = audioCtx.createOscillator();
@@ -37,24 +45,28 @@
         function coachSay(texto) {
             const msg = new SpeechSynthesisUtterance(texto);
             msg.lang = 'es-ES';
+            msg.pitch = 1.1; // Un tono de entrenador con energía
             window.speechSynthesis.speak(msg);
         }
 
         function iniciarEntrenamiento() {
             botes = 0;
             let tiempo = parseInt(document.getElementById('custom-time').value);
+            document.getElementById('counter').innerText = "Botes: 0";
             
             timer = setInterval(() => {
                 botes++;
-                playSound(); // Sonido por cada bote
+                playSound();
                 document.getElementById('counter').innerText = "Botes: " + botes;
                 
-                // Motivación aleatoria cada 20 botes
-                if (botes % 20 === 0) coachSay(motivaciones[Math.floor(Math.random() * motivaciones.length)]);
+                // El Coach habla cada 25 botes para mantener intensidad sin molestar
+                if (botes > 0 && botes % 25 === 0) { 
+                    coachSay(motivaciones[Math.floor(Math.random() * motivaciones.length)]);
+                }
                 
                 if (--tiempo <= 0) {
                     clearInterval(timer);
-                    coachSay("¡Tiempo terminado! Gran trabajo.");
+                    coachSay("¡Tiempo! Gran sesión, sigue practicando ese manejo.");
                 }
             }, 1000);
         }
