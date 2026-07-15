@@ -1,305 +1,289 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HandleLab AI</title>
-    <!-- Configuración para que el celular la reconozca como App -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#0c0f12">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5351/5351477.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HandleLab AI Coach</title>
+  <style>
+    /* Estilos Generales */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0b0f19;
+      color: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
-    <style>
-        body { margin: 0; background: #0c0f12; color: #ffffff; font-family: 'Segoe UI', Roboto, sans-serif; text-align: center; padding: 10px; }
-        h1 { margin: 5px 0; font-size: 1.4rem; color: #ff6600; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .lang-selector { margin-bottom: 10px; display: flex; justify-content: center; gap: 10px; }
-        .btn-lang { background: #222; color: white; border: 1px solid #444; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
-        .btn-lang.active { background: #ff6600; border-color: #ff6600; font-weight: bold; }
+    .container {
+      width: 100%;
+      max-width: 450px;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+    }
 
-        #feedback-banner { background: #ff3333; color: white; padding: 12px; border-radius: 8px; margin: 10px auto; width: 90%; max-width: 360px; font-weight: bold; font-size: 1.1rem; display: none; box-shadow: 0 0 15px rgba(255,51,51,0.5); }
+    /* Sistema de Pantallas y Transiciones (Fade) */
+    .screen {
+      transition: opacity 0.5s ease-in-out;
+      opacity: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
 
-        .stats-container { display: flex; justify-content: space-around; background: #1a1f26; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
-        .stat-box { flex: 1; }
-        .stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
-        .stat-value { font-size: 2rem; font-weight: bold; color: #00ffcc; margin-top: 5px; }
-        
-        .metro-controls { background: #1a1f26; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
-        .btn { background: #ff6600; color: white; border: none; padding: 10px 20px; font-size: 1rem; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 8px; width: 80%; }
-        .btn:active { background: #cc5200; }
-        input[type=range] { width: 80%; margin: 10px 0; accent-color: #ff6600; }
+    .screen.active {
+      display: flex;
+      opacity: 1;
+    }
 
-        #canvas-container { position: relative; width: 100%; max-width: 400px; margin: auto; }
-        video, canvas { width: 100%; border-radius: 12px; border: 2px solid #333; }
-        canvas { position: absolute; top: 0; left: 0; }
+    /* PANTALLA 1: PORTADA */
+    .logo-container {
+      margin-bottom: 40px;
+    }
 
-        /* Botón de instalación de App */
-        #btn-install { background: #00ffcc; color: #000; display: none; margin: 10px auto; width: 90%; max-width: 360px; }
-    </style>
+    .flame-logo {
+      font-size: 5rem;
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    h1 {
+      color: #ff6600;
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      margin: 10px 0 0 0;
+      text-transform: uppercase;
+    }
+
+    /* Botón START con Degradado Premium */
+    .btn-gradient {
+      background: linear-gradient(135deg, #ffcc00 0%, #ff6600 50%, #cc0000 100%);
+      color: #ffffff;
+      border: none;
+      padding: 18px 50px;
+      font-size: 1.6rem;
+      font-weight: bold;
+      border-radius: 50px;
+      box-shadow: 0 5px 25px rgba(255, 102, 0, 0.4);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-gradient:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 10px rgba(255, 102, 0, 0.2);
+    }
+
+    /* PANTALLA 2: REGISTRO */
+    h2 {
+      color: #ffaa00;
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+
+    .registro-form {
+      width: 100%;
+      background: #111827;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      box-sizing: border-box;
+    }
+
+    .input-group {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .input-group label {
+      display: block;
+      color: #9ca3af;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #374151;
+      background-color: #1f2937;
+      color: white;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-selector {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #374151;
+      background-color: #1f2937;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .btn-selector.selected {
+      border-color: #ff6600;
+      background-color: rgba(255, 102, 0, 0.2);
+      color: #ffaa00;
+    }
+
+    .btn-solid {
+      width: 100%;
+      background-color: #ff6600;
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+      margin-top: 10px;
+    }
+
+    .btn-solid:active {
+      transform: scale(0.98);
+    }
+
+    /* Animación del Logo */
+    @keyframes pulse {
+      0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255,102,0,0.5)); }
+      100% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(255,102,0,0.8)); }
+    }
+  </style>
 </head>
 <body>
 
-    <h1>HandleLab AI Coach</h1>
-
-    <!-- Botón para instalar en el cel -->
-    <button id="btn-install" class="btn">📲 INSTALAR HANDLELAB APP</button>
-
-    <div class="lang-selector">
-        <button id="btn-es" class="btn-lang active" onclick="setLanguage('es')">Español 🇪🇸</button>
-        <button id="btn-en" class="btn-lang" onclick="setLanguage('en')">English 🇺🇸</button>
-    </div>
-
-    <div id="feedback-banner">ESCUCHANDO AL COACH...</div>
+  <div class="container">
     
-    <div class="stats-container">
-        <div class="stat-box">
-            <div id="lbl-bounces" class="stat-label">Botes</div>
-            <div id="contador" class="stat-value">0</div>
-        </div>
-        <div class="stat-box">
-            <div id="lbl-tempo" class="stat-label">Tempo (BPM)</div>
-            <div id="bpm-val" class="stat-value">100</div>
-        </div>
-    </div>
+    <!-- PANTALLA 1: PORTADA -->
+    <section id="portada-screen" class="screen active">
+      <div class="logo-container">
+        <div class="flame-logo">🔥</div>
+        <h1>HandleLab</h1>
+      </div>
+      <button id="btn-start" class="btn-gradient">START</button>
+    </section>
 
-    <div class="metro-controls">
-        <div id="lbl-metro-title" style="font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">⏱️ RITMO DE ENTRENAMIENTO</div>
-        <input type="range" id="bpm-slider" min="60" max="200" value="100">
-        <button id="btn-metro" class="btn">ACTIVAR RITMO</button>
-    </div>
-    
-    <div id="canvas-container">
-        <video id="webcam" autoplay playsinline muted></video>
-        <canvas id="output_canvas"></canvas>
-    </div>
-
-    <script>
-        // Registrar el Service Worker para permitir la instalación
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-            .then(() => console.log("Service Worker Registrado con éxito"));
-        }
-
-        // Lógica del botón de instalar
-        let deferredPrompt;
-        const btnInstall = document.getElementById('btn-install');
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            btnInstall.style.display = 'block';
-        });
-
-        btnInstall.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    btnInstall.style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
-
-        const videoElement = document.getElementById('webcam');
-        const canvasElement = document.getElementById('output_canvas');
-        const canvasCtx = canvasElement.getContext('2d');
-        const contadorDiv = document.getElementById('contador');
-        const feedbackBanner = document.getElementById('feedback-banner');
+    <!-- PANTALLA 2: REGISTRO -->
+    <section id="registro-screen" class="screen">
+      <h2>Crea tu Perfil</h2>
+      <form id="registro-form" class="registro-form">
         
-        let currentLang = 'es';
-        const locales = {
-            es: {
-                bounces: "Botes",
-                tempo: "Tempo (BPM)",
-                metroTitle: "⏱️ RITMO DE ENTRENAMIENTO",
-                btnActive: "ACTIVAR RITMO",
-                btnStop: "DETENER RITMO",
-                voiceHead: "¡Levanta la cabeza!",
-                voiceHigh: "Bote muy alto, baja la cadera"
-            },
-            en: {
-                bounces: "Dribbles",
-                tempo: "Tempo (BPM)",
-                metroTitle: "⏱️ TRAINING PACE",
-                btnActive: "START PACE",
-                btnStop: "STOP PACE",
-                voiceHead: "Lift your head up!",
-                voiceHigh: "Dribble too high, get lower"
-            }
-        };
+        <div class="input-group">
+          <label for="alias">Alias (Máx 15 car.)</label>
+          <input type="text" id="alias" maxlength="15" placeholder="Ej. Kyrie01" required>
+        </div>
 
-        let systemVoices = [];
-        function loadVoices() {
-            systemVoices = window.speechSynthesis.getVoices();
-        }
-        loadVoices();
-        if (window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = loadVoices;
-        }
+        <div class="input-group">
+          <label for="edad">Edad</label>
+          <input type="number" id="edad" min="5" max="99" placeholder="Tu edad" required>
+        </div>
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.getElementById('btn-es').classList.toggle('active', lang === 'es');
-            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-            document.getElementById('lbl-bounces').innerText = locales[lang].bounces;
-            document.getElementById('lbl-tempo').innerText = locales[lang].tempo;
-            document.getElementById('lbl-metro-title').innerText = locales[lang].metroTitle;
-            document.getElementById('btn-metro').innerText = isMetroPlaying ? locales[lang].btnStop : locales[lang].btnActive;
-        }
+        <div class="input-group">
+          <label>Mano Dominante</label>
+          <div class="radio-group">
+            <button type="button" class="btn-selector" id="btn-izq" onclick="seleccionarMano('izquierda')">Izquierda</button>
+            <button type="button" class="btn-selector" id="btn-der" onclick="seleccionarMano('derecha')">Derecha</button>
+          </div>
+        </div>
 
-        let bounceCount = 0;
-        let ballGoingDown = true;
-        let lastHandY = 0;
-        let lastVoiceAlertTime = 0;
+        <div class="input-group">
+          <label for="idioma">Idioma</label>
+          <select id="idioma">
+            <option value="es">Español 🇪🇸</option>
+            <option value="en">English 🇺🇸</option>
+          </select>
+        </div>
 
-        function speakAlert(text) {
-            const now = Date.now();
-            if (now - lastVoiceAlertTime < 4500) return;
-            lastVoiceAlertTime = now;
+        <button type="submit" class="btn-solid">CONTINUE</button>
+      </form>
+    </section>
 
-            feedbackBanner.innerText = text;
-            feedbackBanner.style.display = 'block';
-            setTimeout(() => { feedbackBanner.style.display = 'none'; }, 3000);
+  </div>
 
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            const targetLang = currentLang === 'es' ? 'es' : 'en';
-            const matchedVoice = systemVoices.find(v => v.lang.startsWith(targetLang));
-            
-            if (matchedVoice) utterance.voice = matchedVoice;
-            utterance.lang = currentLang === 'es' ? 'es-ES' : 'en-US';
-            utterance.rate = 1.0;
-            utterance.pitch = 1.0;
-            window.speechSynthesis.speak(utterance);
-        }
+  <script>
+    let manoDominante = '';
 
-        let audioCtx = null;
-        let isMetroPlaying = false;
-        let metroInterval = null;
-        const bpmSlider = document.getElementById('bpm-slider');
-        const bpmVal = document.getElementById('bpm-val');
-        const btnMetro = document.getElementById('btn-metro');
+    // Manejo de la selección de mano dominante
+    function seleccionarMano(mano) {
+      document.getElementById('btn-izq').classList.remove('selected');
+      document.getElementById('btn-der').classList.remove('selected');
+      
+      if (mano === 'izquierda') {
+        document.getElementById('btn-izq').classList.add('selected');
+      } else {
+        document.getElementById('btn-der').classList.add('selected');
+      }
+      manoDominante = mano;
+    }
 
-        bpmSlider.addEventListener('input', (e) => {
-            bpmVal.innerText = e.target.value;
-            if (isMetroPlaying) {
-                stopMetronome();
-                startMetronome();
-            }
-        });
+    // Transición de Portada a Registro (Fade-out suave)
+    document.getElementById('btn-start').addEventListener('click', () => {
+      const portada = document.getElementById('portada-screen');
+      const registro = document.getElementById('registro-screen');
 
-        btnMetro.addEventListener('click', () => {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (isMetroPlaying) {
-                stopMetronome();
-                btnMetro.innerText = locales[currentLang].btnActive;
-                btnMetro.style.background = "#ff6600";
-            } else {
-                startMetronome();
-                btnMetro.innerText = locales[currentLang].btnStop;
-                btnMetro.style.background = "#e60000";
-                speakAlert(currentLang === 'es' ? "Entrenamiento iniciado" : "Workout started");
-            }
-        });
+      portada.style.opacity = '0';
+      
+      setTimeout(() => {
+        portada.style.display = 'none';
+        portada.classList.remove('active');
+        
+        registro.style.display = 'flex';
+        // Forzamos un reflow del navegador para aplicar la animación
+        void registro.offsetWidth;
+        registro.classList.add('active');
+        registro.style.opacity = '1';
+      }, 500);
+    });
 
-        function playBeep() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = 800;
-            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
-        }
+    // Guardado de Datos y envío al Módulo 2 (Home)
+    document.getElementById('registro-form').addEventListener('submit', (e) => {
+      e.preventDefault();
 
-        function startMetronome() {
-            isMetroPlaying = true;
-            const bpm = parseInt(bpmSlider.value);
-            const intervalMs = (60 / bpm) * 1000;
-            metroInterval = setInterval(playBeep, intervalMs);
-        }
+      if (!manoDominante) {
+        alert("Por favor, selecciona tu mano dominante.");
+        return;
+      }
 
-        function stopMetronome() {
-            isMetroPlaying = false;
-            clearInterval(metroInterval);
-        }
+      const perfil = {
+        alias: document.getElementById('alias').value,
+        edad: document.getElementById('edad').value,
+        manoDominante: manoDominante,
+        idioma: document.getElementById('idioma').value,
+        handleScore: 0,
+        nivel: 1
+      };
 
-        const pose = new Pose({
-            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@pose/${file}`
-        });
-
-        pose.setOptions({
-            modelComplexity: 1,
-            smoothLandmarks: true,
-            minDetectionConfidence: 0.5,
-            minTrackingConfidence: 0.5
-        });
-
-        pose.onResults((results) => {
-            canvasCtx.save();
-            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            
-            if (results.poseLandmarks) {
-                results.poseLandmarks.slice(15, 21).forEach(landmark => {
-                    const x = landmark.x * canvasElement.width;
-                    const y = landmark.y * canvasElement.height;
-                    canvasCtx.beginPath();
-                    canvasCtx.arc(x, y, 6, 0, 2 * Math.PI);
-                    canvasCtx.fillStyle = '#00ffcc';
-                    canvasCtx.fill();
-                });
-
-                const nose = results.poseLandmarks[0];
-                const leftShoulder = results.poseLandmarks[11];
-                const rightShoulder = results.poseLandmarks[12];
-                const rightHip = results.poseLandmarks[24];
-                const rightHand = results.poseLandmarks[16];
-
-                if (nose && leftShoulder && rightShoulder) {
-                    const shoulderAvgY = (leftShoulder.y + rightShoulder.y) / 2;
-                    if (nose.y > shoulderAvgY - 0.08) {
-                        speakAlert(locales[currentLang].voiceHead);
-                    }
-                }
-
-                if (rightHand && rightHip) {
-                    if (rightHand.y < rightHip.y - 0.05) {
-                        speakAlert(locales[currentLang].voiceHigh);
-                    }
-                }
-
-                if (rightHand) {
-                    let currentHandY = rightHand.y;
-                    if (ballGoingDown && currentHandY > lastHandY + 0.05) {
-                        ballGoingDown = false; 
-                    } else if (!ballGoingDown && currentHandY < lastHandY - 0.05) {
-                        bounceCount++;
-                        contadorDiv.innerText = bounceCount;
-                        ballGoingDown = true; 
-                    }
-                    lastHandY = currentHandY;
-                }
-            }
-            canvasCtx.restore();
-        });
-
-        const camera = new Camera(videoElement, {
-            onFrame: async () => {
-                canvasElement.width = videoElement.videoWidth;
-                canvasElement.height = videoElement.videoHeight;
-                await pose.send({image: videoElement});
-            },
-            width: 480,
-            height: 480
-        });
-        camera.start();
-    </script>
+      // Guardamos en LocalStorage
+      localStorage.setItem('handlelab_perfil', JSON.stringify(perfil));
+      
+      alert("¡Perfil Guardado! Alias: " + perfil.alias);
+      // Aquí haremos la redirección al Módulo 2 cuando lo construyamos.
+    });
+  </script>
 </body>
 </html>
+
