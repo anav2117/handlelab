@@ -1,289 +1,248 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HandleLab AI Coach</title>
-  <style>
-    /* Estilos Generales */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0b0f19;
-      color: #e2e8f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      overflow: hidden;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HandleLab AI Coach</title>
+    <style>
+        /* Estilos Generales */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
 
-    .container {
-      width: 100%;
-      max-width: 450px;
-      padding: 20px;
-      box-sizing: border-box;
-      text-align: center;
-    }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    /* Sistema de Pantallas y Transiciones (Fade) */
-    .screen {
-      transition: opacity 0.5s ease-in-out;
-      opacity: 0;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
+        /* Sistema de Pantallas y Transiciones (Fade) */
+        .screen {
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+        }
 
-    .screen.active {
-      display: flex;
-      opacity: 1;
-    }
+        .screen.active {
+            display: flex;
+            opacity: 1;
+        }
 
-    /* PANTALLA 1: PORTADA */
-    .logo-container {
-      margin-bottom: 40px;
-    }
+        /* PANTALLA 1: PORTADA CON TU IMAGEN DE FONDO */
+        #screen-welcome {
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 50%, rgba(11,15,25,0.95) 90%), url('portada.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            justify-content: flex-end;
+            padding-bottom: 60px;
+        }
 
-    .flame-logo {
-      font-size: 5rem;
-      animation: pulse 1.5s infinite alternate;
-    }
+        /* Botón START adaptado al diseño de la imagen */
+        .btn-gradient {
+            background: linear-gradient(135deg, #ffcc00 0%, #ff6600 50%, #cc0000 100%);
+            color: #ffffff;
+            border: none;
+            padding: 16px 60px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 102, 0, 0.6);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
 
-    h1 {
-      color: #ff6600;
-      font-size: 2.5rem;
-      font-weight: 900;
-      letter-spacing: 3px;
-      margin: 10px 0 0 0;
-      text-transform: uppercase;
-    }
+        .btn-gradient:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.4);
+        }
 
-    /* Botón START con Degradado Premium */
-    .btn-gradient {
-      background: linear-gradient(135deg, #ffcc00 0%, #ff6600 50%, #cc0000 100%);
-      color: #ffffff;
-      border: none;
-      padding: 18px 50px;
-      font-size: 1.6rem;
-      font-weight: bold;
-      border-radius: 50px;
-      box-shadow: 0 5px 25px rgba(255, 102, 0, 0.4);
-      cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.2s;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+        /* PANTALLA 2: REGISTRO PREMIUM */
+        #screen-register {
+            justify-content: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+            overflow-y: auto;
+        }
 
-    .btn-gradient:active {
-      transform: scale(0.95);
-      box-shadow: 0 2px 10px rgba(255, 102, 0, 0.2);
-    }
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 102, 0, 0.2);
+            border-radius: 24px;
+            padding: 30px;
+            width: 100%;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
 
-    /* PANTALLA 2: REGISTRO */
-    h2 {
-      color: #ffaa00;
-      font-size: 1.8rem;
-      margin-bottom: 25px;
-      text-transform: uppercase;
-    }
+        .card h2 {
+            margin-top: 0;
+            color: #ff6600;
+            font-size: 1.8rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-    .registro-form {
-      width: 100%;
-      background: #111827;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      box-sizing: border-box;
-    }
+        .card p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 25px;
+        }
 
-    .input-group {
-      text-align: left;
-      margin-bottom: 20px;
-    }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
 
-    .input-group label {
-      display: block;
-      color: #9ca3af;
-      font-size: 0.9rem;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      font-weight: bold;
-    }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-    .input-group input, .input-group select {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #374151;
-      background-color: #1f2937;
-      color: white;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            background-color: rgba(15, 23, 42, 0.8);
+            color: #ffffff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
 
-    .radio-group {
-      display: flex;
-      gap: 10px;
-    }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ff6600;
+            box-shadow: 0 0 8px rgba(255, 102, 0, 0.3);
+        }
 
-    .btn-selector {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #374151;
-      background-color: #1f2937;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-    }
-
-    .btn-selector.selected {
-      border-color: #ff6600;
-      background-color: rgba(255, 102, 0, 0.2);
-      color: #ffaa00;
-    }
-
-    .btn-solid {
-      width: 100%;
-      background-color: #ff6600;
-      color: white;
-      border: none;
-      padding: 15px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      text-transform: uppercase;
-      margin-top: 10px;
-    }
-
-    .btn-solid:active {
-      transform: scale(0.98);
-    }
-
-    /* Animación del Logo */
-    @keyframes pulse {
-      0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255,102,0,0.5)); }
-      100% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(255,102,0,0.8)); }
-    }
-  </style>
+        .form-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    
-    <!-- PANTALLA 1: PORTADA -->
-    <section id="portada-screen" class="screen active">
-      <div class="logo-container">
-        <div class="flame-logo">🔥</div>
-        <h1>HandleLab</h1>
-      </div>
-      <button id="btn-start" class="btn-gradient">START</button>
-    </section>
-
-    <!-- PANTALLA 2: REGISTRO -->
-    <section id="registro-screen" class="screen">
-      <h2>Crea tu Perfil</h2>
-      <form id="registro-form" class="registro-form">
+    <div class="container">
         
-        <div class="input-group">
-          <label for="alias">Alias (Máx 15 car.)</label>
-          <input type="text" id="alias" maxlength="15" placeholder="Ej. Kyrie01" required>
+        <!-- PANTALLA 1: PORTADA CON IMAGEN DE FONDO -->
+        <div id="screen-welcome" class="screen active">
+            <button class="btn-gradient" id="btn-start">START</button>
         </div>
 
-        <div class="input-group">
-          <label for="edad">Edad</label>
-          <input type="number" id="edad" min="5" max="99" placeholder="Tu edad" required>
+        <!-- PANTALLA 2: REGISTRO -->
+        <div id="screen-register" class="screen">
+            <div class="card">
+                <h2>Crea tu Perfil</h2>
+                <p>Configura tu perfil de entrenamiento</p>
+                
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="alias">Nombre / Alias</label>
+                        <input type="text" id="alias" placeholder="Ej. Baller99" required autocomplete="off">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="age">Edad</label>
+                        <input type="number" id="age" min="5" max="99" placeholder="Tu edad" required>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-options">
+                            <div>
+                                <label for="hand">Mano Hábil</label>
+                                <select id="hand" required>
+                                    <option value="right">Derecha</option>
+                                    <option value="left">Izquierda</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="lang">Idioma</label>
+                                <select id="lang" required>
+                                    <option value="es">Español</option>
+                                    <option value="en">Inglés</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-gradient" style="width: 100%; margin-top: 10px; font-size: 1.2rem;">Guardar y Empezar</button>
+                </form>
+            </div>
         </div>
 
-        <div class="input-group">
-          <label>Mano Dominante</label>
-          <div class="radio-group">
-            <button type="button" class="btn-selector" id="btn-izq" onclick="seleccionarMano('izquierda')">Izquierda</button>
-            <button type="button" class="btn-selector" id="btn-der" onclick="seleccionarMano('derecha')">Derecha</button>
-          </div>
-        </div>
+    </div>
 
-        <div class="input-group">
-          <label for="idioma">Idioma</label>
-          <select id="idioma">
-            <option value="es">Español 🇪🇸</option>
-            <option value="en">English 🇺🇸</option>
-          </select>
-        </div>
+    <script>
+        // Lógica de navegación entre pantallas
+        const btnStart = document.getElementById('btn-start');
+        const screenWelcome = document.getElementById('screen-welcome');
+        const screenRegister = document.getElementById('screen-register');
+        const registerForm = document.getElementById('register-form');
 
-        <button type="submit" class="btn-solid">CONTINUE</button>
-      </form>
-    </section>
+        // Al presionar START se oculta la portada y aparece el registro
+        btnStart.addEventListener('click', () => {
+            screenWelcome.classList.remove('active');
+            setTimeout(() => {
+                screenWelcome.style.display = 'none';
+                screenRegister.style.display = 'flex';
+                setTimeout(() => {
+                    screenRegister.classList.add('active');
+                }, 50);
+            }, 500);
+        });
 
-  </div>
+        // Guardar perfil en memoria del celular (LocalStorage) al enviar formulario
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const profile = {
+                alias: document.getElementById('alias').value,
+                age: document.getElementById('age').value,
+                hand: document.getElementById('hand').value,
+                lang: document.getElementById('lang').value
+            };
 
-  <script>
-    let manoDominante = '';
-
-    // Manejo de la selección de mano dominante
-    function seleccionarMano(mano) {
-      document.getElementById('btn-izq').classList.remove('selected');
-      document.getElementById('btn-der').classList.remove('selected');
-      
-      if (mano === 'izquierda') {
-        document.getElementById('btn-izq').classList.add('selected');
-      } else {
-        document.getElementById('btn-der').classList.add('selected');
-      }
-      manoDominante = mano;
-    }
-
-    // Transición de Portada a Registro (Fade-out suave)
-    document.getElementById('btn-start').addEventListener('click', () => {
-      const portada = document.getElementById('portada-screen');
-      const registro = document.getElementById('registro-screen');
-
-      portada.style.opacity = '0';
-      
-      setTimeout(() => {
-        portada.style.display = 'none';
-        portada.classList.remove('active');
-        
-        registro.style.display = 'flex';
-        // Forzamos un reflow del navegador para aplicar la animación
-        void registro.offsetWidth;
-        registro.classList.add('active');
-        registro.style.opacity = '1';
-      }, 500);
-    });
-
-    // Guardado de Datos y envío al Módulo 2 (Home)
-    document.getElementById('registro-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      if (!manoDominante) {
-        alert("Por favor, selecciona tu mano dominante.");
-        return;
-      }
-
-      const perfil = {
-        alias: document.getElementById('alias').value,
-        edad: document.getElementById('edad').value,
-        manoDominante: manoDominante,
-        idioma: document.getElementById('idioma').value,
-        handleScore: 0,
-        nivel: 1
-      };
-
-      // Guardamos en LocalStorage
-      localStorage.setItem('handlelab_perfil', JSON.stringify(perfil));
-      
-      alert("¡Perfil Guardado! Alias: " + perfil.alias);
-      // Aquí haremos la redirección al Módulo 2 cuando lo construyamos.
-    });
-  </script>
+            // Guardar datos
+            localStorage.setItem('hl_user_profile', JSON.stringify(profile));
+            
+            alert(`¡Perfil creado con éxito, ${profile.alias}! Datos guardados.`);
+            
+            // Aquí en los siguientes módulos conectaremos al menú principal o la cámara
+        });
+    </script>
 </body>
 </html>
-
