@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HandleLab AI</title>
+    <!-- Configuración para que el celular la reconozca como App -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0c0f12">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5351/5351477.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+    <style>
+        body { margin: 0; background: #0c0f12; color: #ffffff; font-family: 'Segoe UI', Roboto, sans-serif; text-align: center; padding: 10px; }
+        h1 { margin: 5px 0; font-size: 1.4rem; color: #ff6600; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .lang-selector { margin-bottom: 10px; display: flex; justify-content: center; gap: 10px; }
+        .btn-lang { background: #222; color: white; border: 1px solid #444; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+        .btn-lang.active { background: #ff6600; border-color: #ff6600; font-weight: bold; }
+
+        #feedback-banner { background: #ff3333; color: white; padding: 12px; border-radius: 8px; margin: 10px auto; width: 90%; max-width: 360px; font-weight: bold; font-size: 1.1rem; display: none; box-shadow: 0 0 15px rgba(255,51,51,0.5); }
+
+        .stats-container { display: flex; justify-content: space-around; background: #1a1f26; padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
+        .stat-box { flex: 1; }
+        .stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #00ffcc; margin-top: 5px; }
+        
+        .metro-controls { background: #1a1f26; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
+        .btn { background: #ff6600; color: white; border: none; padding: 10px 20px; font-size: 1rem; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 8px; width: 80%; }
+        .btn:active { background: #cc5200; }
+        input[type=range] { width: 80%; margin: 10px 0; accent-color: #ff6600; }
+
+        #canvas-container { position: relative; width: 100%; max-width: 400px; margin: auto; }
+        video, canvas { width: 100%; border-radius: 12px; border: 2px solid #333; }
+        canvas { position: absolute; top: 0; left: 0; }
+
+        /* Botón de instalación de App */
+        #btn-install { background: #00ffcc; color: #000; display: none; margin: 10px auto; width: 90%; max-width: 360px; }
+    </style>
+</head>
+<body>
+
+    <h1>HandleLab AI Coach</h1>
+
+    <!-- Botón para instalar en el cel -->
+    <button id="btn-install" class="btn">📲 INSTALAR HANDLELAB APP</button>
+
+    <div class="lang-selector">
+        <button id="btn-es" class="btn-lang active" onclick="setLanguage('es')">Español 🇪🇸</button>
+        <button id="btn-en" class="btn-lang" onclick="setLanguage('en')">English 🇺🇸</button>
+    </div>
+
+    <div id="feedback-banner">ESCUCHANDO AL COACH...</div>
+    
+    <div class="stats-container">
+        <div class="stat-box">
+            <div id="lbl-bounces" class="stat-label">Botes</div>
+            <div id="contador" class="stat-value">0</div>
+        </div>
+        <div class="stat-box">
+            <div id="lbl-tempo" class="stat-label">Tempo (BPM)</div>
+            <div id="bpm-val" class="stat-value">100</div>
+        </div>
+    </div>
+
+    <div class="metro-controls">
+        <div id="lbl-metro-title" style="font-size: 0.9rem; font-weight: bold; margin-bottom: 8px;">⏱️ RITMO DE ENTRENAMIENTO</div>
+        <input type="range" id="bpm-slider" min="60" max="200" value="100">
+        <button id="btn-metro" class="btn">ACTIVAR RITMO</button>
+    </div>
+    
+    <div id="canvas-container">
+        <video id="webcam" autoplay playsinline muted></video>
+        <canvas id="output_canvas"></canvas>
+    </div>
+
+    <script>
+        // Registrar el Service Worker para permitir la instalación
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+            .then(() => console.log("Service Worker Registrado con éxito"));
+        }
+
+        // Lógica del botón de instalar
+        let deferredPrompt;
+        const btnInstall = document.getElementById('btn-install');
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            btnInstall.style.display = 'block';
+        });
+
+        btnInstall.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    btnInstall.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        const videoElement = document.getElementById('webcam');
+        const canvasElement = document.getElementById('output_canvas');
+        const canvasCtx = canvasElement.getContext('2d');
+        const contadorDiv = document.getElementById('contador');
+        const feedbackBanner = document.getElementById('feedback-banner');
+        
+        let currentLang = 'es';
+        const locales = {
+            es: {
+                bounces: "Botes",
+                tempo: "Tempo (BPM)",
+                metroTitle: "⏱️ RITMO DE ENTRENAMIENTO",
+                btnActive: "ACTIVAR RITMO",
+                btnStop: "DETENER RITMO",
+                voiceHead: "¡Levanta la cabeza!",
+                voiceHigh: "Bote muy alto, baja la cadera"
+            },
+            en: {
+                bounces: "Dribbles",
+                tempo: "Tempo (BPM)",
+                metroTitle: "⏱️ TRAINING PACE",
+                btnActive: "START PACE",
+                btnStop: "STOP PACE",
+                voiceHead: "Lift your head up!",
+                voiceHigh: "Dribble too high, get lower"
+            }
+        };
+
+        let systemVoices = [];
+        function loadVoices() {
+            systemVoices = window.speechSynthesis.getVoices();
+        }
+        loadVoices();
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lbl-bounces').innerText = locales[lang].bounces;
+            document.getElementById('lbl-tempo').innerText = locales[lang].tempo;
+            document.getElementById('lbl-metro-title').innerText = locales[lang].metroTitle;
+            document.getElementById('btn-metro').innerText = isMetroPlaying ? locales[lang].btnStop : locales[lang].btnActive;
+        }
+
+        let bounceCount = 0;
+        let ballGoingDown = true;
+        let lastHandY = 0;
+        let lastVoiceAlertTime = 0;
+
+        function speakAlert(text) {
+            const now = Date.now();
+            if (now - lastVoiceAlertTime < 4500) return;
+            lastVoiceAlertTime = now;
+
+            feedbackBanner.innerText = text;
+            feedbackBanner.style.display = 'block';
+            setTimeout(() => { feedbackBanner.style.display = 'none'; }, 3000);
+
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const targetLang = currentLang === 'es' ? 'es' : 'en';
+            const matchedVoice = systemVoices.find(v => v.lang.startsWith(targetLang));
+            
+            if (matchedVoice) utterance.voice = matchedVoice;
+            utterance.lang = currentLang === 'es' ? 'es-ES' : 'en-US';
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        let audioCtx = null;
+        let isMetroPlaying = false;
+        let metroInterval = null;
+        const bpmSlider = document.getElementById('bpm-slider');
+        const bpmVal = document.getElementById('bpm-val');
+        const btnMetro = document.getElementById('btn-metro');
+
+        bpmSlider.addEventListener('input', (e) => {
+            bpmVal.innerText = e.target.value;
+            if (isMetroPlaying) {
+                stopMetronome();
+                startMetronome();
+            }
+        });
+
+        btnMetro.addEventListener('click', () => {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (isMetroPlaying) {
+                stopMetronome();
+                btnMetro.innerText = locales[currentLang].btnActive;
+                btnMetro.style.background = "#ff6600";
+            } else {
+                startMetronome();
+                btnMetro.innerText = locales[currentLang].btnStop;
+                btnMetro.style.background = "#e60000";
+                speakAlert(currentLang === 'es' ? "Entrenamiento iniciado" : "Workout started");
+            }
+        });
+
+        function playBeep() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = 800;
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        function startMetronome() {
+            isMetroPlaying = true;
+            const bpm = parseInt(bpmSlider.value);
+            const intervalMs = (60 / bpm) * 1000;
+            metroInterval = setInterval(playBeep, intervalMs);
+        }
+
+        function stopMetronome() {
+            isMetroPlaying = false;
+            clearInterval(metroInterval);
+        }
+
+        const pose = new Pose({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@pose/${file}`
+        });
+
+        pose.setOptions({
+            modelComplexity: 1,
+            smoothLandmarks: true,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+
+        pose.onResults((results) => {
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            
+            if (results.poseLandmarks) {
+                results.poseLandmarks.slice(15, 21).forEach(landmark => {
+                    const x = landmark.x * canvasElement.width;
+                    const y = landmark.y * canvasElement.height;
+                    canvasCtx.beginPath();
+                    canvasCtx.arc(x, y, 6, 0, 2 * Math.PI);
+                    canvasCtx.fillStyle = '#00ffcc';
+                    canvasCtx.fill();
+                });
+
+                const nose = results.poseLandmarks[0];
+                const leftShoulder = results.poseLandmarks[11];
+                const rightShoulder = results.poseLandmarks[12];
+                const rightHip = results.poseLandmarks[24];
+                const rightHand = results.poseLandmarks[16];
+
+                if (nose && leftShoulder && rightShoulder) {
+                    const shoulderAvgY = (leftShoulder.y + rightShoulder.y) / 2;
+                    if (nose.y > shoulderAvgY - 0.08) {
+                        speakAlert(locales[currentLang].voiceHead);
+                    }
+                }
+
+                if (rightHand && rightHip) {
+                    if (rightHand.y < rightHip.y - 0.05) {
+                        speakAlert(locales[currentLang].voiceHigh);
+                    }
+                }
+
+                if (rightHand) {
+                    let currentHandY = rightHand.y;
+                    if (ballGoingDown && currentHandY > lastHandY + 0.05) {
+                        ballGoingDown = false; 
+                    } else if (!ballGoingDown && currentHandY < lastHandY - 0.05) {
+                        bounceCount++;
+                        contadorDiv.innerText = bounceCount;
+                        ballGoingDown = true; 
+                    }
+                    lastHandY = currentHandY;
+                }
+            }
+            canvasCtx.restore();
+        });
+
+        const camera = new Camera(videoElement, {
+            onFrame: async () => {
+                canvasElement.width = videoElement.videoWidth;
+                canvasElement.height = videoElement.videoHeight;
+                await pose.send({image: videoElement});
+            },
+            width: 480,
+            height: 480
+        });
+        camera.start();
+    </script>
+</body>
+</html>
