@@ -1,0 +1,16 @@
+{
+  "short_name": "HandleLab",
+  "name": "HandleLab AI Basketball",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/5351/5351477.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0c0f12",
+  "theme_color": "#0c0f12",
+  "display": "standalone",
+  "orientation": "portrait"
+}
