@@ -48,15 +48,13 @@
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(texto);
             msg.lang = currentLang;
-            msg.pitch = 0.9; 
+            msg.pitch = 0.9;
             msg.rate = 0.95;
 
+            // Forzamos el uso de la voz configurada por defecto en tu sistema
             const voces = window.speechSynthesis.getVoices();
-            const vozElegida = voces.find(v => v.name.includes('Google') && v.name.includes('Male')) 
-                           || voces.find(v => v.name.toLowerCase().includes('male')) 
-                           || voces[0];
+            msg.voice = voces[1] || voces[0]; 
             
-            msg.voice = vozElegida;
             window.speechSynthesis.speak(msg);
         }
 
@@ -104,4 +102,5 @@
     </script>
 </body>
 </html>
+
 
