@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,6 +11,7 @@
         .box { border: 2px solid #ff6600; padding: 20px; border-radius: 20px; background: rgba(0,0,0,0.5); text-align: center; }
         h1 { color: #ff6600; margin-top: 0; }
         #timer { font-size: 3rem; margin: 5px 0; color: #fff; font-weight: bold; }
+        #status { font-size: 1.2rem; color: #ffcc00; margin-bottom: 10px; height: 25px; }
         #counter { font-size: 1.5rem; color: #ff9933; margin-bottom: 15px; }
         .level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         .level-btn { background: #222; border: 1px solid #444; color: #fff; padding: 15px; border-radius: 10px; cursor: pointer; }
@@ -21,6 +23,7 @@
     <div id="app">
         <div class="box">
             <h1>HandleLab</h1>
+            <div id="status">Selecciona un nivel</div>
             <div id="timer">00:00</div>
             <div id="counter">Botes: 0</div>
             <div class="level-grid" id="grid">
@@ -42,7 +45,6 @@
             const msg = new SpeechSynthesisUtterance(texto);
             msg.lang = 'es-ES';
             const voces = window.speechSynthesis.getVoices();
-            // Prioridad a voz masculina
             msg.voice = voces.find(v => v.name.includes("Male") || v.name.includes("masculino")) || voces[0];
             window.speechSynthesis.speak(msg);
         }
@@ -54,6 +56,7 @@
             
             timeLeft = duracion;
             botes = 0;
+            document.getElementById('status').innerText = `Ejecutando: Nivel ${num}`;
             document.getElementById('counter').innerText = "Botes: 0";
             decir(instruccion);
             
@@ -76,17 +79,14 @@
             const mins = Math.floor(timeLeft / 60);
             const secs = timeLeft % 60;
             document.getElementById('timer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            
-            if (timeLeft <= 0) {
-                finalizarNivel();
-            } else {
-                timeLeft--;
-            }
+            if (timeLeft <= 0) finalizarNivel();
+            else timeLeft--;
         }
 
         function finalizarNivel() {
             detenerEntrenamiento();
             descansando = true;
+            document.getElementById('status').innerText = "¡Nivel completado!";
             document.querySelectorAll('.level-btn').forEach(b => b.disabled = true);
             decir(`¡Excelente! Terminaste con ${botes} botes. Descansa 15 segundos.`);
             
@@ -96,6 +96,7 @@
                 if (descanso < 0) {
                     clearInterval(dInt);
                     descansando = false;
+                    document.getElementById('status').innerText = "Selecciona un nivel";
                     document.getElementById('timer').innerText = "00:00";
                     document.querySelectorAll('.level-btn').forEach(b => b.disabled = false);
                     decir("Descanso terminado. ¡Listo para el siguiente nivel!");
@@ -106,6 +107,10 @@
         function detenerEntrenamiento() {
             clearInterval(interval);
             clearInterval(timerInterval);
+            if (!descansando) {
+                document.getElementById('status').innerText = "Entrenamiento detenido";
+                document.getElementById('timer').innerText = "00:00";
+            }
             window.speechSynthesis.cancel();
         }
     </script>
