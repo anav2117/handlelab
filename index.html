@@ -9,7 +9,7 @@
         #app { width: 100%; max-width: 400px; }
         .box { border: 2px solid #ff6600; padding: 20px; border-radius: 20px; background: rgba(0,0,0,0.5); text-align: center; }
         h1 { color: #ff6600; margin-top: 0; }
-        .section-title { font-size: 1.2rem; margin: 20px 0 10px; color: #ff9933; text-align: left; }
+        #timer { font-size: 2rem; margin: 10px 0; color: #fff; }
         .btn { background: #ff6600; border: none; padding: 15px; color: white; border-radius: 10px; font-size: 1rem; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 10px; }
         .level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .level-btn { background: #222; border: 1px solid #444; color: #fff; padding: 15px; border-radius: 10px; cursor: pointer; }
@@ -19,16 +19,13 @@
     <div id="app">
         <div class="box">
             <h1>HandleLab</h1>
+            <div id="timer">00:00</div>
             
-            <div class="section-title">Reto de Hoy</div>
-            <button class="btn" onclick="iniciarNivel(4, 150, 'Reto de 100 botes iniciado. Ritmo rápido.')">INICIAR RETO: 100 BOTES</button>
-
-            <div class="section-title">Mapa de Niveles</div>
-            <div class="level-grid">
-                <button class="level-btn" onclick="iniciarNivel(1, 90, 'Nivel 1. Mano derecha. Mantén el ritmo.')">Nivel 1</button>
-                <button class="level-btn" onclick="iniciarNivel(2, 90, 'Nivel 2. Mano izquierda. Vamos.')">Nivel 2</button>
-                <button class="level-btn" onclick="iniciarNivel(3, 110, 'Nivel 3. Alternando manos.')">Nivel 3</button>
-                <button class="level-btn" onclick="iniciarNivel(0, 0, 'Detenido.')">STOP</button>
+            <div class="level-grid" id="controls">
+                <button class="level-btn" onclick="iniciarNivel(1, 90, 60, 'Nivel 1, mano derecha. ¡Vamos, tú puedes!')">Nivel 1 (60s)</button>
+                <button class="level-btn" onclick="iniciarNivel(2, 90, 60, 'Nivel 2, mano izquierda. Concentrado.')">Nivel 2 (60s)</button>
+                <button class="level-btn" onclick="iniciarNivel(3, 110, 45, 'Nivel 3, alterna manos. ¡Dale ritmo!')">Nivel 3 (45s)</button>
+                <button class="level-btn" onclick="detenerEntrenamiento()" style="background:#550000">STOP</button>
             </div>
         </div>
     </div>
@@ -36,6 +33,8 @@
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let interval = null;
+        let timerInterval = null;
+        let timeLeft = 0;
 
         function decir(texto) {
             window.speechSynthesis.cancel();
@@ -46,26 +45,52 @@
             window.speechSynthesis.speak(msg);
         }
 
-        function playSound() {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = 150;
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
+        function actualizarTemporizador() {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            document.getElementById('timer').innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            
+            if (timeLeft === Math.floor(document.getElementById('timer').dataset.total / 2)) {
+                decir("¡Vas muy bien, mantén la intensidad!");
+            }
+
+            if (timeLeft <= 0) {
+                detenerEntrenamiento();
+                decir("¡Excelente trabajo! Has completado el ejercicio.");
+            } else {
+                timeLeft--;
+            }
         }
 
-        function iniciarNivel(num, bpm, instruccion) {
-            clearInterval(interval); // Detiene cualquier ritmo anterior
+        function iniciarNivel(num, bpm, duracion, instruccion) {
+            detenerEntrenamiento();
             if (audioCtx.state === 'suspended') { audioCtx.resume(); }
             
-            decir(instruccion);
+            timeLeft = duracion;
+            document.getElementById('timer').dataset.total = duracion;
             
-            if (bpm > 0) {
-                interval = setInterval(playSound, (60000 / bpm));
-            }
+            decir(instruccion);
+            interval = setInterval(() => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.frequency.value = 150;
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            }, (60000 / bpm));
+
+            timerInterval = setInterval(actualizarTemporizador, 1000);
+            actualizarTemporizador();
+        }
+
+        function detenerEntrenamiento() {
+            clearInterval(interval);
+            clearInterval(timerInterval);
+            document.getElementById('timer').innerText = "00:00";
+            window.speechSynthesis.cancel();
         }
     </script>
 </body>
