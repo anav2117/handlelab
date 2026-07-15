@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,27 +10,51 @@
         .box { border: 2px solid #ff6600; padding: 30px; border-radius: 20px; text-align: center; background: rgba(0,0,0,0.5); }
         h1 { color: #ff6600; margin-top: 0; }
         .btn { background: #ff6600; border: none; padding: 15px 30px; color: white; border-radius: 10px; font-size: 1.2rem; cursor: pointer; margin-top: 20px; width: 100%; font-weight: bold; }
+        .lang-btn { background: #333; color: #fff; border: 1px solid #ff6600; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px; }
     </style>
 </head>
 <body>
     <div id="app">
         <div class="box">
-            <h1>HandleLab</h1>
-            <p id="message">¡Entrenador listo! Presiona el botón para empezar tu sesión.</p>
-            <button class="btn" onclick="iniciarSesion()">INICIAR SESIÓN</button>
+            <button class="lang-btn" onclick="toggleLanguage()">Switch to Español</button>
+            <h1 id="title">HandleLab</h1>
+            <p id="message">Coach ready! Press the button to start your session.</p>
+            <button class="btn" id="start-btn" onclick="iniciarSesion()">START SESSION</button>
         </div>
     </div>
 
     <script>
+        let currentLang = 'en-US';
+
+        function toggleLanguage() {
+            const btn = document.querySelector('.lang-btn');
+            if (currentLang === 'en-US') {
+                currentLang = 'es-ES';
+                document.getElementById('title').innerText = "HandleLab";
+                document.getElementById('message').innerText = "¡Entrenador listo! Pulsa para empezar.";
+                document.getElementById('start-btn').innerText = "INICIAR SESIÓN";
+                btn.innerText = "Switch to English";
+            } else {
+                currentLang = 'en-US';
+                document.getElementById('title').innerText = "HandleLab";
+                document.getElementById('message').innerText = "Coach ready! Press the button to start your session.";
+                document.getElementById('start-btn').innerText = "START SESSION";
+                btn.innerText = "Switch to Español";
+            }
+        }
+
         function iniciarSesion() {
-            document.getElementById('message').innerText = "¡Excelente, vamos a darle! Mantén el ritmo.";
-            decir("¡Vamos a entrenar! Mantén el ritmo con el balón.");
+            const msgText = (currentLang === 'en-US') 
+                ? "Listen up! Let's get to work. Keep that ball moving." 
+                : "¡Atención! Vamos a trabajar. Mantén el balón en movimiento.";
+            decir(msgText);
         }
 
         function decir(texto) {
             const msg = new SpeechSynthesisUtterance(texto);
-            msg.lang = 'es-ES';
-            msg.rate = 1.1;
+            msg.lang = currentLang;
+            msg.rate = 1.0;
+            msg.pitch = 0.8;
             window.speechSynthesis.speak(msg);
         }
     </script>
