@@ -192,7 +192,6 @@
             background-color: #0d1321;
         }
 
-        /* Contenedor de dos columnas para Mano e Idioma */
         .form-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -221,13 +220,138 @@
             transform: scale(0.97);
             box-shadow: 0 2px 8px rgba(255, 85, 0, 0.2);
         }
+
+        /* PANTALLA 3: DASHBOARD PRINCIPAL */
+        #screen-dashboard {
+            background: linear-gradient(180deg, #090d16 0%, #060810 100%);
+            padding: 30px 24px;
+            justify-content: flex-start;
+            overflow-y: auto;
+            align-items: stretch;
+        }
+
+        .dashboard-header {
+            margin-bottom: 24px;
+            text-align: left;
+            margin-top: 30px; /* Margen para no chocar con el botón de idioma */
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        .dashboard-header p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin: 4px 0 0 0;
+        }
+
+        /* Tarjeta de Estadísticas del Atleta */
+        .athlete-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(255, 102, 0, 0.15);
+            border-radius: 20px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .athlete-stat {
+            text-align: left;
+        }
+
+        .athlete-stat .stat-label {
+            font-size: 0.75rem;
+            color: #ff8833;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .athlete-stat .stat-val {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-top: 2px;
+        }
+
+        /* Botones de Entrenamiento (Módulos) */
+        .menu-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            text-align: left;
+        }
+
+        .training-card {
+            background: rgba(15, 20, 35, 0.8);
+            border: 1px solid rgba(255, 102, 0, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            text-align: left;
+        }
+
+        .training-card:active {
+            transform: scale(0.97);
+            border-color: #ff6600;
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.15);
+        }
+
+        .training-icon {
+            font-size: 2rem;
+            margin-right: 18px;
+            filter: drop-shadow(0 0 6px rgba(255, 102, 0, 0.4));
+        }
+
+        .training-info {
+            flex-grow: 1;
+        }
+
+        .training-info h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0 0 4px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .training-info p {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .arrow-indicator {
+            color: #ff6600;
+            font-weight: 900;
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         
-        <!-- Botón Selector de Idioma Flotante (Esquina superior derecha) -->
+        <!-- Botón Selector de Idioma Flotante -->
         <button class="lang-switch" id="lang-toggle">ES</button>
         
         <!-- PANTALLA 1: PORTADA CON IMAGEN DE FONDO -->
@@ -253,7 +377,7 @@
                         <input type="number" id="age" min="5" max="99" placeholder="Your age" required>
                     </div>
 
-                    <!-- Dos columnas: Mano dominante e Idioma de la App -->
+                    <!-- Dos columnas: Mano dominante e Idioma -->
                     <div class="form-options">
                         <div class="form-group">
                             <label for="hand" id="label-hand">Dominant Hand</label>
@@ -273,6 +397,48 @@
 
                     <button type="submit" class="btn-submit" id="btn-submit-text">Save & Start</button>
                 </form>
+            </div>
+        </div>
+
+        <!-- PANTALLA 3: DASHBOARD PRINCIPAL -->
+        <div id="screen-dashboard" class="screen">
+            <div class="dashboard-header">
+                <h1 id="dash-welcome">Welcome, Player!</h1>
+                <p id="dash-subtitle">Ready to master your ball handling?</p>
+            </div>
+
+            <!-- Ficha de Estado del Atleta -->
+            <div class="athlete-card">
+                <div class="athlete-stat">
+                    <div class="stat-label" id="stat-hand-label">Hand</div>
+                    <div class="stat-val" id="stat-hand-val">Right</div>
+                </div>
+                <div class="athlete-stat" style="text-align: right;">
+                    <div class="stat-label" id="stat-streak-label">Streak</div>
+                    <div class="stat-val" id="stat-streak-val">🔥 1 Day</div>
+                </div>
+            </div>
+
+            <div class="menu-title" id="dash-menu-title">Training Modules</div>
+
+            <!-- Módulo 1: Rhythm Control -->
+            <div class="training-card" onclick="alert('Dribble rhythm module starting soon!')">
+                <div class="training-icon">🎵</div>
+                <div class="training-info">
+                    <h3 id="mod1-title">Rhythm Control</h3>
+                    <p id="mod1-desc">Analyze your dribbling rhythm & sync with tempo</p>
+                </div>
+                <div class="arrow-indicator">➔</div>
+            </div>
+
+            <!-- Módulo 2: Hand Speed -->
+            <div class="training-card" onclick="alert('Hand speed tracker coming soon!')">
+                <div class="training-icon">⚡</div>
+                <div class="training-info">
+                    <h3 id="mod2-title">Hand Speed</h3>
+                    <p id="mod2-desc">Track real-time velocity and hand positioning</p>
+                </div>
+                <div class="arrow-indicator">➔</div>
             </div>
         </div>
 
@@ -297,7 +463,18 @@
                 optLangEn: "English",
                 optLangEs: "Spanish",
                 btnSubmit: "Save & Start",
-                alertSaved: "Profile successfully created, {name}! Data saved."
+                dashWelcome: "Welcome, {name}!",
+                dashSubtitle: "Ready to master your ball handling?",
+                statHandLabel: "Dominant Hand",
+                statStreakLabel: "Daily Streak",
+                streakVal: "🔥 1 Day",
+                handRightVal: "Right",
+                handLeftVal: "Left",
+                dashMenuTitle: "Training Modules",
+                mod1Title: "Rhythm Control",
+                mod1Desc: "Analyze your dribbling rhythm & sync with tempo",
+                mod2Title: "Hand Speed",
+                mod2Desc: "Track real-time velocity and hand positioning"
             },
             es: {
                 langButton: "EN",
@@ -315,11 +492,23 @@
                 optLangEn: "Inglés",
                 optLangEs: "Español",
                 btnSubmit: "Guardar y Empezar",
-                alertSaved: "¡Perfil creado con éxito, ${name}! Datos guardados."
+                dashWelcome: "¡Bienvenido, {name}!",
+                dashSubtitle: "¿Listo para dominar tu control de balón?",
+                statHandLabel: "Mano Hábil",
+                statStreakLabel: "Racha Diaria",
+                streakVal: "🔥 1 Día",
+                handRightVal: "Derecha",
+                handLeftVal: "Izquierda",
+                dashMenuTitle: "Módulos de Práctica",
+                mod1Title: "Control de Ritmo",
+                mod1Desc: "Analiza tu ritmo de bote y sincronízate con el tempo",
+                mod2Title: "Velocidad de Mano",
+                mod2Desc: "Rastrea la velocidad real y posición de manos"
             }
         };
 
         let currentLang = 'en'; // Inglés por defecto
+        let savedProfile = null;
 
         // Elementos interactivos de la traducción
         const langToggle = document.getElementById('lang-toggle');
@@ -338,6 +527,19 @@
         const optLangEs = document.getElementById('opt-lang-es');
         const btnSubmitText = document.getElementById('btn-submit-text');
         const selectLangInput = document.getElementById('lang');
+
+        // Elementos del Dashboard
+        const dashWelcome = document.getElementById('dash-welcome');
+        const dashSubtitle = document.getElementById('dash-subtitle');
+        const statHandLabel = document.getElementById('stat-hand-label');
+        const statHandVal = document.getElementById('stat-hand-val');
+        const statStreakLabel = document.getElementById('stat-streak-label');
+        const statStreakVal = document.getElementById('stat-streak-val');
+        const dashMenuTitle = document.getElementById('dash-menu-title');
+        const mod1Title = document.getElementById('mod1-title');
+        const mod1Desc = document.getElementById('mod1-desc');
+        const mod2Title = document.getElementById('mod2-title');
+        const mod2Desc = document.getElementById('mod2-desc');
 
         // Función para cambiar textos en la UI
         function updateLanguage(lang) {
@@ -360,15 +562,33 @@
             
             // Sincronizar el selector del formulario
             selectLangInput.value = lang;
+
+            // Actualizar textos del Dashboard si hay un perfil activo
+            if (savedProfile) {
+                dashWelcome.textContent = translations[lang].dashWelcome.replace('{name}', savedProfile.alias);
+                dashSubtitle.textContent = translations[lang].dashSubtitle;
+                statHandLabel.textContent = translations[lang].statHandLabel;
+                statStreakLabel.textContent = translations[lang].statStreakLabel;
+                statStreakVal.textContent = translations[lang].streakVal;
+                
+                const handKey = savedProfile.hand === 'right' ? 'handRightVal' : 'handLeftVal';
+                statHandVal.textContent = translations[lang][handKey];
+                
+                dashMenuTitle.textContent = translations[lang].dashMenuTitle;
+                mod1Title.textContent = translations[lang].mod1Title;
+                mod1Desc.textContent = translations[lang].mod1Desc;
+                mod2Title.textContent = translations[lang].mod2Title;
+                mod2Desc.textContent = translations[lang].mod2Desc;
+            }
         }
 
-        // Si el usuario cambia el idioma usando el botón flotante "ES / EN"
+        // Cambiar idioma con el botón flotante
         langToggle.addEventListener('click', () => {
             const nextLang = currentLang === 'en' ? 'es' : 'en';
             updateLanguage(nextLang);
         });
 
-        // Si el usuario cambia el idioma desde el menú desplegable del formulario
+        // Cambiar idioma desde el formulario
         selectLangInput.addEventListener('change', (e) => {
             updateLanguage(e.target.value);
         });
@@ -376,9 +596,10 @@
         // Lógica de navegación entre pantallas
         const screenWelcome = document.getElementById('screen-welcome');
         const screenRegister = document.getElementById('screen-register');
+        const screenDashboard = document.getElementById('screen-dashboard');
         const registerForm = document.getElementById('register-form');
 
-        // Al presionar START se oculta la portada y aparece el registro
+        // START de portada a registro
         btnStart.addEventListener('click', () => {
             screenWelcome.classList.remove('active');
             setTimeout(() => {
@@ -390,22 +611,32 @@
             }, 500);
         });
 
-        // Guardar perfil localmente al enviar formulario
+        // Registro a Dashboard (Sin molestas alertas)
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const profile = {
+            savedProfile = {
                 alias: document.getElementById('alias').value,
                 age: document.getElementById('age').value,
                 hand: document.getElementById('hand').value,
                 lang: selectLangInput.value
             };
 
-            localStorage.setItem('hl_user_profile', JSON.stringify(profile));
+            // Guardar localmente
+            localStorage.setItem('hl_user_profile', JSON.stringify(profile = savedProfile));
             
-            // Alerta traducida dinámicamente
-            const message = translations[profile.lang].alertSaved.replace('{name}', profile.alias);
-            alert(message);
+            // Forzar actualización de textos traducidos con los datos dinámicos
+            updateLanguage(savedProfile.lang);
+
+            // Transición limpia de Pantalla 2 a Pantalla 3
+            screenRegister.classList.remove('active');
+            setTimeout(() => {
+                screenRegister.style.display = 'none';
+                screenDashboard.style.display = 'flex';
+                setTimeout(() => {
+                    screenDashboard.classList.add('active');
+                }, 50);
+            }, 500);
         });
     </script>
 </body>
