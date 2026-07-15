@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +7,9 @@
     <style>
         body { margin: 0; background-color: #060810; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         #app { width: 100%; max-width: 400px; }
-        .box { border: 2px solid #ff6600; padding: 20px; border-radius: 20px; background: rgba(0,0,0,0.5); }
-        h1 { color: #ff6600; text-align: center; margin-top: 0; }
-        .section-title { font-size: 1.2rem; margin: 20px 0 10px; color: #ff9933; }
+        .box { border: 2px solid #ff6600; padding: 20px; border-radius: 20px; background: rgba(0,0,0,0.5); text-align: center; }
+        h1 { color: #ff6600; margin-top: 0; }
+        .section-title { font-size: 1.2rem; margin: 20px 0 10px; color: #ff9933; text-align: left; }
         .btn { background: #ff6600; border: none; padding: 15px; color: white; border-radius: 10px; font-size: 1rem; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 10px; }
         .level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .level-btn { background: #222; border: 1px solid #444; color: #fff; padding: 15px; border-radius: 10px; cursor: pointer; }
@@ -21,45 +21,52 @@
             <h1>HandleLab</h1>
             
             <div class="section-title">Reto de Hoy</div>
-            <button class="btn" onclick="iniciarReto()">INICIAR RETO: 100 BOTES</button>
+            <button class="btn" onclick="iniciarNivel(4, 150, 'Reto de 100 botes iniciado. Ritmo rápido.')">INICIAR RETO: 100 BOTES</button>
 
             <div class="section-title">Mapa de Niveles</div>
             <div class="level-grid">
-                <button class="level-btn" onclick="iniciarNivel(1)">Nivel 1</button>
-                <button class="level-btn" onclick="iniciarNivel(2)">Nivel 2</button>
-                <button class="level-btn" onclick="iniciarNivel(3)">Nivel 3</button>
-                <button class="level-btn" onclick="iniciarNivel(4)">Nivel 4</button>
+                <button class="level-btn" onclick="iniciarNivel(1, 90, 'Nivel 1. Mano derecha. Mantén el ritmo.')">Nivel 1</button>
+                <button class="level-btn" onclick="iniciarNivel(2, 90, 'Nivel 2. Mano izquierda. Vamos.')">Nivel 2</button>
+                <button class="level-btn" onclick="iniciarNivel(3, 110, 'Nivel 3. Alternando manos.')">Nivel 3</button>
+                <button class="level-btn" onclick="iniciarNivel(0, 0, 'Detenido.')">STOP</button>
             </div>
         </div>
     </div>
 
     <script>
-        let currentLang = 'es-ES';
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let interval = null;
 
         function decir(texto) {
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(texto);
-            msg.lang = currentLang;
+            msg.lang = 'es-ES';
             const voces = window.speechSynthesis.getVoices();
             msg.voice = voces[1] || voces[0]; 
             window.speechSynthesis.speak(msg);
         }
 
-        function iniciarReto() {
-            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-            decir("Iniciando reto de hoy. Prepárate.");
-            // Aquí añadiremos la lógica del cronómetro más adelante
+        function playSound() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = 150;
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
         }
 
-        function iniciarNivel(num) {
+        function iniciarNivel(num, bpm, instruccion) {
+            clearInterval(interval); // Detiene cualquier ritmo anterior
             if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-            decir("Nivel " + num + " seleccionado. Vamos a practicar.");
-            // Aquí activaremos los módulos de dificultad progresiva
+            
+            decir(instruccion);
+            
+            if (bpm > 0) {
+                interval = setInterval(playSound, (60000 / bpm));
+            }
         }
     </script>
 </body>
 </html>
-
-
-
