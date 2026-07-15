@@ -192,6 +192,13 @@
             background-color: #0d1321;
         }
 
+        /* Contenedor de dos columnas para Mano e Idioma */
+        .form-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
         /* Botón de envío Premium */
         .btn-submit {
             background: linear-gradient(135deg, #ff9900 0%, #ff5500 100%);
@@ -220,7 +227,7 @@
 
     <div class="container">
         
-        <!-- Botón Selector de Idioma Flotante (Se hereda en todo el flujo) -->
+        <!-- Botón Selector de Idioma Flotante (Esquina superior derecha) -->
         <button class="lang-switch" id="lang-toggle">ES</button>
         
         <!-- PANTALLA 1: PORTADA CON IMAGEN DE FONDO -->
@@ -246,12 +253,22 @@
                         <input type="number" id="age" min="5" max="99" placeholder="Your age" required>
                     </div>
 
-                    <div class="form-group">
-                        <label for="hand" id="label-hand">Dominant Hand</label>
-                        <select id="hand" required>
-                            <option value="right" id="opt-right">Right Hand</option>
-                            <option value="left" id="opt-left">Left Hand</option>
-                        </select>
+                    <!-- Dos columnas: Mano dominante e Idioma de la App -->
+                    <div class="form-options">
+                        <div class="form-group">
+                            <label for="hand" id="label-hand">Dominant Hand</label>
+                            <select id="hand" required>
+                                <option value="right" id="opt-right">Right Hand</option>
+                                <option value="left" id="opt-left">Left Hand</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lang" id="label-lang">Language</label>
+                            <select id="lang" required>
+                                <option value="en" id="opt-lang-en">English</option>
+                                <option value="es" id="opt-lang-es">Spanish</option>
+                            </select>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn-submit" id="btn-submit-text">Save & Start</button>
@@ -276,6 +293,9 @@
                 labelHand: "Dominant Hand",
                 optRight: "Right Hand",
                 optLeft: "Left Hand",
+                labelLang: "Language",
+                optLangEn: "English",
+                optLangEs: "Spanish",
                 btnSubmit: "Save & Start",
                 alertSaved: "Profile successfully created, {name}! Data saved."
             },
@@ -291,8 +311,11 @@
                 labelHand: "Mano Hábil",
                 optRight: "Mano Derecha",
                 optLeft: "Mano Izquierda",
+                labelLang: "Idioma",
+                optLangEn: "Inglés",
+                optLangEs: "Español",
                 btnSubmit: "Guardar y Empezar",
-                alertSaved: "¡Perfil creado con éxito, {name}! Datos guardados."
+                alertSaved: "¡Perfil creado con éxito, ${name}! Datos guardados."
             }
         };
 
@@ -310,10 +333,15 @@
         const labelHand = document.getElementById('label-hand');
         const optRight = document.getElementById('opt-right');
         const optLeft = document.getElementById('opt-left');
+        const labelLang = document.getElementById('label-lang');
+        const optLangEn = document.getElementById('opt-lang-en');
+        const optLangEs = document.getElementById('opt-lang-es');
         const btnSubmitText = document.getElementById('btn-submit-text');
+        const selectLangInput = document.getElementById('lang');
 
         // Función para cambiar textos en la UI
         function updateLanguage(lang) {
+            currentLang = lang;
             langToggle.textContent = translations[lang].langButton;
             btnStart.textContent = translations[lang].startBtn;
             regTitle.textContent = translations[lang].regTitle;
@@ -325,13 +353,24 @@
             labelHand.textContent = translations[lang].labelHand;
             optRight.textContent = translations[lang].optRight;
             optLeft.textContent = translations[lang].optLeft;
+            labelLang.textContent = translations[lang].labelLang;
+            optLangEn.textContent = translations[lang].optLangEn;
+            optLangEs.textContent = translations[lang].optLangEs;
             btnSubmitText.textContent = translations[lang].btnSubmit;
+            
+            // Sincronizar el selector del formulario
+            selectLangInput.value = lang;
         }
 
-        // Evento botón idioma
+        // Si el usuario cambia el idioma usando el botón flotante "ES / EN"
         langToggle.addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'es' : 'en';
-            updateLanguage(currentLang);
+            const nextLang = currentLang === 'en' ? 'es' : 'en';
+            updateLanguage(nextLang);
+        });
+
+        // Si el usuario cambia el idioma desde el menú desplegable del formulario
+        selectLangInput.addEventListener('change', (e) => {
+            updateLanguage(e.target.value);
         });
 
         // Lógica de navegación entre pantallas
@@ -359,13 +398,13 @@
                 alias: document.getElementById('alias').value,
                 age: document.getElementById('age').value,
                 hand: document.getElementById('hand').value,
-                lang: currentLang
+                lang: selectLangInput.value
             };
 
             localStorage.setItem('hl_user_profile', JSON.stringify(profile));
             
             // Alerta traducida dinámicamente
-            const message = translations[currentLang].alertSaved.replace('{name}', profile.alias);
+            const message = translations[profile.lang].alertSaved.replace('{name}', profile.alias);
             alert(message);
         });
     </script>
