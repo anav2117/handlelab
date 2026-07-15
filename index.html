@@ -428,7 +428,6 @@
             justify-content: center;
             font-size: 1.5rem;
             user-select: none;
-            /* Se controlará la animación mediante variables CSS dinámicas */
         }
 
         /* Sombra dinámica de la pelota */
@@ -728,7 +727,6 @@
                 mod1Desc: "Analyze your dribbling rhythm & sync with tempo",
                 mod2Title: "Hand Speed",
                 mod2Desc: "Track real-time velocity and hand positioning",
-                // Traducciones Pantalla 4
                 backBtn: "◀ Back",
                 rhythmTitle: "Rhythm Control",
                 rhythmSubtitle: "Dribble perfectly in sync with the beat",
@@ -768,7 +766,6 @@
                 mod1Desc: "Analiza tu ritmo de bote y sincronízate con el tempo",
                 mod2Title: "Velocidad de Mano",
                 mod2Desc: "Rastrea la velocidad real y posición de manos",
-                // Traducciones Pantalla 4
                 backBtn: "◀ Volver",
                 rhythmTitle: "Control de Ritmo",
                 rhythmSubtitle: "Bota perfectamente sincronizado con el beat",
@@ -987,7 +984,6 @@
             osc2.connect(gainNode);
             gainNode.connect(audioCtx.destination);
 
-            // Frecuencias disonantes y estridentes para simular un silbato electrónico de árbitro
             osc1.frequency.setValueAtTime(800, audioCtx.currentTime);
             osc2.frequency.setValueAtTime(805, audioCtx.currentTime);
 
@@ -1001,51 +997,58 @@
             osc2.stop(audioCtx.currentTime + 0.4);
         }
 
-        // Generar un sonido de drible de baloncesto (Impacto de madera)
+        // Función mejorada: Golpe grave, seco e instantáneo (como un balón de verdad)
         function playBounceSound() {
             if (!audioCtx) return;
             
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
 
-            osc.connect(gainNode);
+            // Filtro para deshacernos de las frecuencias metálicas/agudas
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(180, audioCtx.currentTime);
+
+            // Onda de tipo sierra modificada para darle cuerpo físico al golpe
+            osc.type = 'sawtooth'; 
+            osc.frequency.setValueAtTime(65, audioCtx.currentTime);
+            // El tono cae rápidamente para simular el impacto contra el parqué
+            osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.04);
+
+            osc.connect(filter);
+            filter.connect(gainNode);
             gainNode.connect(audioCtx.destination);
 
-            // Bote sintético grave (impacto sordo)
-            osc.frequency.setValueAtTime(95, audioCtx.currentTime); 
-            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.09);
+            // Envolvente súper rápida para que se apague en seco (evitamos pitidos residuales)
+            gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.07);
 
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.12);
-
-            // Ejecutar la animación física de impacto en el suelo
-            triggerBounceAnimation();
+            osc.stop(audioCtx.currentTime + 0.08);
         }
 
         // Realizar la animación física del bote y deformación del balón al tocar el piso
         function triggerBounceAnimation() {
-            const duration = (60 / currentBpm) * 1000; // Duración de un ciclo completo de bote
+            const duration = (60 / currentBpm) * 1000; // Duración de un ciclo completo
             const halfTime = duration / 2;
 
-            // 1. Bola sube al punto máximo y baja
+            // Subir Pelota (fase aérea)
             ballCoach.style.transition = `transform ${halfTime}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             ballShadow.style.transition = `transform ${halfTime}ms ease, opacity ${halfTime}ms ease`;
 
-            // Subir Pelota
             ballCoach.style.transform = 'translateY(-100px) scaleY(1.05)';
             ballShadow.style.transform = 'scale(0.4)';
             ballShadow.style.opacity = '0.3';
 
-            // Bajar Pelota (sincronizado a la mitad del beat)
+            // Bajar Pelota (sincronizado a la mitad exacta del beat)
             setTimeout(() => {
                 ballCoach.style.transition = `transform ${halfTime}ms cubic-bezier(0.55, 0.085, 0.68, 0.53)`;
-                ballCoach.style.transform = 'translateY(0px) scaleY(0.9)'; // Deformación contra el suelo
+                ballCoach.style.transform = 'translateY(0px) scaleY(0.9)'; // Deformación leve contra el suelo
                 
                 ballShadow.style.transform = 'scale(1)';
                 ballShadow.style.opacity = '0.8';
 
-                // Al tocar el piso, suena el bote y destella el suelo
+                // Al tocar el piso, suena el bote físico y destella el suelo
                 setTimeout(() => {
                     playBounceSound();
                     
@@ -1073,7 +1076,7 @@
 
             const intervalMs = (60 / currentBpm) * 1000;
             
-            // Iniciar ciclo de rebote infinito
+            // Iniciar ciclo de rebote
             triggerBounceAnimation();
             bounceInterval = setInterval(() => {
                 triggerBounceAnimation();
@@ -1127,7 +1130,6 @@
             if (isPlaying) {
                 stopMetronome();
             }
-            // Suena el silbato inteligente
             playErrorWhistle();
             alert(translations[currentLang].errorAlert);
         });
