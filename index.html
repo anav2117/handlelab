@@ -9,7 +9,8 @@
         #app { width: 100%; max-width: 400px; }
         .box { border: 2px solid #ff6600; padding: 20px; border-radius: 20px; background: rgba(0,0,0,0.5); text-align: center; }
         h1 { color: #ff6600; margin-top: 0; }
-        #timer { font-size: 3rem; margin: 10px 0; color: #fff; font-weight: bold; }
+        #timer { font-size: 3rem; margin: 5px 0; color: #fff; font-weight: bold; }
+        #counter { font-size: 1.5rem; color: #ff9933; margin-bottom: 15px; }
         
         .level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         .level-btn { background: #222; border: 1px solid #444; color: #fff; padding: 15px; border-radius: 10px; cursor: pointer; font-size: 0.9rem; }
@@ -22,6 +23,7 @@
         <div class="box">
             <h1>HandleLab</h1>
             <div id="timer">00:00</div>
+            <div id="counter">Botes: 0</div>
             
             <div class="level-grid">
                 <button class="level-btn" onclick="iniciarNivel(1, 90, 60, 'Nivel 1, mano derecha.')">Nivel 1 (60s)</button>
@@ -39,6 +41,7 @@
         let interval = null;
         let timerInterval = null;
         let timeLeft = 0;
+        let botes = 0;
 
         function decir(texto) {
             window.speechSynthesis.cancel();
@@ -57,7 +60,7 @@
             
             if (timeLeft <= 0) {
                 detenerEntrenamiento();
-                decir("¡Excelente trabajo! Has completado el ejercicio.");
+                decir("¡Excelente! Terminaste con " + botes + " botes.");
             } else {
                 timeLeft--;
             }
@@ -68,9 +71,14 @@
             if (audioCtx.state === 'suspended') { audioCtx.resume(); }
             
             timeLeft = duracion;
+            botes = 0;
+            document.getElementById('counter').innerText = "Botes: 0";
             decir(instruccion);
             
             interval = setInterval(() => {
+                botes++;
+                document.getElementById('counter').innerText = "Botes: " + botes;
+                
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.connect(gain);
