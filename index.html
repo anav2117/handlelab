@@ -48,13 +48,15 @@
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(texto);
             msg.lang = currentLang;
-            msg.pitch = 0.7; // Tono grave
-            msg.rate = 1.0;
+            msg.pitch = 0.9; 
+            msg.rate = 0.95;
 
             const voces = window.speechSynthesis.getVoices();
-            const vozMasculina = voces.find(v => v.name.toLowerCase().includes('male'));
-            if (vozMasculina) { msg.voice = vozMasculina; }
+            const vozElegida = voces.find(v => v.name.includes('Google') && v.name.includes('Male')) 
+                           || voces.find(v => v.name.toLowerCase().includes('male')) 
+                           || voces[0];
             
+            msg.voice = vozElegida;
             window.speechSynthesis.speak(msg);
         }
 
@@ -102,3 +104,4 @@
     </script>
 </body>
 </html>
+
