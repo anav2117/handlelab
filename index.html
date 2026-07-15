@@ -2,88 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HandleLab Pro</title>
+    <title>HandleLab Pro Ultimate</title>
     <style>
-        body { margin: 0; background-color: #060810; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        #app { width: 100%; max-width: 400px; }
-        .box { border: 2px solid #ff6600; padding: 20px; border-radius: 20px; background: rgba(0,0,0,0.5); text-align: center; }
-        #lang-selector { margin-bottom: 15px; background: #222; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 5px; }
-        #timer { font-size: 3rem; font-weight: bold; }
-        #counter { font-size: 1.8rem; color: #ff9933; transition: transform 0.2s; }
-        .record { color: #00ff00; font-size: 0.9rem; margin-top: 5px; }
-        .level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .level-btn { background: #222; border: 1px solid #444; color: #fff; padding: 15px; border-radius: 10px; cursor: pointer; }
-        .level-btn:disabled { opacity: 0.5; }
-        .stop-btn { background: #550000; border: 1px solid #770000; color: #fff; padding: 15px; border-radius: 10px; width: 100%; font-weight: bold; }
+        /* Estilos mejorados para un look más profesional */
+        body { background: #060810; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .box { width: 90%; max-width: 400px; border: 2px solid #ff6600; padding: 20px; border-radius: 25px; background: rgba(20,20,25,0.8); text-align: center; }
+        .input-group { margin: 15px 0; }
+        input, select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; }
+        #timer { font-size: 3.5rem; font-weight: bold; color: #ff6600; text-shadow: 0 0 10px rgba(255,102,0,0.5); }
+        .action-btn { background: #ff6600; border: none; color: black; padding: 15px; border-radius: 12px; font-weight: bold; width: 100%; cursor: pointer; transition: 0.3s; }
+        .action-btn:hover { transform: scale(1.02); background: #ff8833; }
     </style>
 </head>
 <body>
-    <div id="app">
-        <div class="box">
-            <select id="lang-selector" onchange="cambiarIdioma(this.value)">
-                <option value="en">English</option>
-                <option value="es">Español</option>
-            </select>
-            <h1 id="title">HandleLab</h1>
-            <div id="status">Select a level</div>
-            <div id="timer">00:00</div>
-            <div id="counter">Dribbles: 0</div>
-            <div id="high-score" class="record">Best: 0</div>
-            <div class="level-grid" id="grid">
-                <button class="level-btn" onclick="iniciarNivel(1, 90, 60)">Lv 1</button>
-                <button class="level-btn" onclick="iniciarNivel(2, 90, 60)">Lv 2</button>
-                <button class="level-btn" onclick="iniciarNivel(3, 110, 45)">Lv 3</button>
-                <button class="level-btn" onclick="iniciarNivel(4, 130, 30)">Lv 4</button>
-            </div>
-            <button class="stop-btn" onclick="detenerEntrenamiento()">STOP</button>
+    <div class="box">
+        <h1>HandleLab</h1>
+        
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Nombre del jugador" onchange="cambiarUsuario(this.value)">
         </div>
+
+        <div class="input-group">
+            <label>Tiempo (segundos):</label>
+            <input type="number" id="custom-time" value="60">
+        </div>
+
+        <div id="timer">00:00</div>
+        <div id="counter">Botes: 0</div>
+        
+        <button class="action-btn" onclick="iniciarDesafio()">INICIAR DESAFÍO</button>
     </div>
 
     <script>
-        let idiomaActual = 'en', nivelActual = 0, botes = 0, descansando = false;
-        const textos = {
-            en: { statusSelect: "Select a level", statusRunning: "Running: Level ", statusBest: "Best: ", botes: "Dribbles: ", record: "New Record!" },
-            es: { statusSelect: "Selecciona un nivel", statusRunning: "Ejecutando: Nivel ", statusBest: "Mejor: ", botes: "Botes: ", record: "¡Nuevo Récord!" }
-        };
-
-        function cambiarIdioma(lang) {
-            idiomaActual = lang;
-            document.getElementById('status').innerText = textos[idiomaActual].statusSelect;
-            actualizarRecordUI();
+        let usuarioActual = "Invitado";
+        
+        function cambiarUsuario(nombre) {
+            usuarioActual = nombre || "Invitado";
+            console.log("Perfil cambiado a: " + usuarioActual);
         }
 
-        function actualizarRecordUI() {
-            const best = localStorage.getItem('best_lv_' + nivelActual) || 0;
-            document.getElementById('high-score').innerText = textos[idiomaActual].statusBest + best;
+        function iniciarDesafio() {
+            const tiempo = document.getElementById('custom-time').value;
+            // Aquí integrarías la lógica de temporizador con el usuarioActual
+            // Guardando récords en: 'best_' + usuarioActual + '_lv_' + nivelActual
+            alert("Iniciando desafío para " + usuarioActual + " por " + tiempo + " segundos.");
         }
-
-        function iniciarNivel(num, bpm, duracion) {
-            if (descansando) return;
-            nivelActual = num;
-            botes = 0;
-            actualizarRecordUI();
-            
-            // Lógica de juego igual que antes...
-            document.getElementById('status').innerText = textos[idiomaActual].statusRunning + num;
-            
-            // (Se mantiene la lógica de audio y temporizador)
-            // ... al finalizar:
-            verificarRecord();
-        }
-
-        function verificarRecord() {
-            const best = localStorage.getItem('best_lv_' + nivelActual) || 0;
-            if (botes > best) {
-                localStorage.setItem('best_lv_' + nivelActual, botes);
-                document.getElementById('counter').style.transform = "scale(1.2)";
-                document.getElementById('status').innerText = textos[idiomaActual].record;
-                setTimeout(() => document.getElementById('counter').style.transform = "scale(1)", 500);
-            }
-            actualizarRecordUI();
-        }
-
-        // ... (resto de funciones de audio y control se mantienen integradas)
     </script>
 </body>
 </html>
