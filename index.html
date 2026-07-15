@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,7 +33,7 @@
 
         /* Sistema de Pantallas y Transiciones (Fade) */
         .screen {
-            transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.5s ease-in-out, background-color 0.3s ease;
             opacity: 0;
             display: none;
             flex-direction: column;
@@ -344,13 +344,24 @@
             margin-left: 10px;
         }
 
-        /* PANTALLA 4: RHYTHM CONTROL MODULE (CON BOTE FÍSICO) */
+        /* PANTALLA 4: RHYTHM CONTROL MODULE */
         #screen-rhythm {
             background: linear-gradient(180deg, #090d16 0%, #060810 100%);
             padding: 30px 24px;
             justify-content: flex-start;
             overflow-y: auto;
             align-items: stretch;
+        }
+
+        /* Estado del fondo para feedback de ritmo */
+        #screen-rhythm.correct {
+            background: linear-gradient(180deg, #06200f 0%, #060810 100%);
+        }
+        #screen-rhythm.too-fast {
+            background: linear-gradient(180deg, #2b2203 0%, #060810 100%);
+        }
+        #screen-rhythm.too-slow {
+            background: linear-gradient(180deg, #2b0606 0%, #060810 100%);
         }
 
         .btn-back {
@@ -385,9 +396,43 @@
         }
 
         .rhythm-header p {
-            color: #64748b;
-            font-size: 0.85rem;
-            margin: 0 0 20px 0;
+            color: #a0aec0;
+            font-size: 0.9rem;
+            margin: 0 0 15px 0;
+            font-weight: bold;
+        }
+
+        /* Indicador en vivo súper fácil */
+        .live-instruction-banner {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Contador de Racha Gamificado */
+        .streak-counter-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .streak-fire-badge {
+            font-size: 1.5rem;
+            background: rgba(255, 102, 0, 0.2);
+            border: 1px solid #ff6600;
+            padding: 6px 15px;
+            border-radius: 20px;
+            color: #ffffff;
+            font-weight: 800;
         }
 
         /* Área de Rebote Física */
@@ -420,7 +465,7 @@
             border-radius: 50%;
             position: absolute;
             left: calc(50% - 25px);
-            bottom: 12px; /* Posición base sobre el suelo */
+            bottom: 12px;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
             z-index: 5;
             display: flex;
@@ -467,7 +512,7 @@
             100% { opacity: 0; transform: scale(1.5); }
         }
 
-        /* Display de Velocidad */
+        /* Display de Velocidad Simplificado */
         .bpm-display {
             font-size: 2.2rem;
             font-weight: 900;
@@ -476,7 +521,7 @@
         }
 
         .bpm-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #ff8833;
             font-weight: 700;
             text-transform: uppercase;
@@ -518,6 +563,29 @@
             gap: 12px;
         }
 
+        /* Botones de simulación interactivos para pruebas */
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-sim-action {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn-sim-action:active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
         /* Botón Play/Stop */
         .btn-audio {
             background: linear-gradient(135deg, #00b300 0%, #006600 100%);
@@ -537,26 +605,6 @@
         .btn-audio.playing {
             background: linear-gradient(135deg, #ff3333 0%, #990000 100%);
             box-shadow: 0 4px 15px rgba(255, 51, 51, 0.3);
-        }
-
-        /* Botón Simular Error */
-        .btn-error-trigger {
-            background: rgba(255, 51, 51, 0.1);
-            border: 1px dashed #ff3333;
-            color: #ff3333;
-            padding: 12px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s ease;
-        }
-
-        .btn-error-trigger:active {
-            background: rgba(255, 51, 51, 0.25);
-            transform: scale(0.98);
         }
 
         .btn-audio:active {
@@ -579,7 +627,7 @@
         <!-- PANTALLA 2: REGISTRO PREMIUM -->
         <div id="screen-register" class="screen">
             <div class="card">
-                <div class="card-icon">🔥</div>
+                <div class="card-icon">🏀</div>
                 <h2 id="reg-title">Create Profile</h2>
                 <p id="reg-subtitle">Configure your AI training</p>
                 
@@ -594,7 +642,6 @@
                         <input type="number" id="age" min="5" max="99" placeholder="Your age" required>
                     </div>
 
-                    <!-- Dos columnas: Mano dominante e Idioma -->
                     <div class="form-options">
                         <div class="form-group">
                             <label for="hand" id="label-hand">Dominant Hand</label>
@@ -659,13 +706,25 @@
             </div>
         </div>
 
-        <!-- PANTALLA 4: ENTRENAMIENTO DE RITMO (BOTE ACTIVO) -->
+        <!-- PANTALLA 4: ENTRENAMIENTO DE RITMO -->
         <div id="screen-rhythm" class="screen">
             <button class="btn-back" id="btn-back-to-dash">◀ Back</button>
 
             <div class="rhythm-header">
                 <h1 id="rhythm-title">Rhythm Control</h1>
                 <p id="rhythm-subtitle">Dribble perfectly in sync with the beat</p>
+            </div>
+
+            <!-- Indicador en vivo interactivo (Fácil para niños) -->
+            <div class="live-instruction-banner" id="live-banner">
+                ESCUCHA EL RITMO 🎧
+            </div>
+
+            <!-- Racha de Botes Perfectos Sencilla -->
+            <div class="streak-counter-box">
+                <div class="streak-fire-badge" id="streak-badge">
+                    🔥 0 BOTES
+                </div>
             </div>
 
             <!-- Cancha Interactiva con Animación de Rebote -->
@@ -678,19 +737,26 @@
 
             <!-- Display de Velocidad -->
             <div class="bpm-display" id="bpm-number">120</div>
-            <div class="bpm-label">Beats Per Minute (BPM)</div>
+            <div class="bpm-label" id="speed-label">Velocidad del Bote</div>
 
             <!-- Selector de Presets -->
             <div class="speed-presets">
-                <button class="preset-btn" data-bpm="90" id="preset-warm">Warm-up</button>
-                <button class="preset-btn active" data-bpm="120" id="preset-game">Game Pace</button>
-                <button class="preset-btn" data-bpm="150" id="preset-pro">Pro Speed</button>
+                <button class="preset-btn" data-bpm="90" id="preset-warm">Lento</button>
+                <button class="preset-btn active" data-bpm="120" id="preset-game">Normal</button>
+                <button class="preset-btn" data-bpm="150" id="preset-pro">Rápido</button>
             </div>
 
             <!-- Bloque de acciones -->
             <div class="rhythm-actions">
-                <button class="btn-audio" id="btn-audio-toggle">Start Beat</button>
-                <button class="btn-error-trigger" id="btn-error-trigger">Simulate Dribble Error ⚠️</button>
+                <button class="btn-audio" id="btn-audio-toggle">Empezar Entrenamiento</button>
+                
+                <!-- Botones de simulación directa (Para probar el cálculo y las voces del coach) -->
+                <div class="sim-grid">
+                    <button class="btn-sim-action" id="btn-sim-perfect">Bote Perfecto 👍</button>
+                    <button class="btn-sim-action" id="btn-sim-fast">Muy Rápido 🐢</button>
+                    <button class="btn-sim-action" id="btn-sim-slow">Muy Lento ⚡</button>
+                    <button class="btn-sim-action" id="btn-sim-error">Fallo / Pérdida ⚠️</button>
+                </div>
             </div>
         </div>
 
@@ -730,13 +796,18 @@
                 backBtn: "◀ Back",
                 rhythmTitle: "Rhythm Control",
                 rhythmSubtitle: "Dribble perfectly in sync with the beat",
-                presetWarm: "Warm-up",
-                presetGame: "Game Pace",
-                presetPro: "Pro Speed",
-                btnAudioStart: "Start Beat",
-                btnAudioStop: "Stop Beat",
-                btnErrorSim: "Simulate Dribble Error ⚠️",
-                errorAlert: "AI Detected Out of Rhythm! Adjust!"
+                presetWarm: "Slow",
+                presetGame: "Normal",
+                presetPro: "Fast",
+                btnAudioStart: "Start Training",
+                btnAudioStop: "Stop Training",
+                speedLabel: "Dribble Speed",
+                listenRit: "LISTEN TO THE BEAT 🎧",
+                perfMsg: "PERFECT! KEEP IT UP 🔥",
+                fastMsg: "SLOW DOWN A BIT! 🐢",
+                slowMsg: "FASTER! SPEED UP! ⚡",
+                errorMsg: "LOST CONTROL! ⚠️",
+                bouncesTxt: "BOUNCES"
             },
             es: {
                 langButton: "EN",
@@ -769,17 +840,22 @@
                 backBtn: "◀ Volver",
                 rhythmTitle: "Control de Ritmo",
                 rhythmSubtitle: "Bota perfectamente sincronizado con el beat",
-                presetWarm: "Calentar",
-                presetGame: "Ritmo Real",
-                presetPro: "Veloz Pro",
-                btnAudioStart: "Iniciar Ritmo",
-                btnAudioStop: "Detener Ritmo",
-                btnErrorSim: "Simular Error de Bote ⚠️",
-                errorAlert: "¡IA Detectó Ritmo Incorrecto! ¡Ajusta!"
+                presetWarm: "Lento",
+                presetGame: "Normal",
+                presetPro: "Rápido",
+                btnAudioStart: "Empezar Entrenamiento",
+                btnAudioStop: "Detener Entrenamiento",
+                speedLabel: "Velocidad del Bote",
+                listenRit: "ESCUCHA EL RITMO 🎧",
+                perfMsg: "¡PERFECTO! SIGUE ASÍ 🔥",
+                fastMsg: "¡FRENA UN POCO! 🐢",
+                slowMsg: "¡MÁS RÁPIDO! ⚡",
+                errorMsg: "¡PERDISTE EL CONTROL! ⚠️",
+                bouncesTxt: "BOTES"
             }
         };
 
-        let currentLang = 'en'; 
+        let currentLang = 'es'; // Por defecto Español para el mercado local
         let savedProfile = null;
 
         // Elementos interactivos del DOM
@@ -821,12 +897,18 @@
         const presetGame = document.getElementById('preset-game');
         const presetPro = document.getElementById('preset-pro');
         const btnAudioToggle = document.getElementById('btn-audio-toggle');
-        const btnErrorTrigger = document.getElementById('btn-error-trigger');
+        const speedLabel = document.getElementById('speed-label');
+        const liveBanner = document.getElementById('live-banner');
+        const streakBadge = document.getElementById('streak-badge');
 
         // Elementos Físicos de la Cancha de Bote
         const ballCoach = document.getElementById('ball-coach');
         const ballShadow = document.getElementById('ball-shadow');
         const impactFlash = document.getElementById('impact-flash');
+        const screenRhythm = document.getElementById('screen-rhythm');
+
+        // Inicializar traducción por defecto al cargar
+        updateLanguage(currentLang);
 
         // Función para cambiar textos en la UI
         function updateLanguage(lang) {
@@ -856,7 +938,7 @@
             presetWarm.textContent = translations[lang].presetWarm;
             presetGame.textContent = translations[lang].presetGame;
             presetPro.textContent = translations[lang].presetPro;
-            btnErrorTrigger.textContent = translations[lang].btnErrorSim;
+            speedLabel.textContent = translations[lang].speedLabel;
             
             if (isPlaying) {
                 btnAudioToggle.textContent = translations[lang].btnAudioStop;
@@ -895,7 +977,6 @@
         const screenWelcome = document.getElementById('screen-welcome');
         const screenRegister = document.getElementById('screen-register');
         const screenDashboard = document.getElementById('screen-dashboard');
-        const screenRhythm = document.getElementById('screen-rhythm');
         const registerForm = document.getElementById('register-form');
         const cardRhythm = document.getElementById('card-rhythm');
 
@@ -955,20 +1036,85 @@
         });
 
         /* ========================================================
-           SISTEMA DE AUDIO Y ANIMACIÓN DEL BOTE DE BOLA
+           SISTEMA DE AUDIO, VOZ DEL ENTRENADOR Y FEEDBACK
            ======================================================== */
         let audioCtx = null;
         let isPlaying = false;
         let currentBpm = 120;
         let bounceInterval = null;
+        let perfectStreak = 0; // Cuenta de botes perfectos del joven
 
         const bpmNumber = document.getElementById('bpm-number');
         const presetButtons = document.querySelectorAll('.preset-btn');
 
+        // Inicializar motor de sonido
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
+        }
+
+        // SISTEMA DE VOZ DEL ENTRENADOR (Súper enérgico, sin tecnicismos)
+        const coachVoices = {
+            es: {
+                perfect: ["¡Eso es, perfecto!", "¡Gran ritmo!", "¡Excelente control!", "¡Sigue así, campeón!", "¡Ritmo perfecto!"],
+                tooFast: ["¡Ey, frena un poco el balón!", "¡Vas muy acelerado!", "¡Tranquilo, controla la velocidad!", "¡Baja un poco el ritmo!"],
+                tooSlow: ["¡Dale más rápido!", "¡Acelera esa mano!", "¡Más energía!", "¡Muévelo con fuerza!"],
+                error: ["¡Oh! ¡Recupera el balón!", "¡Racha perdida! ¡Empecemos de nuevo!", "¡Concéntrate! ¡Tú puedes!"]
+            },
+            en: {
+                perfect: ["Perfect tempo!", "Great rhythm!", "Nice handling!", "Keep it going!", "Perfect!"],
+                tooFast: ["Slow down!", "Easy there, too fast!", "Control the speed!", "Hold the tempo!"],
+                tooSlow: ["Faster!", "Speed up!", "More power!", "Push that ball!"],
+                error: ["Oops! Grab the ball!", "Streak lost! Let's start over!", "Focus! You got this!"]
+            }
+        };
+
+        let lastSpeakTime = 0;
+
+        function speakAsCoach(category) {
+            const now = Date.now();
+            // Evitar que el entrenador hable encima de sí mismo cada segundo (espera al menos 2.5 segundos entre frases)
+            if (now - lastSpeakTime < 2500) return;
+
+            const languageGroup = coachVoices[currentLang] ? currentLang : 'en';
+            const phraseList = coachVoices[languageGroup][category];
+            const randomPhrase = phraseList[Math.floor(Math.random() * phraseList.length)];
+
+            const utterance = new SpeechSynthesisUtterance(randomPhrase);
+            utterance.lang = languageGroup === 'es' ? 'es-ES' : 'en-US';
+            utterance.rate = 1.15; // Un poco más rápido para dar dinamismo de entrenador de básquet
+            utterance.pitch = 1.0; // Tono natural y enérgico
+            
+            window.speechSynthesis.cancel(); // Cancelar cualquier voz pendiente anterior
+            window.speechSynthesis.speak(utterance);
+            lastSpeakTime = now;
+        }
+
+        // Sonido físico del impacto (Grave y seco)
+        function playBounceSound() {
+            if (!audioCtx) return;
+            
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(180, audioCtx.currentTime);
+
+            osc.type = 'sawtooth'; 
+            osc.frequency.setValueAtTime(65, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.04);
+
+            osc.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.07);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
         }
 
         // Simular el silbato de error de la IA
@@ -997,42 +1143,11 @@
             osc2.stop(audioCtx.currentTime + 0.4);
         }
 
-        // Función mejorada: Golpe grave, seco e instantáneo (como un balón de verdad)
-        function playBounceSound() {
-            if (!audioCtx) return;
-            
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            const filter = audioCtx.createBiquadFilter();
-
-            // Filtro para deshacernos de las frecuencias metálicas/agudas
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(180, audioCtx.currentTime);
-
-            // Onda de tipo sierra modificada para darle cuerpo físico al golpe
-            osc.type = 'sawtooth'; 
-            osc.frequency.setValueAtTime(65, audioCtx.currentTime);
-            // El tono cae rápidamente para simular el impacto contra el parqué
-            osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.04);
-
-            osc.connect(filter);
-            filter.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            // Envolvente súper rápida para que se apague en seco (evitamos pitidos residuales)
-            gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.07);
-
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.08);
-        }
-
-        // Realizar la animación física del bote y deformación del balón al tocar el piso
+        // Animación de bote física en la pantalla
         function triggerBounceAnimation() {
-            const duration = (60 / currentBpm) * 1000; // Duración de un ciclo completo
+            const duration = (60 / currentBpm) * 1000;
             const halfTime = duration / 2;
 
-            // Subir Pelota (fase aérea)
             ballCoach.style.transition = `transform ${halfTime}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             ballShadow.style.transition = `transform ${halfTime}ms ease, opacity ${halfTime}ms ease`;
 
@@ -1040,30 +1155,82 @@
             ballShadow.style.transform = 'scale(0.4)';
             ballShadow.style.opacity = '0.3';
 
-            // Bajar Pelota (sincronizado a la mitad exacta del beat)
             setTimeout(() => {
                 ballCoach.style.transition = `transform ${halfTime}ms cubic-bezier(0.55, 0.085, 0.68, 0.53)`;
-                ballCoach.style.transform = 'translateY(0px) scaleY(0.9)'; // Deformación leve contra el suelo
+                ballCoach.style.transform = 'translateY(0px) scaleY(0.9)';
                 
                 ballShadow.style.transform = 'scale(1)';
                 ballShadow.style.opacity = '0.8';
 
-                // Al tocar el piso, suena el bote físico y destella el suelo
                 setTimeout(() => {
                     playBounceSound();
                     
-                    // Destello físico
                     impactFlash.classList.remove('impact-active');
-                    void impactFlash.offsetWidth; // Reset de animación CSS
+                    void impactFlash.offsetWidth; // Reset CSS
                     impactFlash.classList.add('impact-active');
                     
-                    // Restaurar forma esférica normal de inmediato
                     ballCoach.style.transform = 'translateY(0px) scaleY(1)';
                 }, halfTime - 20);
 
             }, halfTime);
         }
 
+        // PROCESAR LA RESPUESTA DINÁMICA DEL COACH (Feedback Visual + Voces)
+        function handleCoachFeedback(status) {
+            // Limpiar estados visuales anteriores
+            screenRhythm.classList.remove('correct', 'too-fast', 'too-slow');
+
+            if (status === "PERFECT") {
+                perfectStreak++;
+                screenRhythm.classList.add('correct');
+                liveBanner.style.background = "#0c4a1e";
+                liveBanner.textContent = translations[currentLang].perfMsg;
+                speakAsCoach("perfect");
+            } else if (status === "TOO_FAST") {
+                perfectStreak = 0; // Rompe racha
+                screenRhythm.classList.add('too-fast');
+                liveBanner.style.background = "#744210";
+                liveBanner.textContent = translations[currentLang].fastMsg;
+                speakAsCoach("tooFast");
+            } else if (status === "TOO_SLOW") {
+                perfectStreak = 0; // Rompe racha
+                screenRhythm.classList.add('too-slow');
+                liveBanner.style.background = "#741212";
+                liveBanner.textContent = translations[currentLang].slowMsg;
+                speakAsCoach("tooSlow");
+            } else if (status === "ERROR") {
+                perfectStreak = 0;
+                liveBanner.style.background = "#ff3333";
+                liveBanner.textContent = translations[currentLang].errorMsg;
+                playErrorWhistle();
+                speakAsCoach("error");
+            }
+
+            // Actualizar el contador de botes de forma animada e interactiva para niños
+            streakBadge.textContent = `🔥 ${perfectStreak} ${translations[currentLang].bouncesTxt}`;
+        }
+
+        // LÓGICA DE SIMULACIONES PARA PRUEBAS
+        document.getElementById('btn-sim-perfect').addEventListener('click', () => {
+            triggerBounceAnimation();
+            handleCoachFeedback("PERFECT");
+        });
+
+        document.getElementById('btn-sim-fast').addEventListener('click', () => {
+            triggerBounceAnimation();
+            handleCoachFeedback("TOO_FAST");
+        });
+
+        document.getElementById('btn-sim-slow').addEventListener('click', () => {
+            triggerBounceAnimation();
+            handleCoachFeedback("TOO_SLOW");
+        });
+
+        document.getElementById('btn-sim-error').addEventListener('click', () => {
+            handleCoachFeedback("ERROR");
+        });
+
+        // Controladores del Metrónomo / Ritmo Guía
         function startMetronome() {
             initAudio();
             if (audioCtx.state === 'suspended') {
@@ -1076,7 +1243,6 @@
 
             const intervalMs = (60 / currentBpm) * 1000;
             
-            // Iniciar ciclo de rebote
             triggerBounceAnimation();
             bounceInterval = setInterval(() => {
                 triggerBounceAnimation();
@@ -1093,7 +1259,11 @@
                 bounceInterval = null;
             }
 
-            // Resetear pelota a su posición del suelo
+            // Resetear pantalla a su estado original
+            screenRhythm.classList.remove('correct', 'too-fast', 'too-slow');
+            liveBanner.style.background = "rgba(255, 255, 255, 0.1)";
+            liveBanner.textContent = translations[currentLang].listenRit;
+
             ballCoach.style.transition = 'transform 0.3s ease';
             ballCoach.style.transform = 'translateY(0px) scaleY(1)';
             ballShadow.style.transform = 'scale(1)';
@@ -1116,7 +1286,6 @@
             });
         });
 
-        // Evento Iniciar/Detener Metrónomo
         btnAudioToggle.addEventListener('click', () => {
             if (isPlaying) {
                 stopMetronome();
@@ -1124,16 +1293,6 @@
                 startMetronome();
             }
         });
-
-        // Evento Simular Error de Ritmo
-        btnErrorTrigger.addEventListener('click', () => {
-            if (isPlaying) {
-                stopMetronome();
-            }
-            playErrorWhistle();
-            alert(translations[currentLang].errorAlert);
-        });
     </script>
 </body>
 </html>
-
