@@ -344,7 +344,7 @@
             margin-left: 10px;
         }
 
-        /* PANTALLA 4: RHYTHM CONTROL MODULE */
+        /* PANTALLA 4: RHYTHM CONTROL MODULE (CON BOTE FÍSICO) */
         #screen-rhythm {
             background: linear-gradient(180deg, #090d16 0%, #060810 100%);
             padding: 30px 24px;
@@ -353,7 +353,6 @@
             align-items: stretch;
         }
 
-        /* Botón Regresar */
         .btn-back {
             background: none;
             border: none;
@@ -367,7 +366,7 @@
             align-items: center;
             align-self: flex-start;
             margin-top: 30px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             padding: 0;
             transition: color 0.2s;
         }
@@ -381,81 +380,109 @@
             font-weight: 900;
             color: #ffffff;
             text-transform: uppercase;
-            margin: 0 0 8px 0;
+            margin: 0 0 4px 0;
             letter-spacing: 1px;
         }
 
         .rhythm-header p {
             color: #64748b;
-            font-size: 0.9rem;
-            margin: 0 0 30px 0;
+            font-size: 0.85rem;
+            margin: 0 0 20px 0;
         }
 
-        /* Visualizador de Pulso */
-        .pulse-container {
-            height: 180px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Área de Rebote Física */
+        .bounce-court {
+            height: 160px;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(30, 41, 59, 0.2) 100%);
+            border: 1px solid rgba(255, 102, 0, 0.15);
+            border-radius: 20px;
             position: relative;
-            margin-bottom: 30px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
         }
 
-        .pulse-ring {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,102,0,0.6) 0%, rgba(255,0,0,0) 70%);
+        /* Suelo de la Cancha */
+        .court-floor {
             position: absolute;
-            opacity: 0;
-            transform: scale(0.5);
+            bottom: 0;
+            width: 100%;
+            height: 12px;
+            background: linear-gradient(90deg, #ff6600 0%, #ff3300 100%);
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
         }
 
-        /* Clase de animación que se activará vía JS */
-        .pulse-active {
-            animation: beat-ring 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-        }
-
-        @keyframes beat-ring {
-            0% {
-                transform: scale(0.5);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.6);
-                opacity: 0;
-            }
-        }
-
-        .pulse-center {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #ff9900 0%, #cc0000 100%);
+        /* Bola de Baloncesto */
+        .ball-coach {
+            width: 50px;
+            height: 50px;
+            background-image: radial-gradient(circle at 35% 35%, #ff8833, #cc4400 70%, #661100);
             border-radius: 50%;
+            position: absolute;
+            left: calc(50% - 25px);
+            bottom: 12px; /* Posición base sobre el suelo */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+            z-index: 5;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 2.2rem;
-            z-index: 2;
-            box-shadow: 0 0 25px rgba(255, 102, 0, 0.5);
-            transition: transform 0.1s ease-out;
+            justify-content: center;
+            font-size: 1.5rem;
+            user-select: none;
+            /* Se controlará la animación mediante variables CSS dinámicas */
         }
 
-        /* Controles de BPM */
+        /* Sombra dinámica de la pelota */
+        .ball-shadow {
+            width: 40px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            position: absolute;
+            left: calc(50% - 20px);
+            bottom: 8px;
+            z-index: 1;
+            transform: scale(1);
+            opacity: 0.8;
+            transition: transform 0.1s ease, opacity 0.1s ease;
+        }
+
+        /* Clase para el destello del impacto del bote */
+        .impact-flash {
+            position: absolute;
+            bottom: 12px;
+            left: calc(50% - 30px);
+            width: 60px;
+            height: 15px;
+            background: radial-gradient(ellipse, rgba(255,102,0,0.8) 0%, rgba(255,0,0,0) 70%);
+            opacity: 0;
+            z-index: 2;
+        }
+
+        /* Animación activa del impacto */
+        .impact-active {
+            animation: flash-impact 0.15s ease-out;
+        }
+
+        @keyframes flash-impact {
+            0% { opacity: 1; transform: scale(0.8); }
+            100% { opacity: 0; transform: scale(1.5); }
+        }
+
+        /* Display de Velocidad */
         .bpm-display {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 900;
             color: #ffffff;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
 
         .bpm-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #ff8833;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 25px;
+            margin-bottom: 18px;
         }
 
         /* Selector Rápido de Ritmo */
@@ -463,7 +490,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .preset-btn {
@@ -485,12 +512,18 @@
             box-shadow: 0 0 12px rgba(255, 102, 0, 0.4);
         }
 
-        /* Botón de Audio (Play / Stop) */
+        /* Controles de Acción Inferiores */
+        .rhythm-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Botón Play/Stop */
         .btn-audio {
             background: linear-gradient(135deg, #00b300 0%, #006600 100%);
             color: #ffffff;
             border: none;
-            width: 100%;
             padding: 16px;
             font-size: 1.2rem;
             font-weight: 800;
@@ -505,6 +538,26 @@
         .btn-audio.playing {
             background: linear-gradient(135deg, #ff3333 0%, #990000 100%);
             box-shadow: 0 4px 15px rgba(255, 51, 51, 0.3);
+        }
+
+        /* Botón Simular Error */
+        .btn-error-trigger {
+            background: rgba(255, 51, 51, 0.1);
+            border: 1px dashed #ff3333;
+            color: #ff3333;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-error-trigger:active {
+            background: rgba(255, 51, 51, 0.25);
+            transform: scale(0.98);
         }
 
         .btn-audio:active {
@@ -607,7 +660,7 @@
             </div>
         </div>
 
-        <!-- PANTALLA 4: ENTRENAMIENTO DE RITMO -->
+        <!-- PANTALLA 4: ENTRENAMIENTO DE RITMO (BOTE ACTIVO) -->
         <div id="screen-rhythm" class="screen">
             <button class="btn-back" id="btn-back-to-dash">◀ Back</button>
 
@@ -616,10 +669,12 @@
                 <p id="rhythm-subtitle">Dribble perfectly in sync with the beat</p>
             </div>
 
-            <!-- Visualizador del Pulso -->
-            <div class="pulse-container">
-                <div class="pulse-ring" id="pulse-ring"></div>
-                <div class="pulse-center" id="pulse-center">🏀</div>
+            <!-- Cancha Interactiva con Animación de Rebote -->
+            <div class="bounce-court">
+                <div class="ball-shadow" id="ball-shadow"></div>
+                <div class="impact-flash" id="impact-flash"></div>
+                <div class="ball-coach" id="ball-coach">🏀</div>
+                <div class="court-floor"></div>
             </div>
 
             <!-- Display de Velocidad -->
@@ -633,8 +688,11 @@
                 <button class="preset-btn" data-bpm="150" id="preset-pro">Pro Speed</button>
             </div>
 
-            <!-- Botón Play/Stop -->
-            <button class="btn-audio" id="btn-audio-toggle">Start Beat</button>
+            <!-- Bloque de acciones -->
+            <div class="rhythm-actions">
+                <button class="btn-audio" id="btn-audio-toggle">Start Beat</button>
+                <button class="btn-error-trigger" id="btn-error-trigger">Simulate Dribble Error ⚠️</button>
+            </div>
         </div>
 
     </div>
@@ -678,7 +736,9 @@
                 presetGame: "Game Pace",
                 presetPro: "Pro Speed",
                 btnAudioStart: "Start Beat",
-                btnAudioStop: "Stop Beat"
+                btnAudioStop: "Stop Beat",
+                btnErrorSim: "Simulate Dribble Error ⚠️",
+                errorAlert: "AI Detected Out of Rhythm! Adjust!"
             },
             es: {
                 langButton: "EN",
@@ -716,11 +776,13 @@
                 presetGame: "Ritmo Real",
                 presetPro: "Veloz Pro",
                 btnAudioStart: "Iniciar Ritmo",
-                btnAudioStop: "Detener Ritmo"
+                btnAudioStop: "Detener Ritmo",
+                btnErrorSim: "Simular Error de Bote ⚠️",
+                errorAlert: "¡IA Detectó Ritmo Incorrecto! ¡Ajusta!"
             }
         };
 
-        let currentLang = 'en'; // Inglés por defecto
+        let currentLang = 'en'; 
         let savedProfile = null;
 
         // Elementos interactivos del DOM
@@ -762,6 +824,12 @@
         const presetGame = document.getElementById('preset-game');
         const presetPro = document.getElementById('preset-pro');
         const btnAudioToggle = document.getElementById('btn-audio-toggle');
+        const btnErrorTrigger = document.getElementById('btn-error-trigger');
+
+        // Elementos Físicos de la Cancha de Bote
+        const ballCoach = document.getElementById('ball-coach');
+        const ballShadow = document.getElementById('ball-shadow');
+        const impactFlash = document.getElementById('impact-flash');
 
         // Función para cambiar textos en la UI
         function updateLanguage(lang) {
@@ -782,7 +850,6 @@
             optLangEs.textContent = translations[lang].optLangEs;
             btnSubmitText.textContent = translations[lang].btnSubmit;
             
-            // Sincronizar el selector del formulario
             selectLangInput.value = lang;
 
             // Pantalla de Ritmo
@@ -792,6 +859,7 @@
             presetWarm.textContent = translations[lang].presetWarm;
             presetGame.textContent = translations[lang].presetGame;
             presetPro.textContent = translations[lang].presetPro;
+            btnErrorTrigger.textContent = translations[lang].btnErrorSim;
             
             if (isPlaying) {
                 btnAudioToggle.textContent = translations[lang].btnAudioStop;
@@ -799,7 +867,6 @@
                 btnAudioToggle.textContent = translations[lang].btnAudioStart;
             }
 
-            // Actualizar textos del Dashboard si hay un perfil activo
             if (savedProfile) {
                 dashWelcome.textContent = translations[lang].dashWelcome.replace('{name}', savedProfile.alias);
                 dashSubtitle.textContent = translations[lang].dashSubtitle;
@@ -818,13 +885,11 @@
             }
         }
 
-        // Cambiar idioma con el botón flotante
         langToggle.addEventListener('click', () => {
             const nextLang = currentLang === 'en' ? 'es' : 'en';
             updateLanguage(nextLang);
         });
 
-        // Cambiar idioma desde el formulario
         selectLangInput.addEventListener('change', (e) => {
             updateLanguage(e.target.value);
         });
@@ -837,7 +902,6 @@
         const registerForm = document.getElementById('register-form');
         const cardRhythm = document.getElementById('card-rhythm');
 
-        // Navegación: Portada ➔ Registro
         btnStart.addEventListener('click', () => {
             screenWelcome.classList.remove('active');
             setTimeout(() => {
@@ -849,17 +913,14 @@
             }, 500);
         });
 
-        // Navegación: Registro ➔ Dashboard
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
             savedProfile = {
                 alias: document.getElementById('alias').value,
                 age: document.getElementById('age').value,
                 hand: document.getElementById('hand').value,
                 lang: selectLangInput.value
             };
-
             localStorage.setItem('hl_user_profile', JSON.stringify(savedProfile));
             updateLanguage(savedProfile.lang);
 
@@ -873,7 +934,6 @@
             }, 500);
         });
 
-        // Navegación: Dashboard ➔ Rhythm Module
         cardRhythm.addEventListener('click', () => {
             screenDashboard.classList.remove('active');
             setTimeout(() => {
@@ -885,9 +945,8 @@
             }, 500);
         });
 
-        // Navegación: Rhythm Module ➔ Dashboard
         btnBackToDash.addEventListener('click', () => {
-            stopMetronome(); // Parar metrónomo si se está ejecutando
+            stopMetronome();
             screenRhythm.classList.remove('active');
             setTimeout(() => {
                 screenRhythm.style.display = 'none';
@@ -899,27 +958,51 @@
         });
 
         /* ========================================================
-           LÓGICA DEL MOTOR DE AUDIO INTERACTIVO (METRÓNOMO / BEAT)
+           SISTEMA DE AUDIO Y ANIMACIÓN DEL BOTE DE BOLA
            ======================================================== */
         let audioCtx = null;
         let isPlaying = false;
         let currentBpm = 120;
-        let metronomeInterval = null;
+        let bounceInterval = null;
 
         const bpmNumber = document.getElementById('bpm-number');
-        const pulseCenter = document.getElementById('pulse-center');
-        const pulseRing = document.getElementById('pulse-ring');
         const presetButtons = document.querySelectorAll('.preset-btn');
 
-        // Función para inicializar el contexto de audio en la primera interacción
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
         }
 
-        // Generar un beep preciso
-        function playBeatTone() {
+        // Simular el silbato de error de la IA
+        function playErrorWhistle() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc1.connect(gainNode);
+            osc2.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            // Frecuencias disonantes y estridentes para simular un silbato electrónico de árbitro
+            osc1.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc2.frequency.setValueAtTime(805, audioCtx.currentTime);
+
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.6, audioCtx.currentTime + 0.05);
+            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+
+            osc1.start();
+            osc2.start();
+            osc1.stop(audioCtx.currentTime + 0.4);
+            osc2.stop(audioCtx.currentTime + 0.4);
+        }
+
+        // Generar un sonido de drible de baloncesto (Impacto de madera)
+        function playBounceSound() {
             if (!audioCtx) return;
             
             const osc = audioCtx.createOscillator();
@@ -928,30 +1011,54 @@
             osc.connect(gainNode);
             gainNode.connect(audioCtx.destination);
 
-            // Tono sintético de bote de baloncesto (bajos)
-            osc.frequency.setValueAtTime(120, audioCtx.currentTime); // Hz
+            // Bote sintético grave (impacto sordo)
+            osc.frequency.setValueAtTime(95, audioCtx.currentTime); 
             gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-            // Caída súper rápida de ganancia para emular impacto de bote
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.09);
 
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.15);
+            osc.stop(audioCtx.currentTime + 0.12);
 
-            // Gatillar efectos visuales de pulso en sincronía
-            triggerPulseVisual();
+            // Ejecutar la animación física de impacto en el suelo
+            triggerBounceAnimation();
         }
 
-        function triggerPulseVisual() {
-            // Animación del centro
-            pulseCenter.style.transform = 'scale(0.9)';
-            setTimeout(() => {
-                pulseCenter.style.transform = 'scale(1)';
-            }, 80);
+        // Realizar la animación física del bote y deformación del balón al tocar el piso
+        function triggerBounceAnimation() {
+            const duration = (60 / currentBpm) * 1000; // Duración de un ciclo completo de bote
+            const halfTime = duration / 2;
 
-            // Lanzar anillo de pulso
-            pulseRing.classList.remove('pulse-active');
-            void pulseRing.offsetWidth; // Truco de reflow de CSS para reiniciar animación
-            pulseRing.classList.add('pulse-active');
+            // 1. Bola sube al punto máximo y baja
+            ballCoach.style.transition = `transform ${halfTime}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+            ballShadow.style.transition = `transform ${halfTime}ms ease, opacity ${halfTime}ms ease`;
+
+            // Subir Pelota
+            ballCoach.style.transform = 'translateY(-100px) scaleY(1.05)';
+            ballShadow.style.transform = 'scale(0.4)';
+            ballShadow.style.opacity = '0.3';
+
+            // Bajar Pelota (sincronizado a la mitad del beat)
+            setTimeout(() => {
+                ballCoach.style.transition = `transform ${halfTime}ms cubic-bezier(0.55, 0.085, 0.68, 0.53)`;
+                ballCoach.style.transform = 'translateY(0px) scaleY(0.9)'; // Deformación contra el suelo
+                
+                ballShadow.style.transform = 'scale(1)';
+                ballShadow.style.opacity = '0.8';
+
+                // Al tocar el piso, suena el bote y destella el suelo
+                setTimeout(() => {
+                    playBounceSound();
+                    
+                    // Destello físico
+                    impactFlash.classList.remove('impact-active');
+                    void impactFlash.offsetWidth; // Reset de animación CSS
+                    impactFlash.classList.add('impact-active');
+                    
+                    // Restaurar forma esférica normal de inmediato
+                    ballCoach.style.transform = 'translateY(0px) scaleY(1)';
+                }, halfTime - 20);
+
+            }, halfTime);
         }
 
         function startMetronome() {
@@ -964,14 +1071,12 @@
             btnAudioToggle.classList.add('playing');
             btnAudioToggle.textContent = translations[currentLang].btnAudioStop;
 
-            // Calcular el intervalo en milisegundos en base a los BPM
             const intervalMs = (60 / currentBpm) * 1000;
             
-            // Primer golpe inmediato
-            playBeatTone();
-
-            metronomeInterval = setInterval(() => {
-                playBeatTone();
+            // Iniciar ciclo de rebote infinito
+            triggerBounceAnimation();
+            bounceInterval = setInterval(() => {
+                triggerBounceAnimation();
             }, intervalMs);
         }
 
@@ -980,13 +1085,19 @@
             btnAudioToggle.classList.remove('playing');
             btnAudioToggle.textContent = translations[currentLang].btnAudioStart;
             
-            if (metronomeInterval) {
-                clearInterval(metronomeInterval);
-                metronomeInterval = null;
+            if (bounceInterval) {
+                clearInterval(bounceInterval);
+                bounceInterval = null;
             }
+
+            // Resetear pelota a su posición del suelo
+            ballCoach.style.transition = 'transform 0.3s ease';
+            ballCoach.style.transform = 'translateY(0px) scaleY(1)';
+            ballShadow.style.transform = 'scale(1)';
+            ballShadow.style.opacity = '0.8';
         }
 
-        // Eventos de los botones de presets
+        // Cambiar presets de velocidad
         presetButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 presetButtons.forEach(btn => btn.classList.remove('active'));
@@ -995,7 +1106,6 @@
                 currentBpm = parseInt(button.getAttribute('data-bpm'));
                 bpmNumber.textContent = currentBpm;
 
-                // Si está reproduciendo, reiniciar metrónomo a la nueva velocidad
                 if (isPlaying) {
                     stopMetronome();
                     startMetronome();
@@ -1003,7 +1113,7 @@
             });
         });
 
-        // Evento Play/Stop del Botón de Audio
+        // Evento Iniciar/Detener Metrónomo
         btnAudioToggle.addEventListener('click', () => {
             if (isPlaying) {
                 stopMetronome();
@@ -1011,6 +1121,17 @@
                 startMetronome();
             }
         });
+
+        // Evento Simular Error de Ritmo
+        btnErrorTrigger.addEventListener('click', () => {
+            if (isPlaying) {
+                stopMetronome();
+            }
+            // Suena el silbato inteligente
+            playErrorWhistle();
+            alert(translations[currentLang].errorAlert);
+        });
     </script>
 </body>
 </html>
+
