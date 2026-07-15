@@ -38,7 +38,6 @@
         let currentLang = 'en-US';
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Esta función desbloquea el audio y lanza el coach
         function iniciarTodo() {
             if (audioCtx.state === 'suspended') { audioCtx.resume(); }
             decir(currentLang === 'en-US' ? "Let's work. Keep the rhythm." : "A trabajar. Mantén el ritmo.");
@@ -49,11 +48,13 @@
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(texto);
             msg.lang = currentLang;
-            msg.pitch = 0.7; 
+            msg.pitch = 0.7; // Tono grave
             msg.rate = 1.0;
-            // Forzar búsqueda de voz si el sistema no la detecta automáticamente
-            const voices = window.speechSynthesis.getVoices();
-            msg.voice = voices.find(v => v.lang === currentLang) || null;
+
+            const voces = window.speechSynthesis.getVoices();
+            const vozMasculina = voces.find(v => v.name.toLowerCase().includes('male'));
+            if (vozMasculina) { msg.voice = vozMasculina; }
+            
             window.speechSynthesis.speak(msg);
         }
 
@@ -96,6 +97,8 @@
             document.querySelector('.lang-btn').innerText = (currentLang === 'en-US') ? "Switch to Español" : "Switch to English";
             document.getElementById('ctrl-btn').innerText = isPlaying ? ((currentLang === 'en-US') ? "STOP ENGINE" : "PARAR MOTOR") : ((currentLang === 'en-US') ? "START ENGINE" : "INICIAR MOTOR");
         }
+
+        window.speechSynthesis.onvoiceschanged = () => { console.log("Voices loaded"); };
     </script>
 </body>
 </html>
