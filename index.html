@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>HandleLab Pro - Basketball Edition</title>
+    <title>HandleLab Pro - Con Historial</title>
     <style>
         body { background: #060810; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .box { width: 90%; max-width: 400px; border: 2px solid #ff6600; padding: 20px; border-radius: 25px; background: rgba(20,20,25,0.9); text-align: center; }
@@ -10,6 +10,7 @@
         #timer { font-size: 3rem; color: #ff6600; font-weight: bold; }
         #counter { font-size: 1.5rem; color: #ff9933; margin: 10px 0; }
         .btn { background: #ff6600; color: black; padding: 15px; border-radius: 12px; border: none; font-weight: bold; width: 100%; cursor: pointer; }
+        #historial { margin-top: 20px; font-size: 0.9rem; text-align: left; color: #aaa; }
     </style>
 </head>
 <body>
@@ -20,20 +21,15 @@
         <div id="timer">00:00</div>
         <div id="counter">Botes: 0</div>
         <button class="btn" onclick="iniciarEntrenamiento()">INICIAR ENTRENAMIENTO</button>
+        <div id="historial"><h3>Últimas sesiones:</h3><ul id="lista-sesiones"></ul></div>
     </div>
 
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let botes = 0, usuario = "Invitado", timer = null;
         
-        const motivaciones = [
-            "¡Mantén la mirada al frente, no mires el balón!",
-            "¡Trabaja con la punta de los dedos!",
-            "¡Baja el centro de gravedad, mantente fuerte!",
-            "¡Control total del balón!",
-            "¡Sigue trabajando ese crossover!",
-            "¡Eso es, explota en cada bote!"
-        ];
+        // Cargar historial al iniciar
+        window.onload = mostrarHistorial;
 
         function playSound() {
             const osc = audioCtx.createOscillator();
@@ -45,30 +41,40 @@
         function coachSay(texto) {
             const msg = new SpeechSynthesisUtterance(texto);
             msg.lang = 'es-ES';
-            msg.pitch = 1.1; // Un tono de entrenador con energía
+            msg.pitch = 1.1;
             window.speechSynthesis.speak(msg);
         }
 
         function iniciarEntrenamiento() {
             botes = 0;
             let tiempo = parseInt(document.getElementById('custom-time').value);
-            document.getElementById('counter').innerText = "Botes: 0";
             
             timer = setInterval(() => {
                 botes++;
                 playSound();
                 document.getElementById('counter').innerText = "Botes: " + botes;
-                
-                // El Coach habla cada 25 botes para mantener intensidad sin molestar
-                if (botes > 0 && botes % 25 === 0) { 
-                    coachSay(motivaciones[Math.floor(Math.random() * motivaciones.length)]);
-                }
-                
                 if (--tiempo <= 0) {
                     clearInterval(timer);
-                    coachSay("¡Tiempo! Gran sesión, sigue practicando ese manejo.");
+                    guardarSesion();
+                    coachSay("¡Tiempo terminado! Gran sesión.");
                 }
             }, 1000);
+        }
+
+        function guardarSesion() {
+            let historial = JSON.parse(localStorage.getItem('historialHandleLab') || "[]");
+            historial.unshift({ usuario, botes, fecha: new Date().toLocaleDateString() });
+            localStorage.setItem('historialHandleLab', JSON.stringify(historial.slice(0, 5))); // Guarda las últimas 5
+            mostrarHistorial();
+        }
+
+        function mostrarHistorial() {
+            const lista = document.getElementById('lista-sesiones');
+            lista.innerHTML = "";
+            let historial = JSON.parse(localStorage.getItem('historialHandleLab') || "[]");
+            historial.forEach(s => {
+                lista.innerHTML += `<li>${s.fecha} - ${s.usuario}: ${s.botes} botes</li>`;
+            });
         }
     </script>
 </body>
