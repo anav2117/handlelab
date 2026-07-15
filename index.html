@@ -5,102 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HandleLab AI Coach</title>
     <style>
-        body { margin: 0; background-color: #060810; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        #app { width: 100%; max-width: 400px; padding: 20px; }
-        .box { border: 2px solid #ff6600; padding: 25px; border-radius: 20px; text-align: center; background: rgba(0,0,0,0.5); }
-        h1 { color: #ff6600; margin-top: 0; font-size: 2rem; }
-        .btn { background: #ff6600; border: none; padding: 15px; color: white; border-radius: 10px; font-size: 1.2rem; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; transition: 0.3s; }
-        .speed-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .speed-btn { background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 8px; cursor: pointer; }
-        .speed-btn.active { background: #ff6600; border-color: #ff6600; }
-        .lang-btn { background: none; border: 1px solid #555; color: #888; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; margin-bottom: 10px; }
+        body { margin: 0; background-color: #060810; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        #app { width: 100%; max-width: 400px; }
+        .box { border: 2px solid #ff6600; padding: 20px; border-radius: 20px; background: rgba(0,0,0,0.5); }
+        h1 { color: #ff6600; text-align: center; margin-top: 0; }
+        .section-title { font-size: 1.2rem; margin: 20px 0 10px; color: #ff9933; }
+        .btn { background: #ff6600; border: none; padding: 15px; color: white; border-radius: 10px; font-size: 1rem; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 10px; }
+        .level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .level-btn { background: #222; border: 1px solid #444; color: #fff; padding: 15px; border-radius: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div id="app">
         <div class="box">
-            <button class="lang-btn" onclick="toggleLanguage()">Switch to Español</button>
-            <h1 id="title">HandleLab</h1>
-            <p id="msg">Select speed and start:</p>
-            <div class="speed-grid">
-                <button class="speed-btn" onclick="setSpeed(90, this)">Slow</button>
-                <button class="speed-btn active" onclick="setSpeed(120, this)">Normal</button>
-                <button class="speed-btn" onclick="setSpeed(150, this)">Fast</button>
+            <h1>HandleLab</h1>
+            
+            <div class="section-title">Reto de Hoy</div>
+            <button class="btn" onclick="iniciarReto()">INICIAR RETO: 100 BOTES</button>
+
+            <div class="section-title">Mapa de Niveles</div>
+            <div class="level-grid">
+                <button class="level-btn" onclick="iniciarNivel(1)">Nivel 1</button>
+                <button class="level-btn" onclick="iniciarNivel(2)">Nivel 2</button>
+                <button class="level-btn" onclick="iniciarNivel(3)">Nivel 3</button>
+                <button class="level-btn" onclick="iniciarNivel(4)">Nivel 4</button>
             </div>
-            <button class="btn" id="ctrl-btn" onclick="iniciarTodo()">START ENGINE</button>
         </div>
     </div>
 
     <script>
-        let isPlaying = false;
-        let bpm = 120;
-        let interval = null;
-        let currentLang = 'en-US';
+        let currentLang = 'es-ES';
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        function iniciarTodo() {
-            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-            decir(currentLang === 'en-US' ? "Let's work. Keep the rhythm." : "A trabajar. Mantén el ritmo.");
-            toggleRhythm();
-        }
 
         function decir(texto) {
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(texto);
             msg.lang = currentLang;
-            msg.pitch = 0.9;
-            msg.rate = 0.95;
-
-            // Forzamos el uso de la voz configurada por defecto en tu sistema
             const voces = window.speechSynthesis.getVoices();
             msg.voice = voces[1] || voces[0]; 
-            
             window.speechSynthesis.speak(msg);
         }
 
-        function toggleRhythm() {
-            const btn = document.getElementById('ctrl-btn');
-            if (isPlaying) {
-                clearInterval(interval);
-                btn.innerText = (currentLang === 'en-US') ? "START ENGINE" : "INICIAR MOTOR";
-            } else {
-                interval = setInterval(playSound, (60000 / bpm));
-                btn.innerText = (currentLang === 'en-US') ? "STOP ENGINE" : "PARAR MOTOR";
-            }
-            isPlaying = !isPlaying;
+        function iniciarReto() {
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            decir("Iniciando reto de hoy. Prepárate.");
+            // Aquí añadiremos la lógica del cronómetro más adelante
         }
 
-        function playSound() {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = 150;
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
+        function iniciarNivel(num) {
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            decir("Nivel " + num + " seleccionado. Vamos a practicar.");
+            // Aquí activaremos los módulos de dificultad progresiva
         }
-
-        function setSpeed(val, btn) {
-            bpm = val;
-            document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            if (isPlaying) {
-                clearInterval(interval);
-                interval = setInterval(playSound, (60000 / bpm));
-            }
-        }
-
-        function toggleLanguage() {
-            currentLang = (currentLang === 'en-US') ? 'es-ES' : 'en-US';
-            document.getElementById('msg').innerText = (currentLang === 'en-US') ? "Select speed and start:" : "Selecciona velocidad e inicia:";
-            document.querySelector('.lang-btn').innerText = (currentLang === 'en-US') ? "Switch to Español" : "Switch to English";
-            document.getElementById('ctrl-btn').innerText = isPlaying ? ((currentLang === 'en-US') ? "STOP ENGINE" : "PARAR MOTOR") : ((currentLang === 'en-US') ? "START ENGINE" : "INICIAR MOTOR");
-        }
-
-        window.speechSynthesis.onvoiceschanged = () => { console.log("Voices loaded"); };
     </script>
 </body>
 </html>
+
 
 
