@@ -1,6 +1,5 @@
-
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +8,7 @@
         body { margin: 0; background-color: #060810; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         #app { width: 100%; max-width: 400px; }
         .box { border: 2px solid #ff6600; padding: 20px; border-radius: 20px; background: rgba(0,0,0,0.5); text-align: center; }
+        #lang-selector { margin-bottom: 15px; background: #222; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 5px; }
         h1 { color: #ff6600; margin-top: 0; }
         #timer { font-size: 3rem; margin: 5px 0; color: #fff; font-weight: bold; }
         #status { font-size: 1.2rem; color: #ffcc00; margin-bottom: 10px; height: 25px; }
@@ -22,47 +22,67 @@
 <body>
     <div id="app">
         <div class="box">
-            <h1>HandleLab</h1>
-            <div id="status">Selecciona un nivel</div>
+            <select id="lang-selector" onchange="cambiarIdioma(this.value)">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+            </select>
+            <h1 id="title">HandleLab</h1>
+            <div id="status">Select a level</div>
             <div id="timer">00:00</div>
-            <div id="counter">Botes: 0</div>
+            <div id="counter">Dribbles: 0</div>
             <div class="level-grid" id="grid">
-                <button class="level-btn" onclick="iniciarNivel(1, 90, 60, 'Nivel 1, mano derecha.')">Nivel 1</button>
-                <button class="level-btn" onclick="iniciarNivel(2, 90, 60, 'Nivel 2, mano izquierda.')">Nivel 2</button>
-                <button class="level-btn" onclick="iniciarNivel(3, 110, 45, 'Nivel 3, alterna manos.')">Nivel 3</button>
-                <button class="level-btn" onclick="iniciarNivel(4, 130, 30, 'Nivel 4, alta intensidad.')">Nivel 4</button>
+                <button class="level-btn" onclick="iniciarNivel(1, 90, 60, 'lv1')">Level 1</button>
+                <button class="level-btn" onclick="iniciarNivel(2, 90, 60, 'lv2')">Level 2</button>
+                <button class="level-btn" onclick="iniciarNivel(3, 110, 45, 'lv3')">Level 3</button>
+                <button class="level-btn" onclick="iniciarNivel(4, 130, 30, 'lv4')">Level 4</button>
             </div>
             <button class="stop-btn" onclick="detenerEntrenamiento()">STOP</button>
         </div>
     </div>
 
     <script>
+        let idiomaActual = 'en';
+        const textos = {
+            en: { statusSelect: "Select a level", statusRunning: "Running: Level ", statusDone: "Level complete!", statusPaused: "Training stopped", botes: "Dribbles: ", descanso: "Great! You finished with %s dribbles. Rest for 15 seconds.", descansoFin: "Rest finished. Ready for the next level!", levels: ["Level 1, right hand.", "Level 2, left hand.", "Level 3, alternate hands.", "Level 4, high intensity."] },
+            es: { statusSelect: "Selecciona un nivel", statusRunning: "Ejecutando: Nivel ", statusDone: "¡Nivel completado!", statusPaused: "Entrenamiento detenido", botes: "Botes: ", descanso: "¡Excelente! Terminaste con %s botes. Descansa 15 segundos.", descansoFin: "Descanso terminado. ¡Listo para el siguiente nivel!", levels: ["Nivel 1, mano derecha.", "Nivel 2, mano izquierda.", "Nivel 3, alterna manos.", "Nivel 4, alta intensidad."] }
+        };
+
+        function cambiarIdioma(lang) {
+            idiomaActual = lang;
+            document.getElementById('status').innerText = textos[idiomaActual].statusSelect;
+            document.getElementById('counter').innerText = textos[idiomaActual].botes + botes;
+        }
+
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let interval = null, timerInterval = null, timeLeft = 0, botes = 0, descansando = false;
 
-        function decir(texto) {
+        function decir(key, valor = "") {
             window.speechSynthesis.cancel();
-            const msg = new SpeechSynthesisUtterance(texto);
-            msg.lang = 'es-ES';
+            let mensaje = textos[idiomaActual][key];
+            if (valor !== "") mensaje = mensaje.replace("%s", valor);
+            
+            const msg = new SpeechSynthesisUtterance(mensaje);
+            msg.lang = (idiomaActual === 'es') ? 'es-ES' : 'en-US';
             const voces = window.speechSynthesis.getVoices();
-            msg.voice = voces.find(v => v.name.includes("Male") || v.name.includes("masculino")) || voces[0];
+            msg.voice = voces.find(v => (v.name.toLowerCase().includes("male") || v.name.toLowerCase().includes("masculino")) && v.lang.toLowerCase().includes(idiomaActual)) || voces[0];
             window.speechSynthesis.speak(msg);
         }
 
-        function iniciarNivel(num, bpm, duracion, instruccion) {
+        function iniciarNivel(num, bpm, duracion, instrKey) {
             if (descansando) return;
             detenerEntrenamiento();
             if (audioCtx.state === 'suspended') audioCtx.resume();
             
             timeLeft = duracion;
             botes = 0;
-            document.getElementById('status').innerText = `Ejecutando: Nivel ${num}`;
-            document.getElementById('counter').innerText = "Botes: 0";
-            decir(instruccion);
+            document.getElementById('status').innerText = textos[idiomaActual].statusRunning + num;
+            document.getElementById('counter').innerText = textos[idiomaActual].botes + "0";
+            
+            decirRaw(textos[idiomaActual].levels[num-1]);
             
             interval = setInterval(() => {
                 botes++;
-                document.getElementById('counter').innerText = "Botes: " + botes;
+                document.getElementById('counter').innerText = textos[idiomaActual].botes + botes;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.connect(gain); gain.connect(audioCtx.destination);
@@ -73,6 +93,13 @@
 
             timerInterval = setInterval(actualizarTemporizador, 1000);
             actualizarTemporizador();
+        }
+
+        function decirRaw(texto) {
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance(texto);
+            msg.lang = (idiomaActual === 'es') ? 'es-ES' : 'en-US';
+            window.speechSynthesis.speak(msg);
         }
 
         function actualizarTemporizador() {
@@ -86,9 +113,9 @@
         function finalizarNivel() {
             detenerEntrenamiento();
             descansando = true;
-            document.getElementById('status').innerText = "¡Nivel completado!";
+            document.getElementById('status').innerText = textos[idiomaActual].statusDone;
             document.querySelectorAll('.level-btn').forEach(b => b.disabled = true);
-            decir(`¡Excelente! Terminaste con ${botes} botes. Descansa 15 segundos.`);
+            decir('descanso', botes);
             
             let descanso = 15;
             let dInt = setInterval(() => {
@@ -96,10 +123,10 @@
                 if (descanso < 0) {
                     clearInterval(dInt);
                     descansando = false;
-                    document.getElementById('status').innerText = "Selecciona un nivel";
+                    document.getElementById('status').innerText = textos[idiomaActual].statusSelect;
                     document.getElementById('timer').innerText = "00:00";
                     document.querySelectorAll('.level-btn').forEach(b => b.disabled = false);
-                    decir("Descanso terminado. ¡Listo para el siguiente nivel!");
+                    decirRaw(textos[idiomaActual].descansoFin);
                 }
             }, 1000);
         }
@@ -107,10 +134,7 @@
         function detenerEntrenamiento() {
             clearInterval(interval);
             clearInterval(timerInterval);
-            if (!descansando) {
-                document.getElementById('status').innerText = "Entrenamiento detenido";
-                document.getElementById('timer').innerText = "00:00";
-            }
+            if (!descansando) document.getElementById('status').innerText = textos[idiomaActual].statusPaused;
             window.speechSynthesis.cancel();
         }
     </script>
