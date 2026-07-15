@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,6 +46,31 @@
         .screen.active {
             display: flex;
             opacity: 1;
+        }
+
+        /* Selector de Idioma Flotante */
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 20, 35, 0.8);
+            border: 1px solid rgba(255, 102, 0, 0.4);
+            color: #ff8833;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        .lang-switch:active {
+            transform: scale(0.95);
+            background: #ff6600;
+            color: #ffffff;
         }
 
         /* PANTALLA 1: PORTADA CON TU IMAGEN DE FONDO */
@@ -100,7 +125,6 @@
             text-align: center;
         }
 
-        /* Icono decorativo de fuego para el título del formulario */
         .card-icon {
             font-size: 2.2rem;
             margin-bottom: 10px;
@@ -161,18 +185,11 @@
             font-weight: 500;
         }
 
-        /* Efecto Glow Naranja al enfocar los campos */
         .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: #ff6600;
             box-shadow: 0 0 12px rgba(255, 102, 0, 0.25);
             background-color: #0d1321;
-        }
-
-        .form-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
         }
 
         /* Botón de envío Premium */
@@ -203,6 +220,9 @@
 
     <div class="container">
         
+        <!-- Botón Selector de Idioma Flotante (Se hereda en todo el flujo) -->
+        <button class="lang-switch" id="lang-toggle">ES</button>
+        
         <!-- PANTALLA 1: PORTADA CON IMAGEN DE FONDO -->
         <div id="screen-welcome" class="screen active">
             <button class="btn-gradient" id="btn-start">START</button>
@@ -212,40 +232,29 @@
         <div id="screen-register" class="screen">
             <div class="card">
                 <div class="card-icon">🔥</div>
-                <h2>Crea tu Perfil</h2>
-                <p>Configura tu entrenamiento de IA</p>
+                <h2 id="reg-title">Create Profile</h2>
+                <p id="reg-subtitle">Configure your AI training</p>
                 
                 <form id="register-form">
                     <div class="form-group">
-                        <label for="alias">Nombre / Alias</label>
-                        <input type="text" id="alias" placeholder="Ej. Baller99" required autocomplete="off">
+                        <label for="alias" id="label-alias">Name / Alias</label>
+                        <input type="text" id="alias" placeholder="e.g. Baller99" required autocomplete="off">
                     </div>
                     
                     <div class="form-group">
-                        <label for="age">Edad</label>
-                        <input type="number" id="age" min="5" max="99" placeholder="Tu edad" required>
+                        <label for="age" id="label-age">Age</label>
+                        <input type="number" id="age" min="5" max="99" placeholder="Your age" required>
                     </div>
 
                     <div class="form-group">
-                        <div class="form-options">
-                            <div>
-                                <label for="hand">Mano Hábil</label>
-                                <select id="hand" required>
-                                    <option value="right">Derecha</option>
-                                    <option value="left">Izquierda</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="lang">Idioma</label>
-                                <select id="lang" required>
-                                    <option value="es">Español</option>
-                                    <option value="en">Inglés</option>
-                                </select>
-                            </div>
-                        </div>
+                        <label for="hand" id="label-hand">Dominant Hand</label>
+                        <select id="hand" required>
+                            <option value="right" id="opt-right">Right Hand</option>
+                            <option value="left" id="opt-left">Left Hand</option>
+                        </select>
                     </div>
 
-                    <button type="submit" class="btn-submit">Guardar y Empezar</button>
+                    <button type="submit" class="btn-submit" id="btn-submit-text">Save & Start</button>
                 </form>
             </div>
         </div>
@@ -253,13 +262,84 @@
     </div>
 
     <script>
-        // Lógica de navegación entre pantallas
+        // Sistema de Idiomas (Diccionario de traducciones)
+        const translations = {
+            en: {
+                langButton: "ES",
+                startBtn: "START",
+                regTitle: "Create Profile",
+                regSubtitle: "Configure your AI training",
+                labelAlias: "Name / Alias",
+                placeholderAlias: "e.g. Baller99",
+                labelAge: "Age",
+                placeholderAge: "Your age",
+                labelHand: "Dominant Hand",
+                optRight: "Right Hand",
+                optLeft: "Left Hand",
+                btnSubmit: "Save & Start",
+                alertSaved: "Profile successfully created, {name}! Data saved."
+            },
+            es: {
+                langButton: "EN",
+                startBtn: "EMPEZAR",
+                regTitle: "Crea tu Perfil",
+                regSubtitle: "Configura tu entrenamiento de IA",
+                labelAlias: "Nombre / Alias",
+                placeholderAlias: "Ej. Baller99",
+                labelAge: "Edad",
+                placeholderAge: "Tu edad",
+                labelHand: "Mano Hábil",
+                optRight: "Mano Derecha",
+                optLeft: "Mano Izquierda",
+                btnSubmit: "Guardar y Empezar",
+                alertSaved: "¡Perfil creado con éxito, {name}! Datos guardados."
+            }
+        };
+
+        let currentLang = 'en'; // Inglés por defecto
+
+        // Elementos interactivos de la traducción
+        const langToggle = document.getElementById('lang-toggle');
         const btnStart = document.getElementById('btn-start');
+        const regTitle = document.getElementById('reg-title');
+        const regSubtitle = document.getElementById('reg-subtitle');
+        const labelAlias = document.getElementById('label-alias');
+        const inputAlias = document.getElementById('alias');
+        const labelAge = document.getElementById('label-age');
+        const inputAge = document.getElementById('age');
+        const labelHand = document.getElementById('label-hand');
+        const optRight = document.getElementById('opt-right');
+        const optLeft = document.getElementById('opt-left');
+        const btnSubmitText = document.getElementById('btn-submit-text');
+
+        // Función para cambiar textos en la UI
+        function updateLanguage(lang) {
+            langToggle.textContent = translations[lang].langButton;
+            btnStart.textContent = translations[lang].startBtn;
+            regTitle.textContent = translations[lang].regTitle;
+            regSubtitle.textContent = translations[lang].regSubtitle;
+            labelAlias.textContent = translations[lang].labelAlias;
+            inputAlias.placeholder = translations[lang].placeholderAlias;
+            labelAge.textContent = translations[lang].labelAge;
+            inputAge.placeholder = translations[lang].placeholderAge;
+            labelHand.textContent = translations[lang].labelHand;
+            optRight.textContent = translations[lang].optRight;
+            optLeft.textContent = translations[lang].optLeft;
+            btnSubmitText.textContent = translations[lang].btnSubmit;
+        }
+
+        // Evento botón idioma
+        langToggle.addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'es' : 'en';
+            updateLanguage(currentLang);
+        });
+
+        // Lógica de navegación entre pantallas
         const screenWelcome = document.getElementById('screen-welcome');
         const screenRegister = document.getElementById('screen-register');
         const registerForm = document.getElementById('register-form');
 
-        // Al presionar START se oculta la portada y aparece el registro con efecto de desvanecimiento suave
+        // Al presionar START se oculta la portada y aparece el registro
         btnStart.addEventListener('click', () => {
             screenWelcome.classList.remove('active');
             setTimeout(() => {
@@ -271,7 +351,7 @@
             }, 500);
         });
 
-        // Guardar perfil en memoria del celular (LocalStorage) al enviar formulario
+        // Guardar perfil localmente al enviar formulario
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
@@ -279,15 +359,14 @@
                 alias: document.getElementById('alias').value,
                 age: document.getElementById('age').value,
                 hand: document.getElementById('hand').value,
-                lang: document.getElementById('lang').value
+                lang: currentLang
             };
 
-            // Guardar datos localmente
             localStorage.setItem('hl_user_profile', JSON.stringify(profile));
             
-            alert(`¡Perfil creado con éxito, ${profile.alias}! Datos guardados en tu dispositivo.`);
-            
-            // Siguiente paso: Aquí redirigiremos al menú principal de entrenamiento
+            // Alerta traducida dinámicamente
+            const message = translations[currentLang].alertSaved.replace('{name}', profile.alias);
+            alert(message);
         });
     </script>
 </body>
