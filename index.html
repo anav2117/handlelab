@@ -10,9 +10,8 @@
         .box { border: 2px solid #ff6600; padding: 25px; border-radius: 20px; text-align: center; background: rgba(0,0,0,0.5); }
         h1 { color: #ff6600; margin-top: 0; font-size: 2rem; }
         .btn { background: #ff6600; border: none; padding: 15px; color: white; border-radius: 10px; font-size: 1.2rem; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; transition: 0.3s; }
-        .btn:active { transform: scale(0.95); }
         .speed-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .speed-btn { background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .speed-btn { background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 8px; cursor: pointer; }
         .speed-btn.active { background: #ff6600; border-color: #ff6600; }
         .lang-btn { background: none; border: 1px solid #555; color: #888; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; margin-bottom: 10px; }
     </style>
@@ -23,14 +22,12 @@
             <button class="lang-btn" onclick="toggleLanguage()">Switch to Español</button>
             <h1 id="title">HandleLab</h1>
             <p id="msg">Select speed and start:</p>
-            
             <div class="speed-grid">
                 <button class="speed-btn" onclick="setSpeed(90, this)">Slow</button>
                 <button class="speed-btn active" onclick="setSpeed(120, this)">Normal</button>
                 <button class="speed-btn" onclick="setSpeed(150, this)">Fast</button>
             </div>
-            
-            <button class="btn" id="ctrl-btn" onclick="toggleRhythm()">START ENGINE</button>
+            <button class="btn" id="ctrl-btn" onclick="iniciarTodo()">START ENGINE</button>
         </div>
     </div>
 
@@ -41,24 +38,35 @@
         let currentLang = 'en-US';
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+        // Esta función desbloquea el audio y lanza el coach
+        function iniciarTodo() {
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            decir(currentLang === 'en-US' ? "Let's work. Keep the rhythm." : "A trabajar. Mantén el ritmo.");
+            toggleRhythm();
+        }
+
         function decir(texto) {
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(texto);
             msg.lang = currentLang;
-            msg.pitch = 0.7; // Voz masculina grave
+            msg.pitch = 0.7; 
             msg.rate = 1.0;
+            // Forzar búsqueda de voz si el sistema no la detecta automáticamente
+            const voices = window.speechSynthesis.getVoices();
+            msg.voice = voices.find(v => v.lang === currentLang) || null;
             window.speechSynthesis.speak(msg);
         }
 
-        function setSpeed(val, btn) {
-            bpm = val;
-            document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        function toggleRhythm() {
+            const btn = document.getElementById('ctrl-btn');
             if (isPlaying) {
                 clearInterval(interval);
+                btn.innerText = (currentLang === 'en-US') ? "START ENGINE" : "INICIAR MOTOR";
+            } else {
                 interval = setInterval(playSound, (60000 / bpm));
-                decir(currentLang === 'en-US' ? "New speed set." : "Nuevo ritmo establecido.");
+                btn.innerText = (currentLang === 'en-US') ? "STOP ENGINE" : "PARAR MOTOR";
             }
+            isPlaying = !isPlaying;
         }
 
         function playSound() {
@@ -72,17 +80,14 @@
             osc.stop(audioCtx.currentTime + 0.1);
         }
 
-        function toggleRhythm() {
-            const btn = document.getElementById('ctrl-btn');
+        function setSpeed(val, btn) {
+            bpm = val;
+            document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             if (isPlaying) {
                 clearInterval(interval);
-                btn.innerText = (currentLang === 'en-US') ? "START ENGINE" : "INICIAR MOTOR";
-            } else {
                 interval = setInterval(playSound, (60000 / bpm));
-                btn.innerText = (currentLang === 'en-US') ? "STOP ENGINE" : "PARAR MOTOR";
-                decir(currentLang === 'en-US' ? "Let's work. Keep the rhythm." : "A trabajar. Mantén el ritmo.");
             }
-            isPlaying = !isPlaying;
         }
 
         function toggleLanguage() {
