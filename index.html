@@ -1,80 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HandleLab Rhythm Engine</title>
-    <style>
-        body { margin: 0; background-color: #060810; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        #app { width: 100%; max-width: 400px; padding: 20px; }
-        .box { border: 2px solid #ff6600; padding: 20px; border-radius: 20px; text-align: center; background: rgba(0,0,0,0.5); }
-        h1 { color: #ff6600; margin-top: 0; }
-        .btn { background: #ff6600; border: none; padding: 15px; color: white; border-radius: 10px; font-size: 1.1rem; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
-        .speed-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .speed-btn { background: #222; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 8px; cursor: pointer; }
-        .speed-btn.active { background: #ff6600; border-color: #ff6600; }
-        .lang-btn { background: none; border: 1px solid #555; color: #888; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; }
-    </style>
-</head>
-<body>
-    <div id="app">
-        <div class="box">
-            <button class="lang-btn" onclick="toggleLanguage()">Switch to Español</button>
-            <h1 id="title">HandleLab</h1>
-            <p id="msg">Select your speed and start the rhythm:</p>
-            
-            <div class="speed-grid">
-                <button class="speed-btn" onclick="setSpeed(90, this)">Slow</button>
-                <button class="speed-btn active" onclick="setSpeed(120, this)">Normal</button>
-                <button class="speed-btn" onclick="setSpeed(150, this)">Fast</button>
-            </div>
+// Añade esta lógica a tu script existente
+function decir(texto) {
+    // Cancelar cualquier audio pendiente para que sea reactivo
+    window.speechSynthesis.cancel();
+    
+    const msg = new SpeechSynthesisUtterance(texto);
+    msg.lang = (currentLang === 'en-US') ? 'en-US' : 'es-ES';
+    
+    // Configuración de voz masculina grave
+    msg.rate = 1.0; 
+    msg.pitch = 0.7; // Tono grave para una voz de coach autoritaria
+    
+    // Intentar buscar una voz masculina específica
+    const voces = window.speechSynthesis.getVoices();
+    const vozPreferida = voces.find(v => 
+        v.name.includes('Male') || v.name.includes('David') || v.name.includes('Google US English')
+    );
+    if (vozPreferida) msg.voice = vozPreferida;
+    
+    window.speechSynthesis.speak(msg);
+}
 
-            <button class="btn" id="ctrl-btn" onclick="toggleRhythm()">START ENGINE</button>
-        </div>
-    </div>
+// Actualizamos la función toggleRhythm para incluir el feedback inicial
+function toggleRhythm() {
+    const btn = document.getElementById('ctrl-btn');
+    if (isPlaying) {
+        clearInterval(interval);
+        btn.innerText = (currentLang === 'en-US') ? "START ENGINE" : "INICIAR MOTOR";
+    } else {
+        interval = setInterval(playSound, (60000 / bpm));
+        btn.innerText = (currentLang === 'en-US') ? "STOP ENGINE" : "PARAR MOTOR";
+        
+        // Feedback de voz al iniciar
+        const saludo = (currentLang === 'en-US') 
+            ? "Let's work. Focus on the rhythm." 
+            : "A trabajar. Enfócate en el ritmo.";
+        decir(saludo);
+    }
+    isPlaying = !isPlaying;
+}
 
-    <script>
-        let isPlaying = false;
-        let bpm = 120;
-        let interval = null;
-        let currentLang = 'en-US';
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        function setSpeed(val, btn) {
-            bpm = val;
-            document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-
-        function playSound() {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = 150;
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
-        }
-
-        function toggleRhythm() {
-            const btn = document.getElementById('ctrl-btn');
-            if (isPlaying) {
-                clearInterval(interval);
-                btn.innerText = (currentLang === 'en-US') ? "START ENGINE" : "INICIAR MOTOR";
-            } else {
-                interval = setInterval(playSound, (60000 / bpm));
-                btn.innerText = (currentLang === 'en-US') ? "STOP ENGINE" : "PARAR MOTOR";
-            }
-            isPlaying = !isPlaying;
-        }
-
-        function toggleLanguage() {
-            currentLang = (currentLang === 'en-US') ? 'es-ES' : 'en-US';
-            document.getElementById('msg').innerText = (currentLang === 'en-US') ? "Select your speed and start the rhythm:" : "Selecciona la velocidad e inicia el ritmo:";
-            document.getElementById('ctrl-btn').innerText = isPlaying ? ((currentLang === 'en-US') ? "STOP ENGINE" : "PARAR MOTOR") : ((currentLang === 'en-US') ? "START ENGINE" : "INICIAR MOTOR");
-            document.querySelector('.lang-btn').innerText = (currentLang === 'en-US') ? "Switch to Español" : "Switch to English";
-        }
-    </script>
-</body>
-</html>
+// Y al cambiar la velocidad, el coach te avisa
+function setSpeed(val, btn) {
+    bpm = val;
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Feedback de cambio de velocidad
+    if (isPlaying) {
+        const mensaje = (currentLang === 'en-US') ? "New tempo set." : "Nuevo ritmo establecido.";
+        decir(mensaje);
+        // Reiniciar el intervalo con la nueva velocidad
+        clearInterval(interval);
+        interval = setInterval(playSound, (60000 / bpm));
+    }
+}
