@@ -233,7 +233,7 @@
         .dashboard-header {
             margin-bottom: 24px;
             text-align: left;
-            margin-top: 30px; /* Margen para no chocar con el botón de idioma */
+            margin-top: 30px;
         }
 
         .dashboard-header h1 {
@@ -251,7 +251,6 @@
             margin: 4px 0 0 0;
         }
 
-        /* Tarjeta de Estadísticas del Atleta */
         .athlete-card {
             background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
             border: 1px solid rgba(255, 102, 0, 0.15);
@@ -283,7 +282,6 @@
             margin-top: 2px;
         }
 
-        /* Botones de Entrenamiento (Módulos) */
         .menu-title {
             font-size: 0.85rem;
             font-weight: 800;
@@ -344,6 +342,173 @@
             font-weight: 900;
             font-size: 1.2rem;
             margin-left: 10px;
+        }
+
+        /* PANTALLA 4: RHYTHM CONTROL MODULE */
+        #screen-rhythm {
+            background: linear-gradient(180deg, #090d16 0%, #060810 100%);
+            padding: 30px 24px;
+            justify-content: flex-start;
+            overflow-y: auto;
+            align-items: stretch;
+        }
+
+        /* Botón Regresar */
+        .btn-back {
+            background: none;
+            border: none;
+            color: #ff8833;
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            align-self: flex-start;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding: 0;
+            transition: color 0.2s;
+        }
+
+        .btn-back:active {
+            color: #ffffff;
+        }
+
+        .rhythm-header h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin: 0 0 8px 0;
+            letter-spacing: 1px;
+        }
+
+        .rhythm-header p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin: 0 0 30px 0;
+        }
+
+        /* Visualizador de Pulso */
+        .pulse-container {
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .pulse-ring {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,102,0,0.6) 0%, rgba(255,0,0,0) 70%);
+            position: absolute;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        /* Clase de animación que se activará vía JS */
+        .pulse-active {
+            animation: beat-ring 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+        }
+
+        @keyframes beat-ring {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+        }
+
+        .pulse-center {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff9900 0%, #cc0000 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            z-index: 2;
+            box-shadow: 0 0 25px rgba(255, 102, 0, 0.5);
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Controles de BPM */
+        .bpm-display {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .bpm-label {
+            font-size: 0.8rem;
+            color: #ff8833;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        /* Selector Rápido de Ritmo */
+        .speed-presets {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .preset-btn {
+            background: rgba(15, 20, 35, 0.8);
+            border: 1px solid rgba(255, 102, 0, 0.2);
+            color: #ffffff;
+            padding: 12px 6px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        .preset-btn.active {
+            background: #ff6600;
+            border-color: #ffcc00;
+            box-shadow: 0 0 12px rgba(255, 102, 0, 0.4);
+        }
+
+        /* Botón de Audio (Play / Stop) */
+        .btn-audio {
+            background: linear-gradient(135deg, #00b300 0%, #006600 100%);
+            color: #ffffff;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 179, 0, 0.3);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-audio.playing {
+            background: linear-gradient(135deg, #ff3333 0%, #990000 100%);
+            box-shadow: 0 4px 15px rgba(255, 51, 51, 0.3);
+        }
+
+        .btn-audio:active {
+            transform: scale(0.97);
         }
     </style>
 </head>
@@ -422,7 +587,7 @@
             <div class="menu-title" id="dash-menu-title">Training Modules</div>
 
             <!-- Módulo 1: Rhythm Control -->
-            <div class="training-card" onclick="alert('Dribble rhythm module starting soon!')">
+            <div class="training-card" id="card-rhythm">
                 <div class="training-icon">🎵</div>
                 <div class="training-info">
                     <h3 id="mod1-title">Rhythm Control</h3>
@@ -440,6 +605,36 @@
                 </div>
                 <div class="arrow-indicator">➔</div>
             </div>
+        </div>
+
+        <!-- PANTALLA 4: ENTRENAMIENTO DE RITMO -->
+        <div id="screen-rhythm" class="screen">
+            <button class="btn-back" id="btn-back-to-dash">◀ Back</button>
+
+            <div class="rhythm-header">
+                <h1 id="rhythm-title">Rhythm Control</h1>
+                <p id="rhythm-subtitle">Dribble perfectly in sync with the beat</p>
+            </div>
+
+            <!-- Visualizador del Pulso -->
+            <div class="pulse-container">
+                <div class="pulse-ring" id="pulse-ring"></div>
+                <div class="pulse-center" id="pulse-center">🏀</div>
+            </div>
+
+            <!-- Display de Velocidad -->
+            <div class="bpm-display" id="bpm-number">120</div>
+            <div class="bpm-label">Beats Per Minute (BPM)</div>
+
+            <!-- Selector de Presets -->
+            <div class="speed-presets">
+                <button class="preset-btn" data-bpm="90" id="preset-warm">Warm-up</button>
+                <button class="preset-btn active" data-bpm="120" id="preset-game">Game Pace</button>
+                <button class="preset-btn" data-bpm="150" id="preset-pro">Pro Speed</button>
+            </div>
+
+            <!-- Botón Play/Stop -->
+            <button class="btn-audio" id="btn-audio-toggle">Start Beat</button>
         </div>
 
     </div>
@@ -474,7 +669,16 @@
                 mod1Title: "Rhythm Control",
                 mod1Desc: "Analyze your dribbling rhythm & sync with tempo",
                 mod2Title: "Hand Speed",
-                mod2Desc: "Track real-time velocity and hand positioning"
+                mod2Desc: "Track real-time velocity and hand positioning",
+                // Traducciones Pantalla 4
+                backBtn: "◀ Back",
+                rhythmTitle: "Rhythm Control",
+                rhythmSubtitle: "Dribble perfectly in sync with the beat",
+                presetWarm: "Warm-up",
+                presetGame: "Game Pace",
+                presetPro: "Pro Speed",
+                btnAudioStart: "Start Beat",
+                btnAudioStop: "Stop Beat"
             },
             es: {
                 langButton: "EN",
@@ -503,14 +707,23 @@
                 mod1Title: "Control de Ritmo",
                 mod1Desc: "Analiza tu ritmo de bote y sincronízate con el tempo",
                 mod2Title: "Velocidad de Mano",
-                mod2Desc: "Rastrea la velocidad real y posición de manos"
+                mod2Desc: "Rastrea la velocidad real y posición de manos",
+                // Traducciones Pantalla 4
+                backBtn: "◀ Volver",
+                rhythmTitle: "Control de Ritmo",
+                rhythmSubtitle: "Bota perfectamente sincronizado con el beat",
+                presetWarm: "Calentar",
+                presetGame: "Ritmo Real",
+                presetPro: "Veloz Pro",
+                btnAudioStart: "Iniciar Ritmo",
+                btnAudioStop: "Detener Ritmo"
             }
         };
 
         let currentLang = 'en'; // Inglés por defecto
         let savedProfile = null;
 
-        // Elementos interactivos de la traducción
+        // Elementos interactivos del DOM
         const langToggle = document.getElementById('lang-toggle');
         const btnStart = document.getElementById('btn-start');
         const regTitle = document.getElementById('reg-title');
@@ -541,6 +754,15 @@
         const mod2Title = document.getElementById('mod2-title');
         const mod2Desc = document.getElementById('mod2-desc');
 
+        // Elementos de la pantalla Rhythm
+        const btnBackToDash = document.getElementById('btn-back-to-dash');
+        const rhythmTitle = document.getElementById('rhythm-title');
+        const rhythmSubtitle = document.getElementById('rhythm-subtitle');
+        const presetWarm = document.getElementById('preset-warm');
+        const presetGame = document.getElementById('preset-game');
+        const presetPro = document.getElementById('preset-pro');
+        const btnAudioToggle = document.getElementById('btn-audio-toggle');
+
         // Función para cambiar textos en la UI
         function updateLanguage(lang) {
             currentLang = lang;
@@ -562,6 +784,20 @@
             
             // Sincronizar el selector del formulario
             selectLangInput.value = lang;
+
+            // Pantalla de Ritmo
+            btnBackToDash.textContent = translations[lang].backBtn;
+            rhythmTitle.textContent = translations[lang].rhythmTitle;
+            rhythmSubtitle.textContent = translations[lang].rhythmSubtitle;
+            presetWarm.textContent = translations[lang].presetWarm;
+            presetGame.textContent = translations[lang].presetGame;
+            presetPro.textContent = translations[lang].presetPro;
+            
+            if (isPlaying) {
+                btnAudioToggle.textContent = translations[lang].btnAudioStop;
+            } else {
+                btnAudioToggle.textContent = translations[lang].btnAudioStart;
+            }
 
             // Actualizar textos del Dashboard si hay un perfil activo
             if (savedProfile) {
@@ -597,9 +833,11 @@
         const screenWelcome = document.getElementById('screen-welcome');
         const screenRegister = document.getElementById('screen-register');
         const screenDashboard = document.getElementById('screen-dashboard');
+        const screenRhythm = document.getElementById('screen-rhythm');
         const registerForm = document.getElementById('register-form');
+        const cardRhythm = document.getElementById('card-rhythm');
 
-        // START de portada a registro
+        // Navegación: Portada ➔ Registro
         btnStart.addEventListener('click', () => {
             screenWelcome.classList.remove('active');
             setTimeout(() => {
@@ -611,7 +849,7 @@
             }, 500);
         });
 
-        // Registro a Dashboard (Sin molestas alertas)
+        // Navegación: Registro ➔ Dashboard
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
@@ -622,13 +860,9 @@
                 lang: selectLangInput.value
             };
 
-            // Guardar localmente
-            localStorage.setItem('hl_user_profile', JSON.stringify(profile = savedProfile));
-            
-            // Forzar actualización de textos traducidos con los datos dinámicos
+            localStorage.setItem('hl_user_profile', JSON.stringify(savedProfile));
             updateLanguage(savedProfile.lang);
 
-            // Transición limpia de Pantalla 2 a Pantalla 3
             screenRegister.classList.remove('active');
             setTimeout(() => {
                 screenRegister.style.display = 'none';
@@ -637,6 +871,145 @@
                     screenDashboard.classList.add('active');
                 }, 50);
             }, 500);
+        });
+
+        // Navegación: Dashboard ➔ Rhythm Module
+        cardRhythm.addEventListener('click', () => {
+            screenDashboard.classList.remove('active');
+            setTimeout(() => {
+                screenDashboard.style.display = 'none';
+                screenRhythm.style.display = 'flex';
+                setTimeout(() => {
+                    screenRhythm.classList.add('active');
+                }, 50);
+            }, 500);
+        });
+
+        // Navegación: Rhythm Module ➔ Dashboard
+        btnBackToDash.addEventListener('click', () => {
+            stopMetronome(); // Parar metrónomo si se está ejecutando
+            screenRhythm.classList.remove('active');
+            setTimeout(() => {
+                screenRhythm.style.display = 'none';
+                screenDashboard.style.display = 'flex';
+                setTimeout(() => {
+                    screenDashboard.classList.add('active');
+                }, 50);
+            }, 500);
+        });
+
+        /* ========================================================
+           LÓGICA DEL MOTOR DE AUDIO INTERACTIVO (METRÓNOMO / BEAT)
+           ======================================================== */
+        let audioCtx = null;
+        let isPlaying = false;
+        let currentBpm = 120;
+        let metronomeInterval = null;
+
+        const bpmNumber = document.getElementById('bpm-number');
+        const pulseCenter = document.getElementById('pulse-center');
+        const pulseRing = document.getElementById('pulse-ring');
+        const presetButtons = document.querySelectorAll('.preset-btn');
+
+        // Función para inicializar el contexto de audio en la primera interacción
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Generar un beep preciso
+        function playBeatTone() {
+            if (!audioCtx) return;
+            
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            // Tono sintético de bote de baloncesto (bajos)
+            osc.frequency.setValueAtTime(120, audioCtx.currentTime); // Hz
+            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+            // Caída súper rápida de ganancia para emular impacto de bote
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.15);
+
+            // Gatillar efectos visuales de pulso en sincronía
+            triggerPulseVisual();
+        }
+
+        function triggerPulseVisual() {
+            // Animación del centro
+            pulseCenter.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                pulseCenter.style.transform = 'scale(1)';
+            }, 80);
+
+            // Lanzar anillo de pulso
+            pulseRing.classList.remove('pulse-active');
+            void pulseRing.offsetWidth; // Truco de reflow de CSS para reiniciar animación
+            pulseRing.classList.add('pulse-active');
+        }
+
+        function startMetronome() {
+            initAudio();
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            isPlaying = true;
+            btnAudioToggle.classList.add('playing');
+            btnAudioToggle.textContent = translations[currentLang].btnAudioStop;
+
+            // Calcular el intervalo en milisegundos en base a los BPM
+            const intervalMs = (60 / currentBpm) * 1000;
+            
+            // Primer golpe inmediato
+            playBeatTone();
+
+            metronomeInterval = setInterval(() => {
+                playBeatTone();
+            }, intervalMs);
+        }
+
+        function stopMetronome() {
+            isPlaying = false;
+            btnAudioToggle.classList.remove('playing');
+            btnAudioToggle.textContent = translations[currentLang].btnAudioStart;
+            
+            if (metronomeInterval) {
+                clearInterval(metronomeInterval);
+                metronomeInterval = null;
+            }
+        }
+
+        // Eventos de los botones de presets
+        presetButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                presetButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                currentBpm = parseInt(button.getAttribute('data-bpm'));
+                bpmNumber.textContent = currentBpm;
+
+                // Si está reproduciendo, reiniciar metrónomo a la nueva velocidad
+                if (isPlaying) {
+                    stopMetronome();
+                    startMetronome();
+                }
+            });
+        });
+
+        // Evento Play/Stop del Botón de Audio
+        btnAudioToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                stopMetronome();
+            } else {
+                startMetronome();
+            }
         });
     </script>
 </body>
