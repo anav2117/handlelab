@@ -91,6 +91,13 @@
             margin-top: 8px;
         }
 
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #ff6600;
+            color: #ff6600;
+            margin-top: 6px;
+        }
+
         .dashboard-header {
             display: flex;
             align-items: center;
@@ -248,6 +255,35 @@
             font-size: 0.8rem;
         }
 
+        /* History List Styles (Module 5) */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            max-height: 220px;
+            overflow-y: auto;
+            margin-bottom: 8px;
+        }
+
+        .history-item {
+            background: rgba(20, 20, 25, 0.95);
+            border: 1px solid #333;
+            padding: 6px 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+        }
+
+        .history-item span {
+            color: #aaa;
+        }
+
+        .history-item strong {
+            color: #ff6600;
+        }
+
         .screen { display: none; flex-direction: column; height: 100%; }
         .screen.active { display: flex; }
     </style>
@@ -343,6 +379,7 @@
             </div>
 
             <button class="btn" onclick="openCameraModule()">START ANALYSIS</button>
+            <button class="btn btn-secondary" onclick="openHistoryModule()">VIEW TRAINING HISTORY</button>
         </div>
 
         <!-- MODULE 3: Camera & Dribble Analysis -->
@@ -395,6 +432,18 @@
 
             <button class="btn" onclick="returnToDashboard()">BACK TO DASHBOARD</button>
         </div>
+
+        <!-- MODULE 5: Training History Screen -->
+        <div id="history-screen" class="screen">
+            <h1>MODULE 5</h1>
+            <p class="subtitle">Training History & Progress</p>
+
+            <div id="history-container" class="history-list">
+                <!-- Se llena dinámicamente -->
+            </div>
+
+            <button class="btn" onclick="switchScreen('dashboard-screen')">BACK TO DASHBOARD</button>
+        </div>
     </div>
 
     <script>
@@ -436,6 +485,7 @@
                 score: 0,
                 rank: "🟤 Bronze Ball",
                 lastTraining: "None",
+                history: [],
                 registrationDate: new Date().toLocaleDateString()
             };
 
@@ -544,7 +594,6 @@
                     entrenando = false;
                     coachSay("Time's up! Great session.");
                     
-                    // Guardar datos en el usuario
                     let finalScore = Math.min(Math.floor(dribbles * 1.2), 100);
                     let visionScore = Math.min(finalScore + 5, 95);
                     let controlScore = Math.min(dribbles * 2, 98);
@@ -552,11 +601,20 @@
                     let rhythmScore = Math.min(finalScore - 3, 90);
                     if (rhythmScore < 40) rhythmScore = 45;
 
+                    let sessionDate = new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
                     currentUser.score = finalScore;
                     currentUser.lastTraining = `${dribbles} dribbles (${new Date().toLocaleDateString()})`;
+                    
+                    if (!currentUser.history) currentUser.history = [];
+                    currentUser.history.unshift({
+                        date: sessionDate,
+                        dribbles: dribbles,
+                        score: finalScore
+                    });
+
                     localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
 
-                    // Llenar pantalla del Módulo 4 (Resultados)
                     document.getElementById('res-score').innerText = finalScore;
                     document.getElementById('res-vision').innerText = visionScore + "%";
                     document.getElementById('res-control').innerText = controlScore + "%";
@@ -571,7 +629,6 @@
                         document.getElementById('res-drill').innerText = "Low crossover control series.";
                     }
 
-                    // AHORA SÍ: Salta correctamente a la pantalla de resultados del Módulo 4
                     switchScreen('results-screen');
                 }
             }, 1000);
@@ -581,6 +638,31 @@
             let m = Math.floor(segundos / 60);
             let s = segundos % 60;
             document.getElementById('timer').innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+        }
+
+        function openHistoryModule() {
+            const container = document.getElementById('history-container');
+            container.innerHTML = "";
+
+            if (!currentUser.history || currentUser.history.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:#777; font-size:0.75rem;">No training sessions recorded yet.</p>`;
+            } else {
+                currentUser.history.forEach(item => {
+                    container.innerHTML += `
+                        <div class="history-item">
+                            <div>
+                                <span style="display:block; font-size:0.6rem;">${item.date}</span>
+                                <strong>${item.dribbles} Dribbles</strong>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="display:block; font-size:0.6rem;">Score</span>
+                                <strong style="color: #ff9933; font-size:0.8rem;">${item.score}</strong>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            switchScreen('history-screen');
         }
 
         function returnToDashboard() {
