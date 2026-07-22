@@ -107,6 +107,31 @@
             padding: 6px;
         }
 
+        .welcome-hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+        }
+
+        .welcome-img-container {
+            width: 100%;
+            height: 220px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #ff6600;
+            background: #111;
+        }
+
+        .welcome-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .dashboard-header {
             display: flex;
             align-items: center;
@@ -169,6 +194,39 @@
         .stat-card strong {
             font-size: 0.9rem;
             color: #ff6600;
+        }
+
+        /* MÓDULO 7: Estilos para Barra de XP y Rango */
+        .xp-container {
+            background: rgba(20, 20, 25, 0.95);
+            border: 1px solid #333;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .xp-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #ff9933;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        .xp-bar-bg {
+            background: #111;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .xp-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6600, #ffcc00);
+            width: 0%;
+            transition: width 0.5s ease;
         }
 
         .card-section {
@@ -308,6 +366,12 @@
             border-radius: 8px;
             text-align: center;
             font-size: 0.65rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .badge-card:active {
+            transform: scale(0.95);
         }
 
         .badge-card.locked {
@@ -335,11 +399,14 @@
     <div class="box">
         <!-- MODULE 1: Welcome Screen -->
         <div id="welcome-screen" class="screen active">
-            <h1>MODULE 1</h1>
-            <p class="subtitle">Welcome to HandleLab</p>
-            <div style="margin: auto; text-align: center;">
-                <p style="font-size: 0.8rem; color: #ccc; margin: 15px 0;">Master your handle, elevate your game, and become an elite handler.</p>
-                <button class="btn" onclick="switchScreen('register-screen')">GET STARTED</button>
+            <h1>HANDLELAB</h1>
+            <p class="subtitle">Master Your Handle</p>
+            <div class="welcome-hero">
+                <div class="welcome-img-container">
+                    <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=500&auto=format&fit=crop&q=60" alt="HandleLab Cover">
+                </div>
+                <p style="font-size: 0.75rem; color: #ccc; margin: 0;">Elevate your game and become an elite handler.</p>
+                <button class="btn" onclick="switchScreen('register-screen')">START / INICIAR</button>
             </div>
         </div>
 
@@ -401,6 +468,17 @@
                 </div>
             </div>
 
+            <!-- MÓDULO 7: Widget de XP y Rango RPG -->
+            <div class="xp-container">
+                <div class="xp-header">
+                    <span id="xp-rank-title">Rookie Rank</span>
+                    <span id="xp-counter-text">0 / 300 XP</span>
+                </div>
+                <div class="xp-bar-bg">
+                    <div id="xp-bar-fill" class="xp-bar-fill"></div>
+                </div>
+            </div>
+
             <div class="stats-grid">
                 <div class="stat-card">
                     <span>Handle Score</span>
@@ -415,11 +493,6 @@
             <div class="card-section">
                 <h3>🔥 Daily Challenge</h3>
                 <p style="margin:0; color:#ccc;">Complete 1 session of 30s drible analysis.</p>
-            </div>
-
-            <div class="card-section">
-                <h3>📈 Last Training</h3>
-                <p id="dash-last" style="margin:0; color:#ccc;">No sessions recorded yet.</p>
             </div>
 
             <button class="btn" onclick="openCameraModule()">START ANALYSIS (MOD 3)</button>
@@ -541,6 +614,7 @@
             currentUser = {
                 idioma, alias, edad, mano, nivel,
                 score: 0,
+                xp: 0, // Módulo 7: XP Inicial
                 rank: "🟤 Bronze Ball",
                 lastTraining: "None",
                 history: [],
@@ -553,15 +627,29 @@
             switchScreen('dashboard-screen');
         }
 
+        // MÓDULO 7: Cálculo de Rangos y Niveles basados en XP
+        function calcularNivelRPG(xpTotal) {
+            if (xpTotal >= 1000) return { nivel: "HandleLab Master", max: 1000, actual: 1000, porcentaje: 100 };
+            if (xpTotal >= 600) return { nivel: "Elite Handler", max: 1000, actual: xpTotal, porcentaje: (xpTotal / 1000) * 100 };
+            if (xpTotal >= 300) return { nivel: "Hooper", max: 600, actual: xpTotal, porcentaje: ((xpTotal - 300) / 300) * 100 };
+            if (xpTotal >= 100) return { nivel: "Starter", max: 300, actual: xpTotal, porcentaje: ((xpTotal - 100) / 200) * 100 };
+            return { nivel: "Rookie", max: 100, actual: xpTotal, porcentaje: (xpTotal / 100) * 100 };
+        }
+
         function loadDashboard(user) {
+            if (user.xp === undefined) user.xp = 0;
+            const datosRPG = calcularNivelRPG(user.xp);
+
             document.getElementById('dash-initial').innerText = user.alias.charAt(0).toUpperCase();
             document.getElementById('dash-alias').innerText = user.alias;
-            document.getElementById('dash-level').innerText = `Level: ${user.nivel}`;
+            document.getElementById('dash-level').innerText = `Level: ${datosRPG.nivel}`;
             document.getElementById('dash-score').innerText = user.score || 0;
             document.getElementById('dash-rank').innerText = user.rank || "🟤 Bronze";
-            if (user.lastTraining && user.lastTraining !== "None") {
-                document.getElementById('dash-last').innerText = user.lastTraining;
-            }
+
+            // Actualizar barra de Módulo 7
+            document.getElementById('xp-rank-title').innerText = `Rank: ${datosRPG.nivel}`;
+            document.getElementById('xp-counter-text').innerText = `${user.xp} / ${datosRPG.max} XP`;
+            document.getElementById('xp-bar-fill').style.width = `${Math.min(datosRPG.porcentaje, 100)}%`;
         }
 
         async function openCameraModule() {
@@ -662,6 +750,9 @@
 
                     let sessionDate = new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                     
+                    // MÓDULO 7: Asignación de XP basada en botes y puntuación
+                    let xpGanado = Math.floor(dribbles * 1.5) + 25;
+                    currentUser.xp = (currentUser.xp || 0) + xpGanado;
                     currentUser.score = finalScore;
                     currentUser.lastTraining = `${dribbles} dribbles (${new Date().toLocaleDateString()})`;
                     
@@ -740,6 +831,7 @@
 
             const totalSessions = currentUser.history ? currentUser.history.length : 0;
             const maxDribbles = currentUser.maxDribbles || 0;
+            const currentXP = currentUser.xp || 0;
 
             const badges = [
                 { icon: "👶", title: "Rookie Start", desc: "Complete registration", unlocked: true },
@@ -747,12 +839,12 @@
                 { icon: "⚡", title: "Speed Demon", desc: "Reach 50+ dribbles", unlocked: maxDribbles >= 50 },
                 { icon: "🏆", title: "Elite Handler", desc: "Reach 80+ score", unlocked: (currentUser.score >= 80) },
                 { icon: "🔄", title: "Consistent", desc: "Complete 3 sessions", unlocked: totalSessions >= 3 },
-                { icon: "👑", title: "Handle Master", desc: "Reach 95+ score", unlocked: (currentUser.score >= 95) }
+                { icon: "👑", title: "Handle Master", desc: "Reach 1000+ XP", unlocked: (currentXP >= 1000) }
             ];
 
-            badges.forEach(b => {
+            badges.forEach((b) => {
                 container.innerHTML += `
-                    <div class="badge-card ${b.unlocked ? '' : 'locked'}">
+                    <div class="badge-card ${b.unlocked ? '' : 'locked'}" onclick="inspectBadge('${b.title}', '${b.desc}', ${b.unlocked})">
                         <span>${b.icon}</span>
                         <strong>${b.title}</strong>
                         <p style="margin:2px 0 0 0; color:#aaa;">${b.desc}</p>
@@ -761,6 +853,11 @@
             });
 
             switchScreen('badges-screen');
+        }
+
+        function inspectBadge(title, desc, unlocked) {
+            let statusText = unlocked ? "Status: UNLOCKED 🟢" : "Status: LOCKED 🔒";
+            alert(`${title}\n${desc}\n\n${statusText}`);
         }
 
         function returnToDashboard() {
@@ -778,3 +875,4 @@
     </script>
 </body>
 </html>
+
