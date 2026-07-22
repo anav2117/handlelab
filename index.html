@@ -98,6 +98,15 @@
             margin-top: 6px;
         }
 
+        .btn-danger {
+            background: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            margin-top: 6px;
+            font-size: 0.7rem;
+            padding: 6px;
+        }
+
         .dashboard-header {
             display: flex;
             align-items: center;
@@ -283,7 +292,6 @@
             color: #ff6600;
         }
 
-        /* Module 6: Badges Styles */
         .badges-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -417,6 +425,7 @@
             <button class="btn" onclick="openCameraModule()">START ANALYSIS (MOD 3)</button>
             <button class="btn btn-secondary" onclick="openHistoryModule()">TRAINING HISTORY (MOD 5)</button>
             <button class="btn btn-secondary" onclick="openBadgesModule()">BADGES & AWARDS (MOD 6)</button>
+            <button class="btn btn-danger" onclick="resetApp()">🔄 RESTART INTRO / LOGOUT</button>
         </div>
 
         <!-- MODULE 3: Camera & Dribble Analysis -->
@@ -757,6 +766,14 @@
         function returnToDashboard() {
             loadDashboard(currentUser);
             switchScreen('dashboard-screen');
+        }
+
+        function resetApp() {
+            if (confirm("Do you want to reset and test the introduction flow again?")) {
+                localStorage.removeItem('handlelab_user');
+                currentUser = null;
+                switchScreen('welcome-screen');
+            }
         }
     </script>
 </body>
