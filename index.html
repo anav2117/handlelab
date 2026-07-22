@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -536,59 +536,59 @@
             </div>
             <div class="fire-aura-overlay"></div>
             <div class="welcome-hero">
-                <button class="btn" onclick="switchScreen('register-screen')">START / INICIAR</button>
+                <button class="btn" onclick="switchScreen('register-screen')">START</button>
             </div>
         </div>
 
         <!-- MODULE 1B: Registration Form -->
         <div id="register-screen" class="screen">
             <h1>MODULE 1</h1>
-            <p class="subtitle">Registro de Jugador</p>
+            <p class="subtitle">Player Registration</p>
             
             <div class="form-group">
-                <label>🌍 Idioma / Language</label>
+                <label>🌍 Language / Idioma</label>
                 <select id="reg-idioma">
-                    <option value="en">English</option>
-                    <option value="es" selected>Español</option>
+                    <option value="en" selected>English</option>
+                    <option value="es">Español</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>👤 Alias / Nombre</label>
-                <input type="text" id="reg-alias" placeholder="Ej. AlexHoop">
+                <label>👤 Alias / Name</label>
+                <input type="text" id="reg-alias" placeholder="Ex. AlexHoop">
             </div>
 
             <div class="form-group">
-                <label>🎂 Edad</label>
-                <input type="number" id="reg-edad" placeholder="Ej. 16" min="6" max="99">
+                <label>🎂 Age</label>
+                <input type="number" id="reg-edad" placeholder="Ex. 16" min="6" max="99">
             </div>
 
             <div class="form-group">
-                <label>✋ Mano Dominante</label>
+                <label>✋ Dominant Hand</label>
                 <select id="reg-mano">
-                    <option value="Right">Derecha</option>
-                    <option value="Left">Izquierda</option>
-                    <option value="Ambidextrous">Ambidextro</option>
+                    <option value="Right">Right</option>
+                    <option value="Left">Left</option>
+                    <option value="Ambidextrous">Ambidextrous</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>📊 Nivel Actual</label>
+                <label>📊 Current Level</label>
                 <select id="reg-nivel">
-                    <option value="Rookie">Rookie (Principiante)</option>
-                    <option value="Starter">Starter (Intermedio)</option>
-                    <option value="Hooper">Hooper (Avanzado)</option>
-                    <option value="Elite Handler">Elite Handler (Profesional)</option>
+                    <option value="Rookie">Rookie (Beginner)</option>
+                    <option value="Starter">Starter (Intermediate)</option>
+                    <option value="Hooper">Hooper (Advanced)</option>
+                    <option value="Elite Handler">Elite Handler (Professional)</option>
                 </select>
             </div>
 
-            <button class="btn btn-secondary" onclick="saveUserRegistration()" style="width:100%; margin-top:10px; padding:12px; font-size:14px; animation:none; box-shadow:none;">REGISTRAR</button>
+            <button class="btn btn-secondary" onclick="saveUserRegistration()" style="width:100%; margin-top:10px; padding:12px; font-size:14px; animation:none; box-shadow:none;">REGISTER</button>
         </div>
 
         <!-- MODULE 2: Home Dashboard -->
         <div id="dashboard-screen" class="screen">
             <h1>HANDLELAB</h1>
-            <p class="subtitle">Panel Principal (Módulo 2)</p>
+            <p class="subtitle">Main Dashboard (Module 2)</p>
 
             <div class="dashboard-header">
                 <div class="avatar-box" id="dash-initial">A</div>
@@ -600,7 +600,7 @@
 
             <div class="xp-container">
                 <div class="xp-header">
-                    <span id="xp-rank-title">Rango Rookie</span>
+                    <span id="xp-rank-title">Rookie Rank</span>
                     <span id="xp-counter-text">0 / 100 XP</span>
                 </div>
                 <div class="xp-bar-bg">
@@ -620,92 +620,92 @@
             </div>
 
             <div class="card-section">
-                <h3>🔥 Reto Diario</h3>
-                <p style="margin:0; color:#ccc;">Completa 1 sesión de análisis de dribles.</p>
+                <h3>🔥 Daily Challenge</h3>
+                <p style="margin:0; color:#ccc;">Complete 1 dribble analysis session.</p>
             </div>
 
-            <button class="btn btn-secondary" onclick="openCameraModule()">INICIAR ANÁLISIS (MOD 3)</button>
-            <button class="btn btn-secondary" onclick="openHistoryModule()">HISTORIAL DE ENTRENAMIENTO (MOD 5)</button>
-            <button class="btn btn-secondary" onclick="openBadgesModule()">INSIGNIAS Y LOGROS (MOD 6)</button>
-            <button class="btn btn-danger" onclick="resetApp()">🔄 REINICIAR / CERRAR SESIÓN</button>
+            <button class="btn btn-secondary" onclick="openCameraModule()">START ANALYSIS (MOD 3)</button>
+            <button class="btn btn-secondary" onclick="openHistoryModule()">TRAINING HISTORY (MOD 5)</button>
+            <button class="btn btn-secondary" onclick="openBadgesModule()">BADGES & AWARDS (MOD 6)</button>
+            <button class="btn btn-danger" onclick="resetApp()">🔄 RESET / LOG OUT</button>
         </div>
 
         <!-- MODULE 3: Camera, Distance Guide & Dribble Analysis -->
         <div id="camera-screen" class="screen">
             <h1>MODULE 3</h1>
-            <p class="subtitle">Guía de Distancia y Análisis</p>
+            <p class="subtitle">Distance Guide & Analysis</p>
 
             <div class="video-container">
                 <video id="webcam" autoplay playsinline muted></video>
                 <canvas id="distancia-canvas"></canvas>
                 <div id="timer" class="timer-overlay" style="display:none;">00:30</div>
-                <div id="distance-status" class="distance-status">Buscando posición...</div>
+                <div id="distance-status" class="distance-status">Searching position...</div>
             </div>
 
             <div class="controls-panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: bold; color: #ff9933;">
-                    <span id="counter">Botes: 0</span>
+                    <span id="counter">Dribbles: 0</span>
                 </div>
                 <div class="progreso-container"><div id="progreso-bar" class="progreso-bar"></div></div>
-                <button class="btn btn-secondary" id="btn-iniciar-cam" onclick="comenzarEntrenamientoOficial()" style="width:100%; margin-top:6px; animation:none; display:none;">¡LISTO PARA DRIBLAR!</button>
+                <button class="btn btn-secondary" id="btn-iniciar-cam" onclick="comenzarEntrenamientoOficial()" style="width:100%; margin-top:6px; animation:none; display:none;">READY TO DRIBBLE!</button>
             </div>
         </div>
 
         <!-- MODULE 4: Results Screen -->
         <div id="results-screen" class="screen">
             <h1>MODULE 4</h1>
-            <p class="subtitle">Resultados del Análisis</p>
+            <p class="subtitle">Analysis Results</p>
 
             <div class="stat-card" style="margin-bottom: 6px; padding: 8px;">
-                <span style="font-size: 0.7rem;">Puntuación Final (Handle Score)</span>
+                <span style="font-size: 0.7rem;">Final Handle Score</span>
                 <strong id="res-score" style="font-size: 1.4rem;">0</strong>
             </div>
 
             <div class="results-grid">
-                <div class="result-metric"><span>Visión</span><strong id="res-vision">0%</strong></div>
+                <div class="result-metric"><span>Vision</span><strong id="res-vision">0%</strong></div>
                 <div class="result-metric"><span>Control</span><strong id="res-control">0%</strong></div>
-                <div class="result-metric"><span>Coordinación</span><strong id="res-coord">0%</strong></div>
-                <div class="result-metric"><span>Ritmo</span><strong id="res-rhythm">0%</strong></div>
+                <div class="result-metric"><span>Coordination</span><strong id="res-coord">0%</strong></div>
+                <div class="result-metric"><span>Rhythm</span><strong id="res-rhythm">0%</strong></div>
             </div>
 
             <div class="card-section">
-                <h3>⚠️ Error Principal Detectado</h3>
-                <p id="res-error" style="margin:0; color:#ff4444; font-weight:bold;">Analizando error...</p>
+                <h3>⚠️ Main Error Detected</h3>
+                <p id="res-error" style="margin:0; color:#ff4444; font-weight:bold;">Analyzing error...</p>
             </div>
 
             <div class="card-section">
-                <h3>💡 Drills Recomendados</h3>
+                <h3>💡 Recommended Drills</h3>
                 <p id="res-drill" style="margin:0; color:#ccc;">...</p>
             </div>
 
-            <button class="btn btn-secondary" onclick="returnToDashboard()" style="width:100%; margin-top:6px; animation:none;">VOLVER AL PANEL</button>
+            <button class="btn btn-secondary" onclick="returnToDashboard()" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
         </div>
 
         <!-- MODULE 5: Training History Screen -->
         <div id="history-screen" class="screen">
             <h1>MODULE 5</h1>
-            <p class="subtitle">Historial de Entrenamiento</p>
+            <p class="subtitle">Training History</p>
 
             <div id="history-container" class="history-list"></div>
 
-            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">VOLVER AL PANEL</button>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
         </div>
 
         <!-- MODULE 6: Badges & Awards Screen -->
         <div id="badges-screen" class="screen">
             <h1>MODULE 6</h1>
-            <p class="subtitle">Insignias y Premios</p>
+            <p class="subtitle">Badges & Awards</p>
 
             <div id="badges-container" class="badges-grid"></div>
 
-            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">VOLVER AL PANEL</button>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
         </div>
     </div>
 
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let currentUser = null;
-        let dribbles = 0, timer = null, faseEntrenamiento = 'distancia'; // 'distancia' o 'activo'
+        let dribbles = 0, timer = null, faseEntrenamiento = 'distancia'; 
         let lastImageData = null, cooldownBote = false;
         let movimientosBoteValidos = 0;
         let streamCamara = null;
@@ -783,7 +783,7 @@
             const nivel = document.getElementById('reg-nivel').value;
 
             if (!alias || !edad) {
-                alert("Por favor ingresa tu alias y edad.");
+                alert(idioma === 'es' ? "Por favor ingresa tu alias y edad." : "Please enter your alias and age.");
                 return;
             }
 
@@ -792,7 +792,7 @@
                 score: 0,
                 xp: 0,
                 rank: "🟤 Bronze Ball",
-                lastTraining: "Ninguno",
+                lastTraining: idioma === 'es' ? "Ninguno" : "None",
                 history: [],
                 maxDribbles: 0,
                 registrationDate: new Date().toLocaleDateString()
@@ -814,6 +814,7 @@
         function loadDashboard(user) {
             if (user.xp === undefined) user.xp = 0;
             const datosRPG = calcularNivelRPG(user.xp);
+            const isEs = user.idioma === 'es';
 
             document.getElementById('dash-initial').innerText = user.alias.charAt(0).toUpperCase();
             document.getElementById('dash-alias').innerText = user.alias;
@@ -821,7 +822,7 @@
             document.getElementById('dash-score').innerText = user.score || 0;
             document.getElementById('dash-rank').innerText = user.rank || "🟤 Bronze";
 
-            document.getElementById('xp-rank-title').innerText = `Rango: ${datosRPG.nivel}`;
+            document.getElementById('xp-rank-title').innerText = isEs ? `Rango: ${datosRPG.nivel}` : `Rank: ${datosRPG.nivel}`;
             document.getElementById('xp-counter-text').innerText = `${user.xp} / ${datosRPG.max} XP`;
             document.getElementById('xp-bar-fill').style.width = `${Math.min(datosRPG.porcentaje, 100)}%`;
         }
@@ -832,7 +833,9 @@
             document.getElementById('btn-iniciar-cam').style.display = 'none';
             document.getElementById('timer').style.display = 'none';
             document.getElementById('progreso-bar').style.width = '0%';
-            document.getElementById('counter').innerText = "Distancia: Verificando...";
+            
+            const isEs = currentUser && currentUser.idioma === 'es';
+            document.getElementById('counter').innerText = isEs ? "Botes: Verificando..." : "Dribbles: Checking...";
 
             const videoElement = document.getElementById('webcam');
             try {
@@ -845,8 +848,8 @@
                     iniciarMonitoreoDistanciaYAnalisis();
                 };
             } catch (error) {
-                console.error("Error de cámara: ", error);
-                alert("No se pudo acceder a la cámara. Revisa los permisos.");
+                console.error("Camera error: ", error);
+                alert(isEs ? "No se pudo acceder a la cámara." : "Could not access camera. Check permissions.");
             }
         }
 
@@ -870,12 +873,12 @@
             const canvas = document.getElementById('distancia-canvas');
             const ctx = canvas.getContext('2d');
             
-            // Ajustar resolución interna del canvas al tamaño visual del elemento
             canvas.width = video.clientWidth || 300;
             canvas.height = video.clientHeight || 200;
 
             let framesEstable = 0;
             let avisoVozDado = false;
+            const isEs = currentUser && currentUser.idioma === 'es';
 
             const loopMonitoreo = () => {
                 if (video.paused || video.ended) return;
@@ -887,8 +890,6 @@
                 let radioCirculo = Math.min(canvas.width, canvas.height) * 0.32;
 
                 if (faseEntrenamiento === 'distancia') {
-                    // Simulación inteligente de detección de silueta/cuerpo por contraste central
-                    // Analizamos si hay suficiente contraste dentro del círculo para verificar presencia
                     let imgW = 60, imgH = 60;
                     let tempCanvas = document.createElement('canvas');
                     tempCanvas.width = imgW;
@@ -907,43 +908,41 @@
                         }
                     }
 
-                    // Criterio de distancia ideal (ajustado para que sea fácil de cumplir pero exacto)
                     let distanciaPerfecta = cambiosCentro > 250 && cambiosCentro < 1800;
                     let muyCerca = cambiosCentro >= 1800;
 
-                    // Dibujar círculo guía en el piso / pantalla
                     ctx.beginPath();
                     ctx.arc(centroX, centroY, radioCirculo, 0, 2 * Math.PI);
                     ctx.lineWidth = 4;
 
                     if (distanciaPerfecta) {
-                        ctx.strokeStyle = '#00ff66'; // Verde perfecto
+                        ctx.strokeStyle = '#00ff66';
                         ctx.fillStyle = 'rgba(0, 255, 102, 0.08)';
                         ctx.fill();
                         ctx.stroke();
 
-                        document.getElementById('distance-status').innerText = "¡Distancia Perfecta! 🟢";
+                        document.getElementById('distance-status').innerText = isEs ? "¡Distancia Perfecta! 🟢" : "Perfect Distance! 🟢";
                         document.getElementById('distance-status').style.color = "#00ff66";
                         
                         framesEstable++;
                         if (framesEstable > 35) {
                             document.getElementById('btn-iniciar-cam').style.display = 'block';
                             if (!avisoVozDado) {
-                                coachSay(currentUser && currentUser.idioma === 'es' ? "¡Posición perfecta! Presiona iniciar." : "Perfect position! Press start.");
+                                coachSay(isEs ? "¡Posición perfecta! Presiona iniciar." : "Perfect position! Press start.");
                                 avisoVozDado = true;
                             }
                         }
                     } else if (muyCerca) {
-                        ctx.strokeStyle = '#ff3300'; // Rojo: Muy cerca
+                        ctx.strokeStyle = '#ff3300';
                         ctx.stroke();
-                        document.getElementById('distance-status').innerText = "⚠️ Muy cerca. Da un paso atrás.";
+                        document.getElementById('distance-status').innerText = isEs ? "⚠️ Muy cerca. Da un paso atrás." : "⚠️ Too close. Step back.";
                         document.getElementById('distance-status').style.color = "#ff3300";
                         framesEstable = 0;
                         document.getElementById('btn-iniciar-cam').style.display = 'none';
                     } else {
-                        ctx.strokeStyle = '#ff9900'; // Naranja: Muy lejos
+                        ctx.strokeStyle = '#ff9900';
                         ctx.stroke();
-                        document.getElementById('distance-status').innerText = "⚠️ Acércate al círculo central.";
+                        document.getElementById('distance-status').innerText = isEs ? "⚠️ Acércate al círculo central." : "⚠️ Step closer to circle.";
                         document.getElementById('distance-status').style.color = "#ff9900";
                         framesEstable = 0;
                         document.getElementById('btn-iniciar-cam').style.display = 'none';
@@ -952,7 +951,6 @@
                     loopId = requestAnimationFrame(loopMonitoreo);
                 } 
                 else if (faseEntrenamiento === 'activo') {
-                    // FASE DE ANALISIS ACTIVO DE DRIBLE (Con filtro estricto anti-caminar)
                     document.getElementById('distance-status').style.display = 'none';
                     
                     let imgW = 80;
@@ -967,33 +965,28 @@
                     if (lastImageData) {
                         let pixelesCambiadosAbajo = 0;
                         let pixelesCambiadosArriba = 0;
-
-                        // Dividimos la zona en superior (cuerpo) e inferior (zona del balón/piso)
                         let mitadAltura = Math.floor(imgH / 2);
 
                         for (let y = 0; y < imgH; y++) {
                             for (let x = 0; x < imgW; x += 2) {
                                 let i = (y * imgW + x) * 4;
                                 let diff = Math.abs(currentData[i] - lastImageData[i]);
-                                if (diff > 45) { // Umbral estricto para evitar ruido de luz
+                                if (diff > 45) {
                                     if (y >= mitadAltura) pixelesCambiadosAbajo++;
                                     else pixelesCambiadosArriba++;
                                 }
                             }
                         }
 
-                        // FILTRO ANTI-CAMINAR: 
-                        // Para que cuente como bote, el movimiento debe concentrarse fuertemente en la mitad inferior 
-                        // (donde bota el balón) y tener un cambio rápido pero delimitado, descartando el caminar completo del cuerpo.
                         let esReboteReal = (pixelesCambiadosAbajo > 18 && pixelesCambiadosAbajo < 250) && (pixelesCambiadosAbajo > pixelesCambiadosArriba * 1.3);
 
                         if (esReboteReal && !cooldownBote) {
                             dribbles++;
                             movimientosBoteValidos++;
                             playSound(500 + (dribbles % 5) * 30);
-                            document.getElementById('counter').innerText = (currentUser && currentUser.idioma === 'es' ? "Botes: " : "Dribbles: ") + dribbles;
+                            document.getElementById('counter').innerText = (isEs ? "Botes: " : "Dribbles: ") + dribbles;
                             cooldownBote = true;
-                            setTimeout(() => { cooldownBote = false; }, 110); // Cooldown preciso para velocidad de mano
+                            setTimeout(() => { cooldownBote = false; }, 110);
                         }
                     }
                     lastImageData = currentData;
@@ -1011,13 +1004,14 @@
             movimientosBoteValidos = 0;
             let tiempoTotal = 30;
             let tiempoRestante = tiempoTotal;
+            const isEs = currentUser && currentUser.idioma === 'es';
 
             document.getElementById('btn-iniciar-cam').style.display = 'none';
             document.getElementById('timer').style.display = 'block';
-            document.getElementById('counter').innerText = currentUser && currentUser.idioma === 'es' ? "Botes: 0" : "Dribbles: 0";
+            document.getElementById('counter').innerText = isEs ? "Botes: 0" : "Dribbles: 0";
             
             actualizarDisplayTiempo(tiempoRestante);
-            coachSay(currentUser && currentUser.idioma === 'es' ? "¡Comienza a driblar con fuerza!" : "Start dribbling hard!");
+            coachSay(isEs ? "¡Comienza a driblar con fuerza!" : "Start dribbling hard!");
 
             timer = setInterval(() => {
                 tiempoRestante--;
@@ -1029,16 +1023,15 @@
                 if (tiempoRestante <= 0) {
                     clearInterval(timer);
                     detenerCamaraYProcesos();
-                    coachSay(currentUser && currentUser.idioma === 'es' ? "¡Tiempo terminado! Evaluando rendimiento..." : "Time's up! Evaluating performance...");
+                    coachSay(isEs ? "¡Tiempo terminado! Evaluando rendimiento..." : "Time's up! Evaluating performance...");
                     procesarResultadosFinales();
                 }
             }, 1000);
         }
 
         function procesarResultadosFinales() {
-            let esEspanol = currentUser && currentUser.idioma === 'es';
+            let isEs = currentUser && currentUser.idioma === 'es';
             
-            // Si caminaron o hicieron trampa sin botes reales, los botes válidos serán cercanos a 0
             let botesReales = Math.min(dribbles, movimientosBoteValidos + 15);
             if (dribbles < 5) botesReales = dribbles;
 
@@ -1054,7 +1047,7 @@
             let xpGanado = Math.max(Math.floor(botesReales * 1.5) + 15, 10);
             currentUser.xp = (currentUser.xp || 0) + xpGanado;
             currentUser.score = finalScore;
-            currentUser.lastTraining = `${botesReales} botes (${new Date().toLocaleDateString()})`;
+            currentUser.lastTraining = `${botesReales} ${isEs ? 'botes' : 'dribbles'} (${new Date().toLocaleDateString()})`;
             
             if (!currentUser.history) currentUser.history = [];
             currentUser.history.unshift({
@@ -1079,29 +1072,28 @@
             document.getElementById('res-coord').innerText = coordScore + "%";
             document.getElementById('res-rhythm').innerText = rhythmScore + "%";
 
-            // LOGICA CRÍTICA DE ERRORES REALES (Detecta si no hubo botes o si hubo fallos)
             let errorText = "";
             let drillText = "";
 
             if (botesReales < 8) {
-                errorText = esEspanol ? 
+                errorText = isEs ? 
                     "⚠️ Sin botes detectados o control nulo: ¡No se registró un buen manejo de balón!" : 
                     "⚠️ No dribbles detected or zero control: Proper ball handling was not recorded!";
-                drillText = esEspanol ? 
+                drillText = isEs ? 
                     "Ejercicio fundamental: 3 minutos de botes continuos contra el piso manteniendo la vista al frente." : 
                     "Fundamental drill: 3 minutes of continuous pounding keeping your eyes up.";
             } else if (botesReales < 25) {
-                errorText = esEspanol ? 
+                errorText = isEs ? 
                     "⚠️ Ritmo muy lento y pérdida de continuidad en la altura del bote." : 
                     "⚠️ Very slow rhythm and loss of continuity in bounce height.";
-                drillText = esEspanol ? 
+                drillText = isEs ? 
                     "Series de control de muñeca con botes bajos rápidos." : 
                     "Wrist control series with rapid low bounces.";
             } else {
-                errorText = esEspanol ? 
+                errorText = isEs ? 
                     "⚠️ Ligera oscilación en la mano débil durante el cruce." : 
                     "⚠️ Slight wavering in the weak hand during crossover.";
-                drillText = esEspanol ? 
+                drillText = isEs ? 
                     "Drills de cambio de dirección en espejo por 2 minutos." : 
                     "Mirror change of direction drills for 2 minutes.";
             }
@@ -1122,16 +1114,17 @@
         function openHistoryModule() {
             const container = document.getElementById('history-container');
             container.innerHTML = "";
+            const isEs = currentUser && currentUser.idioma === 'es';
 
             if (!currentUser.history || currentUser.history.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color:#777; font-size:0.75rem;">No hay sesiones registradas aún.</p>`;
+                container.innerHTML = `<p style="text-align:center; color:#777; font-size:0.75rem;">${isEs ? 'No hay sesiones registradas aún.' : 'No training sessions recorded yet.'}</p>`;
             } else {
                 currentUser.history.forEach(item => {
                     container.innerHTML += `
                         <div class="history-item">
                             <div>
                                 <span style="display:block; font-size:0.6rem;">${item.date}</span>
-                                <strong>${item.dribbles} Botes</strong>
+                                <strong>${item.dribbles} ${isEs ? 'Botes' : 'Dribbles'}</strong>
                             </div>
                             <div style="text-align: right;">
                                 <span style="display:block; font-size:0.6rem;">Score</span>
@@ -1147,18 +1140,19 @@
         function openBadgesModule() {
             const container = document.getElementById('badges-container');
             container.innerHTML = "";
+            const isEs = currentUser && currentUser.idioma === 'es';
 
             const totalSessions = currentUser.history ? currentUser.history.length : 0;
             const maxDribbles = currentUser.maxDribbles || 0;
             const currentXP = currentUser.xp || 0;
 
             const badges = [
-                { icon: "👶", title: "Rookie Start", desc: "Completar registro", unlocked: true },
-                { icon: "🔥", title: "Primer Fuego", desc: "1 sesión completada", unlocked: totalSessions >= 1 },
-                { icon: "⚡", title: "Demonio Veloz", desc: "Alcanzar 40+ botes", unlocked: maxDribbles >= 40 },
-                { icon: "🏆", title: "Elite Handler", desc: "Alcanzar 80+ score", unlocked: (currentUser.score >= 80) },
-                { icon: "🔄", title: "Constante", desc: "Completar 3 sesiones", unlocked: totalSessions >= 3 },
-                { icon: "👑", title: "Handle Master", desc: "Alcanzar 1000+ XP", unlocked: (currentXP >= 1000) }
+                { icon: "👶", title: "Rookie Start", desc: isEs ? "Completar registro" : "Complete registration", unlocked: true },
+                { icon: "🔥", title: "First Fire", desc: isEs ? "1 sesión completada" : "1 session completed", unlocked: totalSessions >= 1 },
+                { icon: "⚡", title: "Speed Demon", desc: isEs ? "Alcanzar 40+ botes" : "Reach 40+ dribbles", unlocked: maxDribbles >= 40 },
+                { icon: "🏆", title: "Elite Handler", desc: isEs ? "Alcanzar 80+ score" : "Reach 80+ score", unlocked: (currentUser.score >= 80) },
+                { icon: "🔄", title: "Consistent", desc: isEs ? "Completar 3 sesiones" : "Complete 3 sessions", unlocked: totalSessions >= 3 },
+                { icon: "👑", title: "Handle Master", desc: isEs ? "Alcanzar 1000+ XP" : "Reach 1000+ XP", unlocked: (currentXP >= 1000) }
             ];
 
             badges.forEach((b) => {
@@ -1175,7 +1169,8 @@
         }
 
         function inspectBadge(title, desc, unlocked) {
-            let statusText = unlocked ? "Estado: DESBLOQUEADO 🟢" : "Estado: BLOQUEADO 🔒";
+            const isEs = currentUser && currentUser.idioma === 'es';
+            let statusText = unlocked ? (isEs ? "Estado: DESBLOQUEADO 🟢" : "Status: UNLOCKED 🟢") : (isEs ? "Estado: BLOQUEADO 🔒" : "Status: LOCKED 🔒");
             alert(`${title}\n${desc}\n\n${statusText}`);
         }
 
@@ -1185,7 +1180,8 @@
         }
 
         function resetApp() {
-            if (confirm("¿Quieres reiniciar y probar el flujo de bienvenida de nuevo?")) {
+            const isEs = currentUser && currentUser.idioma === 'es';
+            if (confirm(isEs ? "¿Quieres reiniciar y probar el flujo de bienvenida de nuevo?" : "Do you want to reset and test the welcome flow again?")) {
                 localStorage.removeItem('handlelab_user');
                 currentUser = null;
                 switchScreen('welcome-screen');
@@ -1194,3 +1190,4 @@
     </script>
 </body>
 </html>
+
