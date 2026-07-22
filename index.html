@@ -532,7 +532,7 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.9);
-            display: none; /* CORREGIDO: Por defecto oculto, solo se muestra al registrarse */
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 200;
@@ -561,7 +561,7 @@
 </head>
 <body>
     <div class="box">
-        <!-- MODAL OBLIGATORIO DE PRIVACIDAD Y TÉRMINOS (Oculto inicialmente, aparece tras llenar tus datos) -->
+        <!-- MODAL OBLIGATORIO DE PRIVACIDAD Y TÉRMINOS -->
         <div id="privacy-modal">
             <div class="modal-content">
                 <div style="font-size: 1.8rem; margin-bottom: 2px;">📄</div>
@@ -594,7 +594,7 @@
             </div>
         </div>
 
-        <!-- MÓDULO 1B: Formulario de Registro (Tu Nombre / Alias y datos) -->
+        <!-- MÓDULO 1B: Formulario de Registro -->
         <div id="register-screen" class="screen">
             <h1>MODULE 1</h1>
             <p class="subtitle">Player Registration</p>
@@ -852,7 +852,8 @@
         window.onload = function() {
             iniciarEfectoFlash();
             const savedUser = localStorage.getItem('handlelab_user');
-            if (savedUser) {
+            const privacyAccepted = localStorage.getItem('handlelab_privacy');
+            if (savedUser && privacyAccepted === 'true') {
                 currentUser = JSON.parse(savedUser);
                 loadDashboard(currentUser);
                 switchScreen('dashboard-screen');
@@ -871,7 +872,6 @@
                 return;
             }
 
-            // Muestra el modal de términos y condiciones SOLAMENTE tras validar los datos
             document.getElementById('privacy-modal').style.display = 'flex';
         }
 
@@ -972,14 +972,15 @@
         function loadDashboard(user) {
             if (user.xp === undefined) user.xp = 0;
             const datosRPG = calcularNivelRPG(user.xp);
+            const isEs = user.idioma === 'es';
 
             document.getElementById('dash-initial').innerText = user.alias.charAt(0).toUpperCase();
             document.getElementById('dash-alias').innerText = user.alias;
-            document.getElementById('dash-level').innerText = `Level: ${datosRPG.nivel}`;
+            document.getElementById('dash-level').innerText = (isEs ? "Nivel: " : "Level: ") + datosRPG.nivel;
             document.getElementById('dash-score').innerText = user.score || 0;
             document.getElementById('dash-rank').innerText = user.rank || "🟤 Bronze";
 
-            document.getElementById('xp-rank-title').innerText = user.idioma === 'es' ? `Rango: ${datosRPG.nivel}` : `Rank: ${datosRPG.nivel}`;
+            document.getElementById('xp-rank-title').innerText = isEs ? `Rango: ${datosRPG.nivel}` : `Rank: ${datosRPG.nivel}`;
             document.getElementById('xp-counter-text').innerText = `${user.xp} / ${datosRPG.max} XP`;
             document.getElementById('xp-bar-fill').style.width = `${Math.min(datosRPG.porcentaje, 100)}%`;
         }
@@ -1352,28 +1353,3 @@
     </script>
 </body>
 </html>
-
-// MÓDULO 12: Control de Sesión y Persistencia Avanzada de Pantallas
-function gestionarEstadoSesion() {
-    const savedUser = localStorage.getItem('handlelab_user');
-    const privacyAccepted = localStorage.getItem('handlelab_privacy');
-
-    if (savedUser && privacyAccepted === 'true') {
-        currentUser = JSON.parse(savedUser);
-        loadDashboard(currentUser);
-        switchScreen('dashboard-screen');
-    } else {
-        switchScreen('welcomescreen');
-    }
-}
-
-// Validación de salida y limpieza de tokens locales
-function cerrarSesionCompleta() {
-    if (confirm("¿Estás seguro de cerrar sesión y reiniciar el progreso actual?")) {
-        localStorage.removeItem('handlelab_user');
-        localStorage.removeItem('handlelab_privacy');
-        currentUser = null;
-        location.reload();
-    }
-}
-
