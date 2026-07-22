@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>HandleLab</title>
+    <title>HandleLab - Registro</title>
     <style>
         html, body {
             height: 100%;
@@ -29,307 +29,185 @@
             max-width: 360px;
             height: 94vh;
             border: 2px solid #ff6600;
-            padding: 8px;
+            padding: 12px;
             border-radius: 16px;
             background: rgba(10,10,15,0.98);
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            overflow-y: auto;
         }
         
         h1 { 
             margin: 0 0 4px 0; 
-            font-size: 0.95rem; 
-            text-align: center; 
-        }
-
-        .video-container {
-            flex: 1;
-            min-height: 120px;
-            width: 100%;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid #ff6600;
-            background: #000;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 6px;
-        }
-
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: scaleX(-1);
-        }
-
-        .timer-overlay {
-            position: absolute;
-            top: 6px;
-            background: rgba(0, 0, 0, 0.75);
-            border: 1px solid #ff6600;
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 1.2rem;
+            font-size: 1.2rem; 
+            text-align: center;
             color: #ff6600;
-            font-weight: 800;
-            letter-spacing: 1px;
         }
 
-        .controls-panel {
-            background: rgba(20, 20, 25, 0.95);
-            padding: 6px;
-            border-radius: 10px;
-            border: 1px solid #333;
-            flex-shrink: 0;
+        p.subtitle {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            color: #ff9933;
+            margin-bottom: 3px;
+            font-weight: bold;
         }
 
         input, select { 
             background: #1a1a1a; 
             border: 1px solid #444; 
             color: #fff; 
-            padding: 6px; 
-            margin-bottom: 5px; 
+            padding: 8px; 
             width: 100%; 
             box-sizing: border-box; 
             border-radius: 6px; 
-            font-size: 12px; 
-        }
-        
-        .stats-row { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 3px; 
-            font-size: 0.85rem; 
-            font-weight: bold; 
-            color: #ff9933; 
-        }
-        
-        .progreso-container { 
-            background: #111; 
-            height: 5px; 
-            border-radius: 3px; 
-            margin-bottom: 6px; 
-            overflow: hidden; 
-        }
-        
-        .progreso-bar { 
-            height: 100%; 
-            background: #ff6600; 
-            width: 0%; 
-            transition: width 0.3s ease; 
+            font-size: 13px; 
         }
 
-        .bottom-bar { 
-            display: flex; 
-            gap: 6px; 
-        }
-        
         .btn { 
             background: #ff6600; 
             color: #000; 
-            padding: 8px; 
-            border-radius: 6px; 
+            padding: 10px; 
+            border-radius: 8px; 
             border: none; 
             font-weight: 800; 
-            flex: 2; 
+            width: 100%; 
             cursor: pointer; 
-            font-size: 13px; 
-            text-align: center; 
+            font-size: 14px; 
+            text-align: center;
+            margin-top: 15px;
         }
-        
-        .btn-share { 
-            background: #222; 
-            color: #fff; 
-            border: 1px solid #444; 
-            flex: 1; 
-            font-size: 11px; 
-            padding: 8px; 
+
+        /* Pantalla de bienvenida inicial */
+        #welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
         }
-        
-        #historial { 
-            font-size: 0.6rem; 
-            text-align: left; 
-            color: #888; 
-            border-top: 1px solid #222; 
-            padding-top: 2px; 
-            margin-top: 4px; 
-            max-height: 20px; 
-            overflow-y: auto; 
+
+        #register-screen {
+            display: none;
+            flex-direction: column;
+            height: 100%;
         }
     </style>
 </head>
 <body>
     <div class="box">
-        <h1>HandleLab</h1>
-        
-        <div class="video-container">
-            <video id="webcam" autoplay playsinline muted></video>
-            <div id="timer" class="timer-overlay">00:00</div>
+        <!-- Pantalla 1: Bienvenida -->
+        <div id="welcome-screen">
+            <h1>🏀 HANDLELAB</h1>
+            <p style="font-size: 0.85rem; color: #ccc; margin: 20px 0;">Domina tu drible, eleva tu nivel y conviértete en un elite handler.</p>
+            <button class="btn" onclick="mostrarRegistro()">COMENZAR</button>
         </div>
 
-        <!-- Canvas oculto para procesar el movimiento -->
-        <canvas id="canvas-process" style="display:none;"></canvas>
-
-        <div class="controls-panel">
-            <input type="text" id="username" placeholder="Nombre del jugador" onchange="usuario = this.value">
-            <select id="programa">
-                <option value="60">Calentamiento (60s)</option>
-                <option value="120">Intensidad Media (120s)</option>
-                <option value="180">Élite (180s)</option>
-            </select>
+        <!-- Pantalla 2: Formulario de Módulo 1 (Registro) -->
+        <div id="register-screen">
+            <h1>MÓDULO 1</h1>
+            <p class="subtitle">Registro de Jugador</p>
             
-            <div class="stats-row">
-                <span id="counter">Botes: 0</span>
+            <div class="form-group">
+                <label>🌍 Idioma</label>
+                <select id="reg-idioma">
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                </select>
             </div>
-            <div class="progreso-container"><div id="progreso-bar" class="progreso-bar"></div></div>
 
-            <div class="bottom-bar">
-                <button class="btn" onclick="iniciarEntrenamiento()">INICIAR</button>
-                <button class="btn btn-share" onclick="compartirResultados()">COMPARTIR</button>
+            <div class="form-group">
+                <label>👤 Alias / Nombre</label>
+                <input type="text" id="reg-alias" placeholder="Ej. AlexHoop">
             </div>
-            
-            <div id="historial"><ul id="lista-sesiones" style="margin:0; padding-left:10px;"></ul></div>
+
+            <div class="form-group">
+                <label>🎂 Edad</label>
+                <input type="number" id="reg-edad" placeholder="Ej. 16" min="6" max="99">
+            </div>
+
+            <div class="form-group">
+                <label>✋ Mano Dominante</label>
+                <select id="reg-mano">
+                    <option value="Derecha">Derecha</option>
+                    <option value="Izquierda">Izquierda</option>
+                    <option value="Ambiestra">Ambiestra</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>📊 Nivel Actual</label>
+                <select id="reg-nivel">
+                    <option value="Rookie">Rookie (Principiante)</option>
+                    <option value="Starter">Starter (Intermedio)</option>
+                    <option value="Hooper">Hooper (Avanzado)</option>
+                    <option value="Elite Handler">Elite Handler (Profesional)</option>
+                </select>
+            </div>
+
+            <button class="btn" onclick="guardarRegistroUser()">REGISTRARME</button>
         </div>
     </div>
 
     <script>
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let botes = 0, usuario = "Invitado", timer = null;
-        let entrenando = false;
-        let lastImageData = null;
-        let cooldownBote = false;
-        
         window.onload = function() {
-            mostrarHistorial();
-            iniciarCamara();
+            // Verificar si ya existe un usuario registrado previamente
+            const perfilGuardado = localStorage.getItem('handlelab_user');
+            if (perfilGuardado) {
+                // Si ya está registrado, podemos saltar directo o mostrar bienvenida personalizada
+                // Por ahora lo dejamos en la bienvenida para pruebas del Módulo 1
+            }
         };
 
-        async function iniciarCamara() {
-            const videoElement = document.getElementById('webcam');
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { width: { ideal: 480 }, height: { ideal: 640 }, facingMode: "user" }
-                });
-                videoElement.srcObject = stream;
-            } catch (error) {
-                console.error("Error al acceder a la cámara: ", error);
+        function mostrarRegistro() {
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('register-screen').style.display = 'flex';
+        }
+
+        function guardarRegistroUser() {
+            const idioma = document.getElementById('reg-idioma').value;
+            const alias = document.getElementById('reg-alias').value.trim();
+            const edad = document.getElementById('reg-edad').value;
+            const mano = document.getElementById('reg-mano').value;
+            const nivel = document.getElementById('reg-nivel').value;
+
+            if (!alias || !edad) {
+                alert("Por favor, completa tu alias y tu edad.");
+                return;
             }
-        }
 
-        function playSound() {
-            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-            const osc = audioCtx.createOscillator();
-            osc.connect(audioCtx.destination);
-            osc.frequency.value = 450;
-            osc.start(); osc.stop(audioCtx.currentTime + 0.04);
-        }
-
-        function coachSay(texto) {
-            const msg = new SpeechSynthesisUtterance(texto);
-            msg.lang = 'es-ES';
-            msg.pitch = 1.1;
-            window.speechSynthesis.speak(msg);
-        }
-
-        function iniciarEntrenamiento() {
-            botes = 0;
-            entrenando = true;
-            let tiempoTotal = parseInt(document.getElementById('programa').value);
-            let tiempoRestante = tiempoTotal;
-            document.getElementById('counter').innerText = "Botes: 0";
-            
-            actualizarDisplayTiempo(tiempoRestante);
-            coachSay("¡Comenzamos!");
-
-            const video = document.getElementById('webcam');
-            const canvas = document.getElementById('canvas-process');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 100;
-            canvas.height = 75;
-
-            // Bucle de detección por fotogramas
-            const procesarMovimiento = () => {
-                if (!entrenando) return;
-
-                if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    const currentData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-                    if (lastImageData) {
-                        let cambios = 0;
-                        for (let i = 0; i < currentData.length; i += 16) {
-                            let diff = Math.abs(currentData[i] - lastImageData[i]);
-                            if (diff > 45) {
-                                cambios++;
-                            }
-                        }
-
-                        if (cambios > 120 && !cooldownBote) {
-                            botes++;
-                            playSound();
-                            document.getElementById('counter').innerText = "Botes: " + botes;
-                            cooldownBote = true;
-                            setTimeout(() => { cooldownBote = false; }, 180);
-                        }
-                    }
-                    lastImageData = currentData;
-                }
-                if (entrenando) requestAnimationFrame(procesarMovimiento);
+            const perfilJugador = {
+                idioma,
+                alias,
+                edad,
+                mano,
+                nivel,
+                fechaRegistro: new Date().toLocaleDateString()
             };
 
-            requestAnimationFrame(procesarMovimiento);
+            // Guardamos localmente (luego lo conectaremos con Supabase si gustas)
+            localStorage.setItem('handlelab_user', JSON.stringify(perfilJugador));
+
+            alert(`¡Registro exitoso! Bienvenido a HandleLab, ${alias}.`);
             
-            // Reloj de la sesión
-            timer = setInterval(() => {
-                tiempoRestante--;
-                actualizarDisplayTiempo(tiempoRestante);
-                
-                let porcentaje = ((tiempoTotal - tiempoRestante) / tiempoTotal) * 100;
-                document.getElementById('progreso-bar').style.width = Math.min(porcentaje, 100) + "%";
-
-                if (tiempoRestante <= 0) {
-                    clearInterval(timer);
-                    entrenando = false;
-                    guardarSesion();
-                    coachSay("¡Tiempo terminado! Gran sesión.");
-                }
-            }, 1000);
-        }
-
-        function actualizarDisplayTiempo(segundos) {
-            let m = Math.floor(segundos / 60);
-            let s = segundos % 60;
-            document.getElementById('timer').innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
-        }
-
-        function guardarSesion() {
-            let historial = JSON.parse(localStorage.getItem('historialHandleLab') || "[]");
-            historial.unshift({ usuario, botes, fecha: new Date().toLocaleDateString() });
-            localStorage.setItem('historialHandleLab', JSON.stringify(historial.slice(0, 3)));
-            mostrarHistorial();
-        }
-
-        function mostrarHistorial() {
-            const lista = document.getElementById('lista-sesiones');
-            lista.innerHTML = "";
-            let historial = JSON.parse(localStorage.getItem('historialHandleLab') || "[]");
-            historial.forEach(s => {
-                lista.innerHTML += `<li>${s.usuario}: ${s.botes} botes (${s.fecha})</li>`;
-            });
-        }
-
-        function compartirResultados() {
-            const selectProg = document.getElementById('programa');
-            const programa = selectProg.options[selectProg.selectedIndex].text;
-            const texto = `🏀 ¡HandleLab! Sesión: ${programa}. Logré: ${botes} botes. ¡Atrévete a superarme!`;
-            if (navigator.share) { navigator.share({ title: 'Mi récord HandleLab', text: texto }); } 
-            else { prompt("Copia esto:", texto); }
+            // Aquí en el siguiente paso construiremos el Módulo 2 (Home Dashboard)
+            location.reload(); 
         }
     </script>
 </body>
 </html>
+
