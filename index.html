@@ -130,9 +130,34 @@
             gap: 6px;
         }
 
+        .flash-title-container {
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2px;
+        }
+
+        .flash-typing-text {
+            font-size: 1.05rem;
+            font-weight: 900;
+            color: #ff6600;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.6);
+            border-right: 2px solid #ff9933;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: blinkCaret 0.75s step-end infinite;
+        }
+
+        @keyframes blinkCaret {
+            from, to { border-color: transparent }
+            50% { border-color: #ff9933; }
+        }
+
         .welcome-img-container {
             width: 100%;
-            height: 310px;
+            height: 350px;
             border-radius: 12px;
             overflow: hidden;
             border: 2px solid #ff6600;
@@ -144,14 +169,13 @@
         .welcome-img-container img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            animation: ballFireAnimation 1.5s infinite ease-in-out;
+            object-fit: cover;
+            animation: interactiveZoom 3s infinite alternate ease-in-out;
         }
 
-        @keyframes ballFireAnimation {
-            0% { transform: scale(1) translateY(0); filter: brightness(1) drop-shadow(0 0 5px rgba(255, 102, 0, 0.6)); }
-            50% { transform: scale(1.02) translateY(2px); filter: brightness(1.15) drop-shadow(0 0 15px rgba(255, 140, 0, 0.9)); }
-            100% { transform: scale(1) translateY(0); filter: brightness(1) drop-shadow(0 0 5px rgba(255, 102, 0, 0.6)); }
+        @keyframes interactiveZoom {
+            0% { transform: scale(1) translateY(0); filter: brightness(1); }
+            100% { transform: scale(1.06) translateY(-2px); filter: brightness(1.15) drop-shadow(0 0 10px rgba(255, 102, 0, 0.7)); }
         }
 
         .dashboard-header {
@@ -418,14 +442,14 @@
 </head>
 <body>
     <div class="box">
-        <!-- MODULE 1: Welcome Screen with Exact User Image and Fire Animation -->
+        <!-- MODULE 1: Welcome Screen -->
         <div id="welcome-screen" class="screen active">
-            <h1>HANDLELAB</h1>
-            <p class="subtitle">Master Your Handle</p>
+            <div class="flash-title-container">
+                <span id="flash-text" class="flash-typing-text"></span>
+            </div>
             <div class="welcome-hero">
                 <div class="welcome-img-container">
-                    <!-- Tu imagen exacta apuntando directo al archivo subido en el repositorio -->
-                    <img src="Screenshot_20260714_122304..." alt="HandleLab Welcome Fire">
+                    <img src="Screenshot_20260715_094703_ChatGPT.jpg" alt="HandleLab Welcome">
                 </div>
                 <button class="btn" onclick="switchScreen('register-screen')">START / INICIAR</button>
             </div>
@@ -600,6 +624,7 @@
         let lastImageData = null, cooldownBote = false;
 
         window.onload = function() {
+            iniciarEfectoFlash();
             const savedUser = localStorage.getItem('handlelab_user');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
@@ -609,6 +634,44 @@
                 switchScreen('welcome-screen');
             }
         };
+
+        function iniciarEfectoFlash() {
+            const words = ["Welcome to HandleLab", "Master Your Handle", "Ignite Your Game"];
+            let i = 0;
+            let timerTyping;
+
+            function typingEffect() {
+                let word = words[i].split("");
+                let loopTyping = function() {
+                    if (word.length > 0) {
+                        document.getElementById('flash-text').innerHTML += word.shift();
+                    } else {
+                        setTimeout(deletingEffect, 1500);
+                        return;
+                    }
+                    timerTyping = setTimeout(loopTyping, 90);
+                };
+                loopTyping();
+            }
+
+            function deletingEffect() {
+                let word = words[i].split("");
+                let loopDeleting = function() {
+                    if (word.length > 0) {
+                        word.pop();
+                        document.getElementById('flash-text').innerHTML = word.join("");
+                    } else {
+                        i = (i + 1) % words.length;
+                        setTimeout(typingEffect, 500);
+                        return;
+                    }
+                    timerTyping = setTimeout(loopDeleting, 45);
+                };
+                loopDeleting();
+            }
+
+            typingEffect();
+        }
 
         function switchScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
