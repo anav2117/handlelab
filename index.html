@@ -36,6 +36,7 @@
             flex-direction: column;
             box-sizing: border-box;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            overflow-y: auto;
         }
         
         h1 { 
@@ -229,6 +230,27 @@
             transition: width 0.3s ease; 
         }
 
+        /* Results Styles (Module 4) */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+            margin-bottom: 6px;
+        }
+        .result-metric {
+            background: rgba(20, 20, 25, 0.95);
+            border: 1px solid #333;
+            padding: 5px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.65rem;
+        }
+        .result-metric strong {
+            display: block;
+            color: #ff6600;
+            font-size: 0.8rem;
+        }
+
         .screen { display: none; flex-direction: column; height: 100%; }
         .screen.active { display: flex; }
     </style>
@@ -346,6 +368,36 @@
                 <button class="btn" id="btn-iniciar-cam" onclick="iniciarAnalisisCamara()">START DRIBBLE</button>
             </div>
         </div>
+
+        <!-- MODULE 4: Results Screen -->
+        <div id="results-screen" class="screen">
+            <h1>MODULE 4</h1>
+            <p class="subtitle">Analysis Results</p>
+
+            <div class="stat-card" style="margin-bottom: 6px; padding: 8px;">
+                <span style="font-size: 0.7rem;">Final Handle Score</span>
+                <strong id="res-score" style="font-size: 1.4rem;">0</strong>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-metric"><span>Vision</span><strong id="res-vision">0%</strong></div>
+                <div class="result-metric"><span>Control</span><strong id="res-control">0%</strong></div>
+                <div class="result-metric"><span>Coordination</span><strong id="res-coord">0%</strong></div>
+                <div class="result-metric"><span>Rhythm</span><strong id="res-rhythm">0%</strong></div>
+            </div>
+
+            <div class="card-section">
+                <h3>⚠️ Main Error</h3>
+                <p id="res-error" style="margin:0; color:#ff6600; font-weight:bold;">Looking down too much.</p>
+            </div>
+
+            <div class="card-section">
+                <h3>💡 Recommended Drills</h3>
+                <p id="res-drill" style="margin:0; color:#ccc;">Pound dribble with eyes up.</p>
+            </div>
+
+            <button class="btn" onclick="returnToDashboard()">BACK TO DASHBOARD</button>
+        </div>
     </div>
 
     <script>
@@ -406,9 +458,10 @@
             }
         }
 
-        // Módulo 3: Activar Cámara
         async function openCameraModule() {
             switchScreen('camera-screen');
+            document.getElementById('btn-iniciar-cam').style.display = 'block';
+            document.getElementById('progreso-bar').style.width = '0%';
             const videoElement = document.getElementById('webcam');
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
@@ -439,7 +492,7 @@
         function iniciarAnalisisCamara() {
             dribbles = 0;
             entrenando = true;
-            let tiempoTotal = 30; // 30 segundos de análisis
+            let tiempoTotal = 30;
             let tiempoRestante = tiempoTotal;
             document.getElementById('counter').innerText = "Dribbles: 0";
             document.getElementById('btn-iniciar-cam').style.display = 'none';
@@ -494,14 +547,34 @@
                     entrenando = false;
                     coachSay("Time's up! Great session.");
                     
-                    // Guardar resultado provisional y actualizar usuario
-                    currentUser.score = Math.min(Math.floor(dribbles * 1.5), 100);
+                    // Calcular métricas para el Módulo 4 (Resultados)
+                    let finalScore = Math.min(Math.floor(dribbles * 1.2), 100);
+                    let visionScore = Math.min(finalScore + 5, 95);
+                    let controlScore = Math.min(dribbles * 2, 98);
+                    let coordScore = Math.min(finalScore + 2, 96);
+                    let rhythmScore = Math.min(finalScore - 3, 90);
+                    if (rhythmScore < 40) rhythmScore = 45;
+
+                    currentUser.score = finalScore;
                     currentUser.lastTraining = `${dribbles} dribbles (${new Date().toLocaleDateString()})`;
                     localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
-                    
-                    alert(`Analysis complete! Total dribbles: ${dribbles}. Score calculated.`);
-                    loadDashboard(currentUser);
-                    switchScreen('dashboard-screen');
+
+                    // Mostrar pantalla de resultados (Módulo 4)
+                    document.getElementById('res-score').innerText = finalScore;
+                    document.getElementById('res-vision').innerText = visionScore + "%";
+                    document.getElementById('res-control').innerText = controlScore + "%";
+                    document.getElementById('res-coord').innerText = coordScore + "%";
+                    document.getElementById('res-rhythm').innerText = rhythmScore + "%";
+
+                    if (dribbles < 15) {
+                        document.getElementById('res-error').innerText = "Low dribble frequency / Slow pace.";
+                        document.getElementById('res-drill').innerText = "5-minute continuous pound drills.";
+                    } else {
+                        document.getElementById('res-error').innerText = "Minor hand height inconsistency.";
+                        document.getElementById('res-drill').innerText = "Low crossover control series.";
+                    }
+
+                    switchScreen('results-screen');
                 }
             }, 1000);
         }
@@ -510,6 +583,11 @@
             let m = Math.floor(segundos / 60);
             let s = segundos % 60;
             document.getElementById('timer').innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+        }
+
+        function returnToDashboard() {
+            loadDashboard(currentUser);
+            switchScreen('dashboard-screen');
         }
     </script>
 </body>
