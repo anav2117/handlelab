@@ -172,6 +172,9 @@
             <div id="timer" class="timer-overlay">00:00</div>
         </div>
 
+        <!-- Canvas oculto para procesar el movimiento -->
+        <canvas id="canvas-process" style="display:none;"></canvas>
+
         <div class="controls-panel">
             <input type="text" id="username" placeholder="Nombre del jugador" onchange="usuario = this.value">
             <select id="programa">
@@ -197,6 +200,9 @@
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let botes = 0, usuario = "Invitado", timer = null;
+        let entrenando = false;
+        let lastImageData = null;
+        let cooldownBote = false;
         
         window.onload = function() {
             mostrarHistorial();
@@ -219,8 +225,8 @@
             if (audioCtx.state === 'suspended') { audioCtx.resume(); }
             const osc = audioCtx.createOscillator();
             osc.connect(audioCtx.destination);
-            osc.frequency.value = 400;
-            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+            osc.frequency.value = 450;
+            osc.start(); osc.stop(audioCtx.currentTime + 0.04);
         }
 
         function coachSay(texto) {
@@ -232,18 +238,55 @@
 
         function iniciarEntrenamiento() {
             botes = 0;
+            entrenando = true;
             let tiempoTotal = parseInt(document.getElementById('programa').value);
             let tiempoRestante = tiempoTotal;
             document.getElementById('counter').innerText = "Botes: 0";
             
             actualizarDisplayTiempo(tiempoRestante);
             coachSay("¡Comenzamos!");
+
+            const video = document.getElementById('webcam');
+            const canvas = document.getElementById('canvas-process');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 100;
+            canvas.height = 75;
+
+            // Bucle de detección por fotogramas
+            const procesarMovimiento = () => {
+                if (!entrenando) return;
+
+                if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const currentData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+                    if (lastImageData) {
+                        let cambios = 0;
+                        for (let i = 0; i < currentData.length; i += 16) {
+                            let diff = Math.abs(currentData[i] - lastImageData[i]);
+                            if (diff > 45) {
+                                cambios++;
+                            }
+                        }
+
+                        if (cambios > 120 && !cooldownBote) {
+                            botes++;
+                            playSound();
+                            document.getElementById('counter').innerText = "Botes: " + botes;
+                            cooldownBote = true;
+                            setTimeout(() => { cooldownBote = false; }, 180);
+                        }
+                    }
+                    lastImageData = currentData;
+                }
+                if (entrenando) requestAnimationFrame(procesarMovimiento);
+            };
+
+            requestAnimationFrame(procesarMovimiento);
             
+            // Reloj de la sesión
             timer = setInterval(() => {
-                botes++;
                 tiempoRestante--;
-                playSound();
-                document.getElementById('counter').innerText = "Botes: " + botes;
                 actualizarDisplayTiempo(tiempoRestante);
                 
                 let porcentaje = ((tiempoTotal - tiempoRestante) / tiempoTotal) * 100;
@@ -251,6 +294,7 @@
 
                 if (tiempoRestante <= 0) {
                     clearInterval(timer);
+                    entrenando = false;
                     guardarSesion();
                     coachSay("¡Tiempo terminado! Gran sesión.");
                 }
