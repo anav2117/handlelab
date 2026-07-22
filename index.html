@@ -77,7 +77,6 @@
             font-size: 12px; 
         }
 
-        /* EFECTO DE FUEGO Y PULSO EN EL BOTÓN START */
         .btn { 
             background: linear-gradient(135deg, #ff6600, #ff3300);
             color: #fff; 
@@ -131,7 +130,6 @@
             gap: 6px;
         }
 
-        /* CONTENEDOR DE TU IMAGEN EXACTA CON ANIMACIÓN DE BOTE Y FUEGO */
         .welcome-img-container {
             width: 100%;
             height: 310px;
@@ -146,11 +144,10 @@
         .welcome-img-container img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Mantiene toda la estructura exacta de tu captura (logo, textos y botón de la imagen) */
+            object-fit: contain;
             animation: ballFireAnimation 1.5s infinite ease-in-out;
         }
 
-        /* ANIMACIÓN QUE SIMULA EL BOTE DEL BALÓN Y EL FUEGO EN SU LUGAR */
         @keyframes ballFireAnimation {
             0% { transform: scale(1) translateY(0); filter: brightness(1) drop-shadow(0 0 5px rgba(255, 102, 0, 0.6)); }
             50% { transform: scale(1.02) translateY(2px); filter: brightness(1.15) drop-shadow(0 0 15px rgba(255, 140, 0, 0.9)); }
@@ -427,8 +424,8 @@
             <p class="subtitle">Master Your Handle</p>
             <div class="welcome-hero">
                 <div class="welcome-img-container">
-                    <!-- Aquí colocas la ruta de tu imagen exacta (puedes reemplazar este enlace con el archivo local o enlace directo de tu imagen) -->
-                    <img src="1000020108.jpg" alt="HandleLab Welcome Fire" onerror="this.src='https://images.unsplash.com/photo-1546519638-68e109498ffc?w=500&auto=format&fit=crop&q=60'">
+                    <!-- Tu imagen exacta apuntando directo al archivo subido en el repositorio -->
+                    <img src="Screenshot_20260714_122304..." alt="HandleLab Welcome Fire">
                 </div>
                 <button class="btn" onclick="switchScreen('register-screen')">START / INICIAR</button>
             </div>
@@ -492,7 +489,6 @@
                 </div>
             </div>
 
-            <!-- MÓDULO 7: XP y Rango RPG -->
             <div class="xp-container">
                 <div class="xp-header">
                     <span id="xp-rank-title">Rookie Rank</span>
@@ -581,9 +577,7 @@
             <h1>MODULE 5</h1>
             <p class="subtitle">Training History & Progress</p>
 
-            <div id="history-container" class="history-list">
-                <!-- Se llena dinámicamente -->
-            </div>
+            <div id="history-container" class="history-list"></div>
 
             <button class="btn" onclick="switchScreen('dashboard-screen')">BACK TO DASHBOARD</button>
         </div>
@@ -593,9 +587,7 @@
             <h1>MODULE 6</h1>
             <p class="subtitle">Badges & Awards</p>
 
-            <div id="badges-container" class="badges-grid">
-                <!-- Se llena dinámicamente -->
-            </div>
+            <div id="badges-container" class="badges-grid"></div>
 
             <button class="btn" onclick="switchScreen('dashboard-screen')">BACK TO DASHBOARD</button>
         </div>
@@ -896,4 +888,3 @@
     </script>
 </body>
 </html>
-
