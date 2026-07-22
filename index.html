@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>HandleLab - Registration</title>
+    <title>HandleLab</title>
     <style>
         html, body {
             height: 100%;
@@ -41,28 +41,28 @@
         
         h1 { 
             margin: 0 0 4px 0; 
-            font-size: 1.2rem; 
+            font-size: 1.1rem; 
             text-align: center;
             color: #ff6600;
         }
 
         p.subtitle {
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #aaa;
             margin-top: 0;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         label {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #ff9933;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             font-weight: bold;
         }
 
@@ -70,11 +70,11 @@
             background: #1a1a1a; 
             border: 1px solid #444; 
             color: #fff; 
-            padding: 8px; 
+            padding: 7px; 
             width: 100%; 
             box-sizing: border-box; 
             border-radius: 6px; 
-            font-size: 13px; 
+            font-size: 12px; 
         }
 
         .btn { 
@@ -86,38 +86,109 @@
             font-weight: 800; 
             width: 100%; 
             cursor: pointer; 
-            font-size: 14px; 
+            font-size: 13px; 
             text-align: center;
-            margin-top: 15px;
+            margin-top: 10px;
         }
 
-        #welcome-screen {
+        /* Estilos del Dashboard (Módulo 2) */
+        .dashboard-header {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: rgba(20, 20, 25, 0.95);
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            margin-bottom: 10px;
+        }
+
+        .avatar-box {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #ff6600;
+            color: #000;
+            display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
+            font-weight: 900;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .user-info h2 {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .user-info p {
+            margin: 2px 0 0 0;
+            font-size: 0.7rem;
+            color: #ff9933;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card {
+            background: rgba(20, 20, 25, 0.95);
+            border: 1px solid #333;
+            padding: 8px;
+            border-radius: 8px;
             text-align: center;
         }
 
-        #register-screen {
-            display: none;
-            flex-direction: column;
-            height: 100%;
+        .stat-card span {
+            display: block;
+            font-size: 0.65rem;
+            color: #888;
+            text-transform: uppercase;
         }
+
+        .stat-card strong {
+            font-size: 0.95rem;
+            color: #ff6600;
+        }
+
+        .card-section {
+            background: rgba(20, 20, 25, 0.95);
+            border: 1px solid #333;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.75rem;
+        }
+
+        .card-section h3 {
+            margin: 0 0 4px 0;
+            font-size: 0.8rem;
+            color: #ff9933;
+        }
+
+        /* Control de pantallas */
+        .screen { display: none; flex-direction: column; height: 100%; }
+        .screen.active { display: flex; }
     </style>
 </head>
 <body>
     <div class="box">
-        <!-- Welcome Screen (English default) -->
-        <div id="welcome-screen">
-            <h1>🏀 HANDLELAB</h1>
-            <p style="font-size: 0.85rem; color: #ccc; margin: 20px 0;">Master your handle, elevate your game, and become an elite handler.</p>
-            <button class="btn" onclick="showRegister()">GET STARTED</button>
+        <!-- PANTALLA 1: Bienvenida / Módulo 1 -->
+        <div id="welcome-screen" class="screen active">
+            <div style="margin: auto; text-align: center;">
+                <h1>🏀 HANDLELAB</h1>
+                <p style="font-size: 0.8rem; color: #ccc; margin: 15px 0;">Master your handle, elevate your game, and become an elite handler.</p>
+                <button class="btn" onclick="goToRegister()">GET STARTED</button>
+            </div>
         </div>
 
-        <!-- Registration Screen (Module 1) -->
-        <div id="register-screen">
+        <!-- PANTALLA 2: Registro / Módulo 1 -->
+        <div id="register-screen" class="screen">
             <h1>MODULE 1</h1>
             <p class="subtitle">Player Registration</p>
             
@@ -160,12 +231,75 @@
 
             <button class="btn" onclick="saveUserRegistration()">REGISTER</button>
         </div>
+
+        <!-- PANTALLA 3: Home Dashboard / Módulo 2 -->
+        <div id="dashboard-screen" class="screen">
+            <h1>HANDLELAB</h1>
+            <p class="subtitle">Home Dashboard</p>
+
+            <!-- Cabecera de Perfil -->
+            <div class="dashboard-header">
+                <div class="avatar-box" id="dash-initial">A</div>
+                <div class="user-info">
+                    <h2 id="dash-alias">Player</h2>
+                    <p id="dash-level">Level: Rookie</p>
+                </div>
+            </div>
+
+            <!-- Estadísticas Principales -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span>Handle Score</span>
+                    <strong id="dash-score">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Ball Rank</span>
+                    <strong id="dash-rank">🟤 Bronze</strong>
+                </div>
+            </div>
+
+            <!-- Reto del Día -->
+            <div class="card-section">
+                <h3>🔥 Daily Challenge</h3>
+                <p id="dash-challenge" style="margin:0; color:#ccc;">Complete 1 session of 60s drible tracking.</p>
+            </div>
+
+            <!-- Último Entrenamiento -->
+            <div class="card-section">
+                <h3>📈 Last Training</h3>
+                <p id="dash-last" style="margin:0; color:#ccc;">No sessions recorded yet.</p>
+            </div>
+
+            <!-- Botón para ir al Módulo de Cámara -->
+            <button class="btn" onclick="alert('Próximamente: Módulo 3 - Análisis con Cámara')">START ANALYSIS</button>
+        </div>
     </div>
 
     <script>
-        function showRegister() {
-            document.getElementById('welcome-screen').style.display = 'none';
-            document.getElementById('register-screen').style.display = 'flex';
+        window.onload = function() {
+            checkUserSession();
+        };
+
+        function checkUserSession() {
+            const savedUser = localStorage.getItem('handlelab_user');
+            if (savedUser) {
+                // Si ya está registrado, cargamos los datos en el Dashboard y mostramos la Pantalla 3
+                const user = JSON.parse(savedUser);
+                loadDashboard(user);
+                switchScreen('dashboard-screen');
+            } else {
+                // Si no hay sesión, muestra bienvenida
+                switchScreen('welcome-screen');
+            }
+        }
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function goToRegister() {
+            switchScreen('register-screen');
         }
 
         function saveUserRegistration() {
@@ -186,15 +320,27 @@
                 edad,
                 mano,
                 nivel,
+                score: 0,
+                rank: "🟤 Bronze Ball",
+                lastTraining: "None",
                 registrationDate: new Date().toLocaleDateString()
             };
 
             localStorage.setItem('handlelab_user', JSON.stringify(playerProfile));
+            loadDashboard(playerProfile);
+            switchScreen('dashboard-screen');
+        }
 
-            alert(`Registration successful! Welcome to HandleLab, ${alias}.`);
-            location.reload(); 
+        function loadDashboard(user) {
+            document.getElementById('dash-initial').innerText = user.alias.charAt(0).toUpperCase();
+            document.getElementById('dash-alias').innerText = user.alias;
+            document.getElementById('dash-level').innerText = `Level: ${user.nivel}`;
+            document.getElementById('dash-score').innerText = user.score || 0;
+            document.getElementById('dash-rank').innerText = user.rank || "🟤 Bronze";
+            if (user.lastTraining && user.lastTraining !== "None") {
+                document.getElementById('dash-last').innerText = user.lastTraining;
+            }
         }
     </script>
 </body>
 </html>
-
