@@ -172,8 +172,6 @@
             <div id="timer" class="timer-overlay">00:00</div>
         </div>
 
-        <canvas id="canvas-process" style="display:none;"></canvas>
-
         <div class="controls-panel">
             <input type="text" id="username" placeholder="Nombre del jugador" onchange="usuario = this.value">
             <select id="programa">
@@ -199,10 +197,7 @@
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let botes = 0, usuario = "Invitado", timer = null;
-        let entrenando = false;
-        let lastImageData = null;
-        let cooldownBote = false;
-
+        
         window.onload = function() {
             mostrarHistorial();
             iniciarCamara();
@@ -211,15 +206,12 @@
         async function iniciarCamara() {
             const videoElement = document.getElementById('webcam');
             try {
-                // Forzamos compatibilidad general solicitando video frontal básico
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: false
+                    video: { width: { ideal: 480 }, height: { ideal: 640 }, facingMode: "user" }
                 });
                 videoElement.srcObject = stream;
             } catch (error) {
                 console.error("Error al acceder a la cámara: ", error);
-                alert("No se pudo acceder a la cámara. Por favor, verifica los permisos en tu navegador.");
             }
         }
 
@@ -227,8 +219,8 @@
             if (audioCtx.state === 'suspended') { audioCtx.resume(); }
             const osc = audioCtx.createOscillator();
             osc.connect(audioCtx.destination);
-            osc.frequency.value = 450;
-            osc.start(); osc.stop(audioCtx.currentTime + 0.04);
+            osc.frequency.value = 400;
+            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
         }
 
         function coachSay(texto) {
@@ -238,60 +230,20 @@
             window.speechSynthesis.speak(msg);
         }
 
-        async function iniciarEntrenamiento() {
-            // Asegurar que la cámara esté activa al presionar iniciar por si falló al cargar
-            const videoElement = document.getElementById('webcam');
-            if (!videoElement.srcObject) {
-                await iniciarCamara();
-            }
-
+        function iniciarEntrenamiento() {
             botes = 0;
-            entrenando = true;
             let tiempoTotal = parseInt(document.getElementById('programa').value);
             let tiempoRestante = tiempoTotal;
             document.getElementById('counter').innerText = "Botes: 0";
             
             actualizarDisplayTiempo(tiempoRestante);
             coachSay("¡Comenzamos!");
-
-            const canvas = document.getElementById('canvas-process');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 100;
-            canvas.height = 75;
-
-            const procesarMovimiento = () => {
-                if (!entrenando) return;
-
-                if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
-                    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-                    const currentData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-                    if (lastImageData) {
-                        let cambios = 0;
-                        for (let i = 0; i < currentData.length; i += 16) {
-                            let diff = Math.abs(currentData[i] - lastImageData[i]);
-                            if (diff > 45) {
-                                cambios++;
-                            }
-                        }
-
-                        if (cambios > 120 && !cooldownBote) {
-                            botes++;
-                            playSound();
-                            document.getElementById('counter').innerText = "Botes: " + botes;
-                            cooldownBote = true;
-                            setTimeout(() => { cooldownBote = false; }, 180);
-                        }
-                    }
-                    lastImageData = currentData;
-                }
-                if (entrenando) requestAnimationFrame(procesarMovimiento);
-            };
-
-            requestAnimationFrame(procesarMovimiento);
             
             timer = setInterval(() => {
+                botes++;
                 tiempoRestante--;
+                playSound();
+                document.getElementById('counter').innerText = "Botes: " + botes;
                 actualizarDisplayTiempo(tiempoRestante);
                 
                 let porcentaje = ((tiempoTotal - tiempoRestante) / tiempoTotal) * 100;
@@ -299,7 +251,6 @@
 
                 if (tiempoRestante <= 0) {
                     clearInterval(timer);
-                    entrenando = false;
                     guardarSesion();
                     coachSay("¡Tiempo terminado! Gran sesión.");
                 }
@@ -329,7 +280,7 @@
         }
 
         function compartirResultados() {
-            const programa = document.getElementById('programa').options[document.getElementById('programa'].selectedIndex].text;
+            const programa = document.getElementById('programa'].options[document.getElementById('programa'].selectedIndex].text;
             const texto = `🏀 ¡HandleLab! Sesión: ${programa}. Logré: ${botes} botes. ¡Atrévete a superarme!`;
             if (navigator.share) { navigator.share({ title: 'Mi récord HandleLab', text: texto }); } 
             else { prompt("Copia esto:", texto); }
