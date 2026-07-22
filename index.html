@@ -499,23 +499,22 @@
         .rank-card {
             background: rgba(20, 20, 25, 0.95);
             border: 1px solid #333;
-            padding: 8px 10px;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.7rem;
-            cursor: pointer;
+            gap: 12px;
+            font-size: 0.75rem;
         }
 
         .ball-icon-container {
-            width: 35px;
-            height: 35px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
         }
 
@@ -526,14 +525,14 @@
         .ball-diamond { background: radial-gradient(circle at 30% 30%, #00ffff, #008b8b); border: 1px solid #00ffff; }
         .ball-master { background: radial-gradient(circle at 30% 30%, #9400d3, #ff1493); border: 1px solid #ff00ff; }
 
-        #privacy-modal, #rank-modal, #academy-modal {
+        #privacy-modal, #academy-modal {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.9);
-            display: flex;
+            display: none; /* CORREGIDO: Por defecto oculto, solo se muestra al registrarse */
             justify-content: center;
             align-items: center;
             z-index: 200;
@@ -562,11 +561,11 @@
 </head>
 <body>
     <div class="box">
-        <!-- MODAL OBLIGATORIO DE PRIVACIDAD Y TÉRMINOS (MÓDULO 11) -->
+        <!-- MODAL OBLIGATORIO DE PRIVACIDAD Y TÉRMINOS (Oculto inicialmente, aparece tras llenar tus datos) -->
         <div id="privacy-modal">
             <div class="modal-content">
                 <div style="font-size: 1.8rem; margin-bottom: 2px;">📄</div>
-                <h3>Privacy & Terms (Mod 11)</h3>
+                <h3>Privacy & Terms</h3>
                 <p>
                     Welcome to <strong>HandleLab</strong>. By entering, you agree to our privacy standards:<br><br>
                     1. <strong>Camera Usage:</strong> Video is processed locally in real-time solely to measure dribble metrics and is never stored or shared with external parties.<br>
@@ -577,11 +576,11 @@
                     <input type="checkbox" id="accept-privacy" style="width: 16px; height: 16px;">
                     <label for="accept-privacy" style="margin: 0; color: #fff; cursor: pointer;">I accept the Terms and Privacy Policy</label>
                 </div>
-                <button class="btn btn-secondary" onclick="confirmarPrivacidad()" style="padding: 10px; font-size: 0.8rem;">ACCEPT & CONTINUE</button>
+                <button class="btn btn-secondary" onclick="confirmarPrivacidadYRegistrar()" style="padding: 10px; font-size: 0.8rem;">ACCEPT & CONTINUE</button>
             </div>
         </div>
 
-        <!-- MODULE 1: Welcome Screen -->
+        <!-- MÓDULO 1: Pantalla Llamativa de Bienvenida -->
         <div id="welcome-screen" class="screen">
             <div class="flash-title-container">
                 <span id="flash-text" class="flash-typing-text"></span>
@@ -595,7 +594,7 @@
             </div>
         </div>
 
-        <!-- MODULE 1B: Registration Form -->
+        <!-- MÓDULO 1B: Formulario de Registro (Tu Nombre / Alias y datos) -->
         <div id="register-screen" class="screen">
             <h1>MODULE 1</h1>
             <p class="subtitle">Player Registration</p>
@@ -637,7 +636,7 @@
                 </select>
             </div>
 
-            <button class="btn btn-secondary" onclick="saveUserRegistration()" style="width:100%; margin-top:8px;">REGISTER</button>
+            <button class="btn btn-secondary" onclick="intentarRegistrarUsuario()" style="width:100%; margin-top:8px;">REGISTER</button>
         </div>
 
         <!-- MODULE 2: Home Dashboard -->
@@ -779,8 +778,7 @@
 
         <!-- MODULE 8: Ball Ranks Screen -->
         <div id="ranks-screen" class="screen">
-            <h1>MODULE 8</h1>
-            <p class="subtitle">Ball Ranks & Evolution</p>
+            <h1>Ball Ranks & Evolution</h1>
             <div style="flex:1; overflow-y:auto; margin-bottom:6px;">
                 <div id="ranks-container" class="ranks-list"></div>
             </div>
@@ -831,16 +829,6 @@
             <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%;">RETURN TO DASHBOARD</button>
         </div>
 
-        <!-- MODAL RANGOS -->
-        <div id="rank-modal" style="display:none;">
-            <div class="modal-content">
-                <div id="modal-icon" style="font-size: 2rem; margin-bottom: 4px;">🏆</div>
-                <h3 id="modal-title">Rank Title</h3>
-                <p id="modal-desc" style="margin-bottom: 10px; text-align: center;">Description.</p>
-                <button class="btn btn-secondary" onclick="closeRankModal()" style="padding: 6px; font-size: 0.75rem;">CLOSE</button>
-            </div>
-        </div>
-
         <!-- MODAL ACADEMIA -->
         <div id="academy-modal" style="display:none;">
             <div class="modal-content">
@@ -863,31 +851,6 @@
 
         window.onload = function() {
             iniciarEfectoFlash();
-            const privacyAccepted = localStorage.getItem('handlelab_privacy');
-            if (privacyAccepted === 'true') {
-                document.getElementById('privacy-modal').style.display = 'none';
-            } else {
-                document.getElementById('privacy-modal').style.display = 'flex';
-            }
-
-            const savedUser = localStorage.getItem('handlelab_user');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                loadDashboard(currentUser);
-                if (privacyAccepted === 'true') switchScreen('dashboard-screen');
-            } else {
-                if (privacyAccepted === 'true') switchScreen('welcome-screen');
-            }
-        };
-
-        function confirmarPrivacidad() {
-            const checkbox = document.getElementById('accept-privacy');
-            if (!checkbox.checked) {
-                alert("You must accept the Terms and Privacy Policy to use HandleLab.");
-                return;
-            }
-            localStorage.setItem('handlelab_privacy', 'true');
-            document.getElementById('privacy-modal').style.display = 'none';
             const savedUser = localStorage.getItem('handlelab_user');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
@@ -896,6 +859,52 @@
             } else {
                 switchScreen('welcome-screen');
             }
+        };
+
+        function intentarRegistrarUsuario() {
+            const idioma = document.getElementById('reg-idioma').value;
+            const alias = document.getElementById('reg-alias').value.trim();
+            const edad = document.getElementById('reg-edad').value;
+
+            if (!alias || !edad) {
+                alert(idioma === 'es' ? "Por favor ingresa tu alias y edad." : "Please enter your alias and age.");
+                return;
+            }
+
+            // Muestra el modal de términos y condiciones SOLAMENTE tras validar los datos
+            document.getElementById('privacy-modal').style.display = 'flex';
+        }
+
+        function confirmarPrivacidadYRegistrar() {
+            const checkbox = document.getElementById('accept-privacy');
+            if (!checkbox.checked) {
+                alert("You must accept the Terms and Privacy Policy to use HandleLab.");
+                return;
+            }
+            localStorage.setItem('handlelab_privacy', 'true');
+            document.getElementById('privacy-modal').style.display = 'none';
+
+            const idioma = document.getElementById('reg-idioma').value;
+            const alias = document.getElementById('reg-alias').value.trim();
+            const edad = document.getElementById('reg-edad').value;
+            const mano = document.getElementById('reg-mano').value;
+            const nivel = document.getElementById('reg-nivel').value;
+
+            currentUser = {
+                idioma, alias, edad, mano, nivel,
+                score: 0,
+                xp: 0,
+                rank: "🟤 Ball Bronze",
+                lastTraining: idioma === 'es' ? "Ninguno" : "None",
+                history: [],
+                maxDribbles: 0,
+                missionsCompleted: [false, false, false],
+                registrationDate: new Date().toLocaleDateString()
+            };
+
+            localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
+            loadDashboard(currentUser);
+            switchScreen('dashboard-screen');
         }
 
         function iniciarEfectoFlash() {
@@ -938,6 +947,9 @@
             detenerCamaraYProcesos();
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
+            if (screenId === 'ranks-screen') {
+                openRanksModule();
+            }
         }
 
         function detenerCamaraYProcesos() {
@@ -947,35 +959,6 @@
                 streamCamara.getTracks().forEach(track => track.stop());
                 streamCamara = null;
             }
-        }
-
-        function saveUserRegistration() {
-            const idioma = document.getElementById('reg-idioma').value;
-            const alias = document.getElementById('reg-alias').value.trim();
-            const edad = document.getElementById('reg-edad').value;
-            const mano = document.getElementById('reg-mano').value;
-            const nivel = document.getElementById('reg-nivel').value;
-
-            if (!alias || !edad) {
-                alert(idioma === 'es' ? "Por favor ingresa tu alias y edad." : "Please enter your alias and age.");
-                return;
-            }
-
-            currentUser = {
-                idioma, alias, edad, mano, nivel,
-                score: 0,
-                xp: 0,
-                rank: "🟤 Bronze Ball",
-                lastTraining: idioma === 'es' ? "Ninguno" : "None",
-                history: [],
-                maxDribbles: 0,
-                missionsCompleted: [false, false, false],
-                registrationDate: new Date().toLocaleDateString()
-            };
-
-            localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
-            loadDashboard(currentUser);
-            switchScreen('dashboard-screen');
         }
 
         function calcularNivelRPG(xpTotal) {
@@ -1272,26 +1255,33 @@
             const container = document.getElementById('ranks-container');
             container.innerHTML = "";
             const xp = currentUser ? currentUser.xp : 0;
+            const isEs = currentUser && currentUser.idioma === 'es';
+            
             const ranks = [
-                { name: "Ball Bronze", symbol: "🟤", css: "ball-bronze", req: "0 XP", unlocked: true, desc: "Basic ball handling fundamentals." },
-                { name: "Ball Silver", symbol: "⚪", css: "ball-silver", req: "100 XP", unlocked: xp >= 100, desc: "Basic speed control." },
-                { name: "Ball Gold", symbol: "🟡", css: "ball-gold", req: "300 XP", unlocked: xp >= 300, desc: "Fast crossovers." },
-                { name: "HandleLab Master", symbol: "👑", css: "ball-master", req: "1000 XP", unlocked: xp >= 1000, desc: "Absolute mastery." }
+                { name: "Ball Bronze", symbol: "🟤", css: "ball-bronze", req: "0 XP", unlocked: true },
+                { name: "Ball Silver", symbol: "⚪", css: "ball-silver", req: "100 XP", unlocked: xp >= 100 },
+                { name: "Ball Gold", symbol: "🟡", css: "ball-gold", req: "300 XP", unlocked: xp >= 300 },
+                { name: "Ball Super Gold", symbol: "🔥", css: "ball-supergold", req: "400 XP", unlocked: xp >= 400 },
+                { name: "Ball Diamond", symbol: "💎", css: "ball-diamond", req: "600 XP", unlocked: xp >= 600 },
+                { name: "HandleLab Master Ball", symbol: "👑", css: "ball-master", req: "1000 XP", unlocked: xp >= 1000 }
             ];
+
             ranks.forEach(r => {
-                container.innerHTML += `<div class="rank-card" onclick="showRank('${r.symbol}', '${r.name}', '${r.req}', '${r.desc}', ${r.unlocked})"><div class="ball-icon-container ${r.css}">${r.symbol}</div><div><h3>${r.name}</h3><p style="margin:0; color:#aaa;">Req: ${r.req}</p></div></div>`;
+                let statusText = r.unlocked ? (isEs ? "🟢 Desbloqueado" : "🟢 Unlocked") : (isEs ? "🔒 Bloqueado" : "🔒 Locked");
+                let statusColor = r.unlocked ? "#00ff66" : "#777";
+                container.innerHTML += `
+                    <div class="rank-card">
+                        <div class="ball-icon-container ${r.css}">${r.symbol}</div>
+                        <div style="flex:1;">
+                            <strong style="font-size:0.8rem; color:#fff; display:block;">${r.name}</strong>
+                            <span style="font-size:0.65rem; color:#aaa; display:block; margin:2px 0;">${isEs ? 'Requisito' : 'Requirement'}: ${r.req}</span>
+                            <span style="font-size:0.65rem; color:${statusColor}; font-weight:bold;">${statusText}</span>
+                        </div>
+                    </div>
+                `;
             });
             switchScreen('ranks-screen');
         }
-
-        function showRank(symbol, name, req, desc, unlocked) {
-            document.getElementById('modal-icon').innerText = symbol;
-            document.getElementById('modal-title').innerText = name;
-            document.getElementById('modal-desc').innerHTML = `${desc}<br><br><strong>Req: ${req}</strong><br>${unlocked ? '🟢 Unlocked' : '🔒 Locked'}`;
-            document.getElementById('rank-modal').style.display = 'flex';
-        }
-
-        function closeRankModal() { document.getElementById('rank-modal').style.display = 'none'; }
 
         function openMissionsModule() {
             const container = document.getElementById('missions-container');
@@ -1362,4 +1352,3 @@
     </script>
 </body>
 </html>
-
