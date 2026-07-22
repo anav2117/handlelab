@@ -37,7 +37,7 @@
             flex-direction: column;
             box-sizing: border-box;
             box-shadow: none;
-            overflow: hidden; /* Evita scroll general en la caja principal */
+            overflow: hidden;
             position: relative;
         }
         
@@ -539,7 +539,7 @@
             font-size: 0.75rem;
         }
 
-        /* --- LAYOUT CORREGIDO PARA MÓDULO 8 --- */
+        /* --- MÓDULO 8 CON TARJETAS INTERACTIVAS --- */
         .ranks-scroll-area {
             flex: 1;
             overflow-y: auto;
@@ -567,6 +567,16 @@
             font-size: 0.7rem;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.15s ease, border-color 0.15s ease;
+        }
+
+        .rank-card:active {
+            transform: scale(0.97);
+        }
+
+        .rank-card:hover {
+            border-color: #ff6600;
         }
 
         .rank-card.locked {
@@ -586,7 +596,6 @@
             box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
         }
 
-        /* Unique designs for each ball rank */
         .ball-bronze { background: radial-gradient(circle at 30% 30%, #cd7f32, #5c3a21); border: 1px solid #a05a2c; }
         .ball-silver { background: radial-gradient(circle at 30% 30%, #e0e0e0, #757575); border: 1px solid #b0b0b0; }
         .ball-gold { background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b); border: 1px solid #ffcc00; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
@@ -619,6 +628,45 @@
             margin: 0 0 3px 0;
             font-size: 0.65rem;
             color: #aaa;
+        }
+
+        /* --- MODAL DETALLE DE RANGO --- */
+        #rank-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            background: #141419;
+            border: 2px solid #ff6600;
+            padding: 16px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 102, 0, 0.4);
+        }
+
+        .modal-content h3 {
+            color: #ff9933;
+            margin-top: 8px;
+            font-size: 1.1rem;
+        }
+
+        .modal-content p {
+            font-size: 0.75rem;
+            color: #ccc;
+            line-height: 1.4;
         }
 
         .screen { display: none; flex-direction: column; height: 100%; padding: 12px; box-sizing: border-box; }
@@ -815,7 +863,7 @@
             <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
         </div>
 
-        <!-- MODULE 8: Ball Ranks Screen (Con Scroll Independiente y Botón Fijo Abajo) -->
+        <!-- MODULE 8: Ball Ranks Screen (Con Tarjetas Interactivas) -->
         <div id="ranks-screen" class="screen">
             <h1>MODULE 8</h1>
             <p class="subtitle">Ball Ranks & Evolution</p>
@@ -825,6 +873,16 @@
             </div>
 
             <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:0; animation:none;">RETURN TO DASHBOARD</button>
+        </div>
+
+        <!-- MODAL PARA CADA RANGO -->
+        <div id="rank-modal">
+            <div class="modal-content">
+                <div id="modal-icon" style="font-size: 2.2rem; margin-bottom: 4px;">🏆</div>
+                <h3 id="modal-title">Rank Title</h3>
+                <p id="modal-desc" style="margin-bottom: 12px;">Rank description and perks.</p>
+                <button class="btn btn-secondary" onclick="closeRankModal()" style="padding: 8px; font-size: 0.8rem; animation:none; box-shadow:none;">CLOSE</button>
+            </div>
         </div>
     </div>
 
@@ -1339,28 +1397,94 @@
             const currentXP = currentUser ? (currentUser.xp || 0) : 0;
 
             const ranks = [
-                { name: "Ball Bronze", symbol: "🟤", cssClass: "ball-bronze", req: "0 XP", unlocked: true },
-                { name: "Ball Silver", symbol: "⚪", cssClass: "ball-silver", req: "100 XP", unlocked: currentXP >= 100 },
-                { name: "Ball Gold", symbol: "🟡", cssClass: "ball-gold", req: "300 XP", unlocked: currentXP >= 300 },
-                { name: "Ball Super Gold", symbol: "🔥", cssClass: "ball-supergold", req: "400 XP", unlocked: currentXP >= 400 },
-                { name: "Ball Diamond", symbol: "💎", cssClass: "ball-diamond", req: "600 XP", unlocked: currentXP >= 600 },
-                { name: "HandleLab Master Ball", symbol: "👑", cssClass: "ball-master", req: "1000 XP", unlocked: currentXP >= 1000 }
+                { 
+                    name: "Ball Bronze", 
+                    symbol: "🟤", 
+                    cssClass: "ball-bronze", 
+                    req: "0 XP", 
+                    unlocked: true,
+                    descEs: "El punto de partida de todo buen ballhandler. Domina los fundamentos básicos y el bote estacionario.",
+                    descEn: "The starting point of every good ballhandler. Master basic fundamentals and stationary dribbling."
+                },
+                { 
+                    name: "Ball Silver", 
+                    symbol: "⚪", 
+                    cssClass: "ball-silver", 
+                    req: "100 XP", 
+                    unlocked: currentXP >= 100,
+                    descEs: "Demuestras control de velocidad y cambios de dirección básicos sin perder la vista al frente.",
+                    descEn: "Demonstrates speed control and basic changes of direction while keeping your eyes up."
+                },
+                { 
+                    name: "Ball Gold", 
+                    symbol: "🟡", 
+                    cssClass: "ball-gold", 
+                    req: "300 XP", 
+                    unlocked: currentXP >= 300,
+                    descEs: "Nivel avanzado. Capacidad de ejecutar crossovers rápidos y mantener presión constante.",
+                    descEn: "Advanced level. Ability to execute quick crossovers and maintain constant pressure."
+                },
+                { 
+                    name: "Ball Super Gold", 
+                    symbol: "🔥", 
+                    cssClass: "ball-supergold", 
+                    req: "400 XP", 
+                    unlocked: currentXP >= 400,
+                    descEs: "Tus manos arden en la duela. Manejo de balón fluido con cambios de ritmo letales.",
+                    descEn: "Your hands are burning on the court. Fluid ball handling with lethal rhythm changes."
+                },
+                { 
+                    name: "Ball Diamond", 
+                    symbol: "💎", 
+                    cssClass: "ball-diamond", 
+                    req: "600 XP", 
+                    unlocked: currentXP >= 600,
+                    descEs: "Precisión quirúrgica. Imposible de robar el balón en situaciones de uno contra uno.",
+                    descEn: "Surgical precision. Impossible to strip the ball in one-on-one situations."
+                },
+                { 
+                    name: "HandleLab Master Ball", 
+                    symbol: "👑", 
+                    cssClass: "ball-master", 
+                    req: "1000 XP", 
+                    unlocked: currentXP >= 1000,
+                    descEs: "El rango máximo de la leyenda. Dominio absoluto de la cancha y velocidad sobrehumana.",
+                    descEn: "The ultimate legend rank. Absolute court dominance and superhuman speed."
+                }
             ];
 
             ranks.forEach(r => {
+                let descText = isEs ? r.descEs : r.descEn;
+                let statusText = r.unlocked ? (isEs ? '🟢 Desbloqueado' : '🟢 Unlocked') : (isEs ? '🔒 Bloqueado' : '🔒 Locked');
+                
                 container.innerHTML += `
-                    <div class="rank-card ${r.unlocked ? '' : 'locked'}">
+                    <div class="rank-card ${r.unlocked ? '' : 'locked'}" onclick="showRankDetails('${r.symbol}', '${r.name}', '${r.req}', '${descText.replace(/'/g, "\\'")}', ${r.unlocked})">
                         <div class="ball-icon-container ${r.cssClass}">${r.symbol}</div>
                         <div class="rank-info">
                             <h3>${r.name}</h3>
                             <p>${isEs ? 'Requisito: ' : 'Requirement: '}${r.req}</p>
-                            <span style="font-size:0.55rem; color:${r.unlocked ? '#00ff66' : '#777'};">${r.unlocked ? (isEs ? '🟢 Desbloqueado' : '🟢 Unlocked') : (isEs ? '🔒 Bloqueado' : '🔒 Locked')}</span>
+                            <span style="font-size:0.55rem; color:${r.unlocked ? '#00ff66' : '#777'};">${statusText}</span>
                         </div>
                     </div>
                 `;
             });
 
             switchScreen('ranks-screen');
+        }
+
+        function showRankDetails(symbol, name, req, desc, unlocked) {
+            const isEs = currentUser && currentUser.idioma === 'es';
+            document.getElementById('modal-icon').innerText = symbol;
+            document.getElementById('modal-title').innerText = name;
+            
+            let statusBadge = unlocked ? (isEs ? "Estado: DESBLOQUEADO 🟢" : "Status: UNLOCKED 🟢") : (isEs ? "Estado: BLOQUEADO 🔒" : "Status: LOCKED 🔒");
+            document.getElementById('modal-desc').innerHTML = `${desc}<br><br><strong style="color:#ff9933;">Req: ${req}</strong><br><span style="font-size:0.65rem; color:${unlocked ? '#00ff66':'#ff4444'};">${statusBadge}</span>`;
+            
+            document.getElementById('rank-modal').style.display = 'flex';
+        }
+
+        function closeRankModal() {
+            document.getElementById('rank-modal').style.display = 'none';
         }
 
         function inspectBadge(title, desc, unlocked) {
