@@ -1,4 +1,4 @@
-            <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -7,15 +7,15 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>HandleLab</title>
     <style>
-        body { background: #060810; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; touch-action: manipulation; }
-        .box { width: 100%; max-width: 420px; height: 100vh; border: 2px solid #ff6600; padding: 8px 10px; border-radius: 20px; background: rgba(10,10,15,0.98); display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        body { background: #060810; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 10px 0; box-sizing: border-box; touch-action: manipulation; }
+        .box { width: 95%; max-width: 400px; border: 2px solid #ff6600; padding: 10px; border-radius: 18px; background: rgba(10,10,15,0.98); display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         
-        h1 { margin: 0 0 2px 0; font-size: 1rem; text-align: center; }
+        h1 { margin: 0 0 5px 0; font-size: 1.1rem; text-align: center; }
 
-        /* Cámara alta y proporcionada para dejar ver los botones abajo */
+        /* Cámara con altura controlada para dejar espacio libre abajo */
         .video-container {
             width: 100%;
-            height: 48vh; /* Altura controlada para que quepa todo perfecto */
+            height: 250px; 
             border-radius: 12px;
             overflow: hidden;
             border: 2px solid #ff6600;
@@ -24,7 +24,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
         video {
             width: 100%;
@@ -39,47 +39,46 @@
             top: 8px;
             background: rgba(0, 0, 0, 0.75);
             border: 1px solid #ff6600;
-            padding: 3px 14px;
-            border-radius: 14px;
-            font-size: 1.6rem;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 1.5rem;
             color: #ff6600;
             font-weight: 800;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
-        /* Panel inferior optimizado para que los botones queden totalmente visibles */
         .controls-panel {
             background: rgba(20, 20, 25, 0.95);
-            padding: 6px 8px;
+            padding: 8px;
             border-radius: 12px;
             border: 1px solid #333;
         }
 
-        input, select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 7px; margin-bottom: 5px; width: 100%; box-sizing: border-box; border-radius: 8px; font-size: 13px; }
+        input, select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 8px; margin-bottom: 6px; width: 100%; box-sizing: border-box; border-radius: 8px; font-size: 13px; }
         
-        .stats-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; font-size: 0.95rem; font-weight: bold; color: #ff9933; }
+        .stats-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 0.95rem; font-weight: bold; color: #ff9933; }
         
-        .progreso-container { background: #111; height: 5px; border-radius: 3px; margin-bottom: 6px; overflow: hidden; }
+        .progreso-container { background: #111; height: 6px; border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
         .progreso-bar { height: 100%; background: #ff6600; width: 0%; transition: width 0.3s ease; }
 
-        .bottom-bar { display: flex; gap: 6px; }
+        .bottom-bar { display: flex; gap: 8px; }
         .btn { background: #ff6600; color: #000; padding: 10px; border-radius: 8px; border: none; font-weight: 800; flex: 2; cursor: pointer; font-size: 14px; text-align: center; }
-        .btn-share { background: #222; color: #fff; border: 1px solid #444; flex: 1; font-size: 11px; padding: 10px; }
+        .btn-share { background: #222; color: #fff; border: 1px solid #444; flex: 1; font-size: 12px; padding: 10px; }
         
-        #historial { font-size: 0.65rem; text-align: left; color: #888; border-top: 1px solid #222; padding-top: 3px; max-height: 28px; overflow-y: auto; }
+        #historial { font-size: 0.7rem; text-align: left; color: #888; border-top: 1px solid #222; padding-top: 4px; margin-top: 6px; max-height: 35px; overflow-y: auto; }
     </style>
 </head>
 <body>
     <div class="box">
         <h1>HandleLab</h1>
         
-        <!-- Cámara con tamaño equilibrado -->
+        <!-- Cámara en vertical optimizada -->
         <div class="video-container">
             <video id="webcam" autoplay playsinline muted></video>
             <div id="timer" class="timer-overlay">00:00</div>
         </div>
 
-        <!-- Panel con controles centrados y visibles -->
+        <!-- Panel de control completamente visible -->
         <div class="controls-panel">
             <input type="text" id="username" placeholder="Nombre del jugador" onchange="usuario = this.value">
             <select id="programa">
@@ -98,7 +97,7 @@
                 <button class="btn btn-share" onclick="compartirResultados()">COMPARTIR</button>
             </div>
             
-            <div id="historial"><ul id="lista-sesiones" style="margin:0; padding-left:10px;"></ul></div>
+            <div id="historial"><ul id="lista-sesiones" style="margin:0; padding-left:12px;"></ul></div>
         </div>
     </div>
 
