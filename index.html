@@ -29,33 +29,32 @@
             max-width: 360px;
             height: 94vh;
             border: 2px solid #ff6600;
-            padding: 12px;
+            padding: 8px;
             border-radius: 16px;
             background: rgba(10,10,15,0.98);
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            overflow-y: auto;
         }
         
         h1 { 
-            margin: 0 0 4px 0; 
-            font-size: 1.1rem; 
+            margin: 0 0 2px 0; 
+            font-size: 0.95rem; 
             text-align: center;
             color: #ff6600;
         }
 
         p.subtitle {
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #aaa;
             margin-top: 0;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
 
         .form-group {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         label {
@@ -70,7 +69,7 @@
             background: #1a1a1a; 
             border: 1px solid #444; 
             color: #fff; 
-            padding: 7px; 
+            padding: 6px; 
             width: 100%; 
             box-sizing: border-box; 
             border-radius: 6px; 
@@ -80,7 +79,7 @@
         .btn { 
             background: #ff6600; 
             color: #000; 
-            padding: 10px; 
+            padding: 9px; 
             border-radius: 8px; 
             border: none; 
             font-weight: 800; 
@@ -88,10 +87,10 @@
             cursor: pointer; 
             font-size: 13px; 
             text-align: center;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
-        /* Estilos del Dashboard (Módulo 2) */
+        /* Dashboard Styles (Module 2) */
         .dashboard-header {
             display: flex;
             align-items: center;
@@ -100,12 +99,12 @@
             padding: 8px;
             border-radius: 10px;
             border: 1px solid #333;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .avatar-box {
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background: #ff6600;
             color: #000;
@@ -119,75 +118,133 @@
 
         .user-info h2 {
             margin: 0;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #fff;
         }
 
         .user-info p {
             margin: 2px 0 0 0;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #ff9933;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 10px;
+            gap: 6px;
+            margin-bottom: 8px;
         }
 
         .stat-card {
             background: rgba(20, 20, 25, 0.95);
             border: 1px solid #333;
-            padding: 8px;
+            padding: 6px;
             border-radius: 8px;
             text-align: center;
         }
 
         .stat-card span {
             display: block;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: #888;
             text-transform: uppercase;
         }
 
         .stat-card strong {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #ff6600;
         }
 
         .card-section {
             background: rgba(20, 20, 25, 0.95);
             border: 1px solid #333;
-            padding: 8px;
+            padding: 6px;
             border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 0.75rem;
+            margin-bottom: 6px;
+            font-size: 0.7rem;
         }
 
         .card-section h3 {
-            margin: 0 0 4px 0;
-            font-size: 0.8rem;
+            margin: 0 0 2px 0;
+            font-size: 0.75rem;
             color: #ff9933;
         }
 
-        /* Control de pantallas */
+        /* Camera Module Styles (Module 3) */
+        .video-container {
+            flex: 1;
+            min-height: 100px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #ff6600;
+            background: #000;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+
+        .timer-overlay {
+            position: absolute;
+            top: 6px;
+            background: rgba(0, 0, 0, 0.75);
+            border: 1px solid #ff6600;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            color: #ff6600;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .controls-panel {
+            background: rgba(20, 20, 25, 0.95);
+            padding: 6px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            flex-shrink: 0;
+        }
+
+        .progreso-container { 
+            background: #111; 
+            height: 4px; 
+            border-radius: 2px; 
+            margin: 6px 0; 
+            overflow: hidden; 
+        }
+        
+        .progreso-bar { 
+            height: 100%; 
+            background: #ff6600; 
+            width: 0%; 
+            transition: width 0.3s ease; 
+        }
+
         .screen { display: none; flex-direction: column; height: 100%; }
         .screen.active { display: flex; }
     </style>
 </head>
 <body>
     <div class="box">
-        <!-- PANTALLA 1: Bienvenida / Módulo 1 -->
+        <!-- MODULE 1: Welcome Screen -->
         <div id="welcome-screen" class="screen active">
             <div style="margin: auto; text-align: center;">
                 <h1>🏀 HANDLELAB</h1>
                 <p style="font-size: 0.8rem; color: #ccc; margin: 15px 0;">Master your handle, elevate your game, and become an elite handler.</p>
-                <button class="btn" onclick="goToRegister()">GET STARTED</button>
+                <button class="btn" onclick="switchScreen('register-screen')">GET STARTED</button>
             </div>
         </div>
 
-        <!-- PANTALLA 2: Registro / Módulo 1 -->
+        <!-- MODULE 1: Registration Form -->
         <div id="register-screen" class="screen">
             <h1>MODULE 1</h1>
             <p class="subtitle">Player Registration</p>
@@ -232,12 +289,11 @@
             <button class="btn" onclick="saveUserRegistration()">REGISTER</button>
         </div>
 
-        <!-- PANTALLA 3: Home Dashboard / Módulo 2 -->
+        <!-- MODULE 2: Home Dashboard -->
         <div id="dashboard-screen" class="screen">
             <h1>HANDLELAB</h1>
             <p class="subtitle">Home Dashboard</p>
 
-            <!-- Cabecera de Perfil -->
             <div class="dashboard-header">
                 <div class="avatar-box" id="dash-initial">A</div>
                 <div class="user-info">
@@ -246,7 +302,6 @@
                 </div>
             </div>
 
-            <!-- Estadísticas Principales -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <span>Handle Score</span>
@@ -258,48 +313,61 @@
                 </div>
             </div>
 
-            <!-- Reto del Día -->
             <div class="card-section">
                 <h3>🔥 Daily Challenge</h3>
-                <p id="dash-challenge" style="margin:0; color:#ccc;">Complete 1 session of 60s drible tracking.</p>
+                <p style="margin:0; color:#ccc;">Complete 1 session of 30s drible analysis.</p>
             </div>
 
-            <!-- Último Entrenamiento -->
             <div class="card-section">
                 <h3>📈 Last Training</h3>
                 <p id="dash-last" style="margin:0; color:#ccc;">No sessions recorded yet.</p>
             </div>
 
-            <!-- Botón para ir al Módulo de Cámara -->
-            <button class="btn" onclick="alert('Próximamente: Módulo 3 - Análisis con Cámara')">START ANALYSIS</button>
+            <button class="btn" onclick="openCameraModule()">START ANALYSIS</button>
+        </div>
+
+        <!-- MODULE 3: Camera & Dribble Analysis -->
+        <div id="camera-screen" class="screen">
+            <h1>MODULE 3</h1>
+            <p class="subtitle">Camera Analysis (30s)</p>
+
+            <div class="video-container">
+                <video id="webcam" autoplay playsinline muted></video>
+                <div id="timer" class="timer-overlay">00:30</div>
+            </div>
+
+            <canvas id="canvas-process" style="display:none;"></canvas>
+
+            <div class="controls-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: bold; color: #ff9933;">
+                    <span id="counter">Dribbles: 0</span>
+                </div>
+                <div class="progreso-container"><div id="progreso-bar" class="progreso-bar"></div></div>
+                <button class="btn" id="btn-iniciar-cam" onclick="iniciarAnalisisCamara()">START DRIBBLE</button>
+            </div>
         </div>
     </div>
 
     <script>
-        window.onload = function() {
-            checkUserSession();
-        };
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let currentUser = null;
+        let dribbles = 0, timer = null, entrenando = false;
+        let lastImageData = null, cooldownBote = false;
 
-        function checkUserSession() {
+        window.onload = function() {
             const savedUser = localStorage.getItem('handlelab_user');
             if (savedUser) {
-                // Si ya está registrado, cargamos los datos en el Dashboard y mostramos la Pantalla 3
-                const user = JSON.parse(savedUser);
-                loadDashboard(user);
+                currentUser = JSON.parse(savedUser);
+                loadDashboard(currentUser);
                 switchScreen('dashboard-screen');
             } else {
-                // Si no hay sesión, muestra bienvenida
                 switchScreen('welcome-screen');
             }
-        }
+        };
 
         function switchScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
-        }
-
-        function goToRegister() {
-            switchScreen('register-screen');
         }
 
         function saveUserRegistration() {
@@ -314,20 +382,16 @@
                 return;
             }
 
-            const playerProfile = {
-                idioma,
-                alias,
-                edad,
-                mano,
-                nivel,
+            currentUser = {
+                idioma, alias, edad, mano, nivel,
                 score: 0,
                 rank: "🟤 Bronze Ball",
                 lastTraining: "None",
                 registrationDate: new Date().toLocaleDateString()
             };
 
-            localStorage.setItem('handlelab_user', JSON.stringify(playerProfile));
-            loadDashboard(playerProfile);
+            localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
+            loadDashboard(currentUser);
             switchScreen('dashboard-screen');
         }
 
@@ -341,6 +405,113 @@
                 document.getElementById('dash-last').innerText = user.lastTraining;
             }
         }
+
+        // Módulo 3: Activar Cámara
+        async function openCameraModule() {
+            switchScreen('camera-screen');
+            const videoElement = document.getElementById('webcam');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: { ideal: 480 }, height: { ideal: 640 }, facingMode: "user" }
+                });
+                videoElement.srcObject = stream;
+            } catch (error) {
+                console.error("Camera error: ", error);
+                alert("Could not access camera. Please check permissions.");
+            }
+        }
+
+        function playSound() {
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            const osc = audioCtx.createOscillator();
+            osc.connect(audioCtx.destination);
+            osc.frequency.value = 450;
+            osc.start(); osc.stop(audioCtx.currentTime + 0.04);
+        }
+
+        function coachSay(texto) {
+            const msg = new SpeechSynthesisUtterance(texto);
+            msg.lang = currentUser && currentUser.idioma === 'es' ? 'es-ES' : 'en-US';
+            msg.pitch = 1.1;
+            window.speechSynthesis.speak(msg);
+        }
+
+        function iniciarAnalisisCamara() {
+            dribbles = 0;
+            entrenando = true;
+            let tiempoTotal = 30; // 30 segundos de análisis
+            let tiempoRestante = tiempoTotal;
+            document.getElementById('counter').innerText = "Dribbles: 0";
+            document.getElementById('btn-iniciar-cam').style.display = 'none';
+            
+            actualizarDisplayTiempo(tiempoRestante);
+            coachSay("Let's go! Start dribbling.");
+
+            const video = document.getElementById('webcam');
+            const canvas = document.getElementById('canvas-process');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 100;
+            canvas.height = 75;
+
+            const procesarMovimiento = () => {
+                if (!entrenando) return;
+
+                if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const currentData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+                    if (lastImageData) {
+                        let cambios = 0;
+                        for (let i = 0; i < currentData.length; i += 16) {
+                            let diff = Math.abs(currentData[i] - lastImageData[i]);
+                            if (diff > 45) { cambios++; }
+                        }
+
+                        if (cambios > 120 && !cooldownBote) {
+                            dribbles++;
+                            playSound();
+                            document.getElementById('counter').innerText = "Dribbles: " + dribbles;
+                            cooldownBote = true;
+                            setTimeout(() => { cooldownBote = false; }, 180);
+                        }
+                    }
+                    lastImageData = currentData;
+                }
+                if (entrenando) requestAnimationFrame(procesarMovimiento);
+            };
+
+            requestAnimationFrame(procesarMovimiento);
+            
+            timer = setInterval(() => {
+                tiempoRestante--;
+                actualizarDisplayTiempo(tiempoRestante);
+                
+                let porcentaje = ((tiempoTotal - tiempoRestante) / tiempoTotal) * 100;
+                document.getElementById('progreso-bar').style.width = Math.min(porcentaje, 100) + "%";
+
+                if (tiempoRestante <= 0) {
+                    clearInterval(timer);
+                    entrenando = false;
+                    coachSay("Time's up! Great session.");
+                    
+                    // Guardar resultado provisional y actualizar usuario
+                    currentUser.score = Math.min(Math.floor(dribbles * 1.5), 100);
+                    currentUser.lastTraining = `${dribbles} dribbles (${new Date().toLocaleDateString()})`;
+                    localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
+                    
+                    alert(`Analysis complete! Total dribbles: ${dribbles}. Score calculated.`);
+                    loadDashboard(currentUser);
+                    switchScreen('dashboard-screen');
+                }
+            }, 1000);
+        }
+
+        function actualizarDisplayTiempo(segundos) {
+            let m = Math.floor(segundos / 60);
+            let s = segundos % 60;
+            document.getElementById('timer').innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+        }
     </script>
 </body>
 </html>
+
