@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>HandleLab - Registro</title>
+    <title>HandleLab - Registration</title>
     <style>
         html, body {
             height: 100%;
@@ -91,7 +91,6 @@
             margin-top: 15px;
         }
 
-        /* Pantalla de bienvenida inicial */
         #welcome-screen {
             display: flex;
             flex-direction: column;
@@ -110,75 +109,66 @@
 </head>
 <body>
     <div class="box">
-        <!-- Pantalla 1: Bienvenida -->
+        <!-- Welcome Screen (English default) -->
         <div id="welcome-screen">
             <h1>🏀 HANDLELAB</h1>
-            <p style="font-size: 0.85rem; color: #ccc; margin: 20px 0;">Domina tu drible, eleva tu nivel y conviértete en un elite handler.</p>
-            <button class="btn" onclick="mostrarRegistro()">COMENZAR</button>
+            <p style="font-size: 0.85rem; color: #ccc; margin: 20px 0;">Master your handle, elevate your game, and become an elite handler.</p>
+            <button class="btn" onclick="showRegister()">GET STARTED</button>
         </div>
 
-        <!-- Pantalla 2: Formulario de Módulo 1 (Registro) -->
+        <!-- Registration Screen (Module 1) -->
         <div id="register-screen">
-            <h1>MÓDULO 1</h1>
-            <p class="subtitle">Registro de Jugador</p>
+            <h1>MODULE 1</h1>
+            <p class="subtitle">Player Registration</p>
             
             <div class="form-group">
-                <label>🌍 Idioma</label>
+                <label>🌍 Language</label>
                 <select id="reg-idioma">
+                    <option value="en" selected>English</option>
                     <option value="es">Español</option>
-                    <option value="en">English</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>👤 Alias / Nombre</label>
-                <input type="text" id="reg-alias" placeholder="Ej. AlexHoop">
+                <label>👤 Alias / Name</label>
+                <input type="text" id="reg-alias" placeholder="E.g. AlexHoop">
             </div>
 
             <div class="form-group">
-                <label>🎂 Edad</label>
-                <input type="number" id="reg-edad" placeholder="Ej. 16" min="6" max="99">
+                <label>🎂 Age</label>
+                <input type="number" id="reg-edad" placeholder="E.g. 16" min="6" max="99">
             </div>
 
             <div class="form-group">
-                <label>✋ Mano Dominante</label>
+                <label>✋ Dominant Hand</label>
                 <select id="reg-mano">
-                    <option value="Derecha">Derecha</option>
-                    <option value="Izquierda">Izquierda</option>
-                    <option value="Ambiestra">Ambiestra</option>
+                    <option value="Right">Right</option>
+                    <option value="Left">Left</option>
+                    <option value="Ambidextrous">Ambidextrous</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>📊 Nivel Actual</label>
+                <label>📊 Current Level</label>
                 <select id="reg-nivel">
-                    <option value="Rookie">Rookie (Principiante)</option>
-                    <option value="Starter">Starter (Intermedio)</option>
-                    <option value="Hooper">Hooper (Avanzado)</option>
-                    <option value="Elite Handler">Elite Handler (Profesional)</option>
+                    <option value="Rookie">Rookie (Beginner)</option>
+                    <option value="Starter">Starter (Intermediate)</option>
+                    <option value="Hooper">Hooper (Advanced)</option>
+                    <option value="Elite Handler">Elite Handler (Professional)</option>
                 </select>
             </div>
 
-            <button class="btn" onclick="guardarRegistroUser()">REGISTRARME</button>
+            <button class="btn" onclick="saveUserRegistration()">REGISTER</button>
         </div>
     </div>
 
     <script>
-        window.onload = function() {
-            // Verificar si ya existe un usuario registrado previamente
-            const perfilGuardado = localStorage.getItem('handlelab_user');
-            if (perfilGuardado) {
-                // Si ya está registrado, podemos saltar directo o mostrar bienvenida personalizada
-                // Por ahora lo dejamos en la bienvenida para pruebas del Módulo 1
-            }
-        };
-
-        function mostrarRegistro() {
+        function showRegister() {
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('register-screen').style.display = 'flex';
         }
 
-        function guardarRegistroUser() {
+        function saveUserRegistration() {
             const idioma = document.getElementById('reg-idioma').value;
             const alias = document.getElementById('reg-alias').value.trim();
             const edad = document.getElementById('reg-edad').value;
@@ -186,25 +176,22 @@
             const nivel = document.getElementById('reg-nivel').value;
 
             if (!alias || !edad) {
-                alert("Por favor, completa tu alias y tu edad.");
+                alert("Please fill in your alias and age.");
                 return;
             }
 
-            const perfilJugador = {
+            const playerProfile = {
                 idioma,
                 alias,
                 edad,
                 mano,
                 nivel,
-                fechaRegistro: new Date().toLocaleDateString()
+                registrationDate: new Date().toLocaleDateString()
             };
 
-            // Guardamos localmente (luego lo conectaremos con Supabase si gustas)
-            localStorage.setItem('handlelab_user', JSON.stringify(perfilJugador));
+            localStorage.setItem('handlelab_user', JSON.stringify(playerProfile));
 
-            alert(`¡Registro exitoso! Bienvenido a HandleLab, ${alias}.`);
-            
-            // Aquí en el siguiente paso construiremos el Módulo 2 (Home Dashboard)
+            alert(`Registration successful! Welcome to HandleLab, ${alias}.`);
             location.reload(); 
         }
     </script>
