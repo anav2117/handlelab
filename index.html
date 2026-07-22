@@ -519,6 +519,27 @@
             font-size: 0.75rem;
         }
 
+        /* Leaderboard styles for Module 7 */
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            max-height: 220px;
+            overflow-y: auto;
+            margin-bottom: 8px;
+        }
+
+        .leaderboard-item {
+            background: rgba(20, 20, 25, 0.95);
+            border: 1px solid #333;
+            padding: 6px 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+
         .screen { display: none; flex-direction: column; height: 100%; padding: 12px; box-sizing: border-box; }
         .screen.active { display: flex; }
         #welcome-screen.screen.active { padding: 0; }
@@ -627,6 +648,7 @@
             <button class="btn btn-secondary" onclick="openCameraModule()">START ANALYSIS (MOD 3)</button>
             <button class="btn btn-secondary" onclick="openHistoryModule()">TRAINING HISTORY (MOD 5)</button>
             <button class="btn btn-secondary" onclick="openBadgesModule()">BADGES & AWARDS (MOD 6)</button>
+            <button class="btn btn-secondary" onclick="openLeaderboardModule()">GLOBAL LEADERBOARD (MOD 7)</button>
             <button class="btn btn-danger" onclick="resetApp()">🔄 RESET / LOG OUT</button>
         </div>
 
@@ -697,6 +719,16 @@
             <p class="subtitle">Badges & Awards</p>
 
             <div id="badges-container" class="badges-grid"></div>
+
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
+        </div>
+
+        <!-- MODULE 7: Global Leaderboard Screen -->
+        <div id="leaderboard-screen" class="screen">
+            <h1>MODULE 7</h1>
+            <p class="subtitle">Global Leaderboard</p>
+
+            <div id="leaderboard-container" class="leaderboard-list"></div>
 
             <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
         </div>
@@ -1166,6 +1198,43 @@
             });
 
             switchScreen('badges-screen');
+        }
+
+        function openLeaderboardModule() {
+            const container = document.getElementById('leaderboard-container');
+            container.innerHTML = "";
+            const isEs = currentUser && currentUser.idioma === 'es';
+
+            // Global mock leaderboard combined with user current score
+            let leaders = [
+                { rank: 1, name: "AlexHoop", score: 98, level: "Elite Handler" },
+                { rank: 2, name: "Baller99", score: 92, level: "HandleLab Master" },
+                { rank: 3, name: "CrossoverKing", score: 88, level: "Hooper" },
+                { rank: 4, name: currentUser ? currentUser.alias : "You", score: currentUser ? (currentUser.score || 0) : 0, level: "Starter" },
+                { rank: 5, name: "SpeedyDribbles", score: 65, level: "Rookie" }
+            ];
+
+            // Sort leaderboard by score descending
+            leaders.sort((a, b) => b.score - a.score);
+
+            leaders.forEach((item, index) => {
+                let badgeIcon = index === 0 ? "👑" : index === 1 ? "🥈" : index === 2 ? "🥉" : "🏀";
+                container.innerHTML += `
+                    <div class="leaderboard-item">
+                        <div>
+                            <span style="font-size:0.6rem; color:#888;">#${index + 1} ${badgeIcon}</span>
+                            <strong style="display:block; color:#fff;">${item.name}</strong>
+                            <span style="font-size:0.6rem; color:#ff9933;">${item.level}</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size:0.6rem; color:#888;">Score</span>
+                            <strong style="color: #ff6600; font-size:0.9rem;">${item.score}</strong>
+                        </div>
+                    </div>
+                `;
+            });
+
+            switchScreen('leaderboard-screen');
         }
 
         function inspectBadge(title, desc, unlocked) {
