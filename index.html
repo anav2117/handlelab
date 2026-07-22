@@ -91,7 +91,6 @@
             margin-top: 8px;
         }
 
-        /* Dashboard Styles (Module 2) */
         .dashboard-header {
             display: flex;
             align-items: center;
@@ -171,7 +170,6 @@
             color: #ff9933;
         }
 
-        /* Camera Module Styles (Module 3) */
         .video-container {
             flex: 1;
             min-height: 100px;
@@ -230,7 +228,6 @@
             transition: width 0.3s ease; 
         }
 
-        /* Results Styles (Module 4) */
         .results-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -547,7 +544,7 @@
                     entrenando = false;
                     coachSay("Time's up! Great session.");
                     
-                    // Calcular métricas para el Módulo 4 (Resultados)
+                    // Guardar datos en el usuario
                     let finalScore = Math.min(Math.floor(dribbles * 1.2), 100);
                     let visionScore = Math.min(finalScore + 5, 95);
                     let controlScore = Math.min(dribbles * 2, 98);
@@ -559,7 +556,7 @@
                     currentUser.lastTraining = `${dribbles} dribbles (${new Date().toLocaleDateString()})`;
                     localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
 
-                    // Mostrar pantalla de resultados (Módulo 4)
+                    // Llenar pantalla del Módulo 4 (Resultados)
                     document.getElementById('res-score').innerText = finalScore;
                     document.getElementById('res-vision').innerText = visionScore + "%";
                     document.getElementById('res-control').innerText = controlScore + "%";
@@ -574,6 +571,7 @@
                         document.getElementById('res-drill').innerText = "Low crossover control series.";
                     }
 
+                    // AHORA SÍ: Salta correctamente a la pantalla de resultados del Módulo 4
                     switchScreen('results-screen');
                 }
             }, 1000);
@@ -592,4 +590,3 @@
     </script>
 </body>
 </html>
-
