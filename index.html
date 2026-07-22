@@ -37,7 +37,7 @@
             flex-direction: column;
             box-sizing: border-box;
             box-shadow: none;
-            overflow-y: auto;
+            overflow: hidden; /* Evita scroll general en la caja principal */
             position: relative;
         }
         
@@ -126,7 +126,7 @@
             background: transparent;
             border: 1px solid #ff6600;
             color: #ff6600;
-            margin-top: 6px;
+            margin-top: 0;
             animation: none;
             box-shadow: none;
             width: 100%;
@@ -539,15 +539,21 @@
             font-size: 0.75rem;
         }
 
-        /* Ball Ranks styles for Module 8 (Optimized Padding & Spacing) */
+        /* --- LAYOUT CORREGIDO PARA MÓDULO 8 --- */
+        .ranks-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 8px;
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
         .ranks-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 230px;
-            overflow-y: auto;
-            margin-bottom: 8px;
-            padding: 4px;
         }
 
         .rank-card {
@@ -809,14 +815,16 @@
             <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
         </div>
 
-        <!-- MODULE 8: Ball Ranks Screen -->
+        <!-- MODULE 8: Ball Ranks Screen (Con Scroll Independiente y Botón Fijo Abajo) -->
         <div id="ranks-screen" class="screen">
             <h1>MODULE 8</h1>
             <p class="subtitle">Ball Ranks & Evolution</p>
 
-            <div id="ranks-container" class="ranks-list"></div>
+            <div class="ranks-scroll-area">
+                <div id="ranks-container" class="ranks-list"></div>
+            </div>
 
-            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:0; animation:none;">RETURN TO DASHBOARD</button>
         </div>
     </div>
 
@@ -1377,4 +1385,3 @@
     </script>
 </body>
 </html>
-
