@@ -8,81 +8,114 @@
     <title>HandleLab</title>
     <style>
         body { background: #060810; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; touch-action: manipulation; }
-        .box { width: 95%; max-width: 400px; border: 2px solid #ff6600; padding: 20px; border-radius: 30px; background: rgba(20,20,25,0.95); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        input, select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 14px; margin-bottom: 12px; width: 100%; box-sizing: border-box; border-radius: 12px; font-size: 16px; }
+        .box { width: 100%; max-width: 420px; height: 100vh; max-height: 850px; border: 2px solid #ff6600; padding: 15px; border-radius: 25px; background: rgba(10,10,15,0.98); display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         
-        /* Contenedor de cámara en formato VERTICAL (tipo retrato) */
+        h1 { margin: 0 0 5px 0; font-size: 1.2rem; text-align: center; }
+
+        /* Contenedor de cámara grande vertical con temporizador flotando arriba */
         .video-container {
             width: 100%;
-            height: 280px; /* Más alto para dar espacio vertical a tus movimientos */
-            border-radius: 12px;
+            flex-grow: 1; /* Crece para ocupar todo el espacio posible */
+            border-radius: 16px;
             overflow: hidden;
             border: 2px solid #ff6600;
             background: #000;
-            margin-bottom: 15px;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
         }
         video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transform: scaleX(-1); /* Efecto espejo natural */
+            transform: scaleX(-1);
         }
 
-        #timer { font-size: 2.5rem; color: #ff6600; font-weight: 800; margin: 5px 0; }
-        #counter { font-size: 1.5rem; color: #ff9933; margin-bottom: 10px; font-weight: bold; }
-        .btn { background: #ff6600; color: #000; padding: 16px; border-radius: 15px; border: none; font-weight: 800; width: 100%; cursor: pointer; font-size: 18px; margin-bottom: 10px; }
-        .btn-share { background: #222; color: #fff; border: 1px solid #444; font-size: 14px; padding: 12px; }
-        .progreso-container { background: #111; height: 10px; border-radius: 5px; margin-bottom: 15px; overflow: hidden; }
+        /* Reloj flotando en la parte superior dentro de la cámara */
+        .timer-overlay {
+            position: absolute;
+            top: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #ff6600;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 2rem;
+            color: #ff6600;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .controls-panel {
+            background: rgba(20, 20, 25, 0.9);
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid #333;
+        }
+
+        input, select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 10px; margin-bottom: 8px; width: 100%; box-sizing: border-box; border-radius: 10px; font-size: 14px; }
+        
+        .stats-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 1.1rem; font-weight: bold; color: #ff9933; }
+        
+        .progreso-container { background: #111; height: 8px; border-radius: 4px; margin-bottom: 10px; overflow: hidden; }
         .progreso-bar { height: 100%; background: #ff6600; width: 0%; transition: width 0.3s ease; }
-        #historial { margin-top: 15px; font-size: 0.8rem; text-align: left; color: #888; border-top: 1px solid #222; padding-top: 10px; }
+
+        /* Barra de botones inferior estilo barra de herramientas */
+        .bottom-bar { display: flex; gap: 10px; }
+        .btn { background: #ff6600; color: #000; padding: 14px; border-radius: 12px; border: none; font-weight: 800; flex: 2; cursor: pointer; font-size: 16px; text-align: center; }
+        .btn-share { background: #222; color: #fff; border: 1px solid #444; flex: 1; font-size: 13px; padding: 14px; }
+        
+        #historial { font-size: 0.75rem; text-align: left; color: #888; border-top: 1px solid #222; padding-top: 5px; max-height: 50px; overflow-y: auto; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h1 style="margin-top:0; font-size: 1.4rem;">HandleLab</h1>
+        <h1>HandleLab</h1>
         
-        <!-- Vista de la cámara en VERTICAL arriba, para ver los movimientos de inmediato -->
+        <!-- Cámara grande con el temporizador integrado arriba -->
         <div class="video-container">
             <video id="webcam" autoplay playsinline muted></video>
+            <div id="timer" class="timer-overlay">00:00</div>
         </div>
 
-        <input type="text" id="username" placeholder="Nombre del jugador" onchange="usuario = this.value">
-        <select id="programa">
-            <option value="60">Calentamiento (60s)</option>
-            <option value="120">Intensidad Media (120s)</option>
-            <option value="180">Élite (180s)</option>
-        </select>
-        
-        <div id="timer">00:00</div>
-        <div class="progreso-container"><div id="progreso-bar" class="progreso-bar"></div></div>
-        <div id="counter">Botes: 0</div>
-        
-        <button class="btn" onclick="iniciarEntrenamiento()">INICIAR ENTRENAMIENTO</button>
-        <button class="btn btn-share" onclick="compartirResultados()">COMPARTIR SESIÓN</button>
-        <div id="historial"><h3>Últimas sesiones:</h3><ul id="lista-sesiones"></ul></div>
+        <!-- Panel de control y barra inferior -->
+        <div class="controls-panel">
+            <input type="text" id="username" placeholder="Nombre del jugador" onchange="usuario = this.value">
+            <select id="programa">
+                <option value="60">Calentamiento (60s)</option>
+                <option value="120">Intensidad Media (120s)</option>
+                <option value="180">Élite (180s)</option>
+            </select>
+            
+            <div class="stats-row">
+                <span id="counter">Botes: 0</span>
+            </div>
+            <div class="progreso-container"><div id="progreso-bar" class="progreso-bar"></div></div>
+
+            <div class="bottom-bar">
+                <button class="btn" onclick="iniciarEntrenamiento()">INICIAR</button>
+                <button class="btn btn-share" onclick="compartirResultados()">COMPARTIR</button>
+            </div>
+            
+            <div id="historial"><ul id="lista-sesiones" style="margin:0; padding-left:15px;"></ul></div>
+        </div>
     </div>
 
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let botes = 0, usuario = "Invitado", timer = null;
         
-        // Al cargar la página, iniciamos el historial y encendemos la cámara automáticamente
         window.onload = function() {
             mostrarHistorial();
             iniciarCamara();
         };
 
-        // Función para encender la cámara frontal en vertical de manera automática
         async function iniciarCamara() {
             const videoElement = document.getElementById('webcam');
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { 
-                        width: { ideal: 480 }, 
-                        height: { ideal: 640 }, // Resolución orientada a vertical
-                        facingMode: "user" 
-                    }
+                    video: { width: { ideal: 480 }, height: { ideal: 640 }, facingMode: "user" }
                 });
                 videoElement.srcObject = stream;
             } catch (error) {
@@ -110,14 +143,20 @@
             let tiempoRestante = tiempoTotal;
             document.getElementById('counter').innerText = "Botes: 0";
             
+            // Formatear el tiempo inicial
+            actualizarDisplayTiempo(tiempoRestante);
+            
             timer = setInterval(() => {
                 botes++;
+                tiempoRestante--;
                 playSound();
                 document.getElementById('counter').innerText = "Botes: " + botes;
-                let porcentaje = (botes / (tiempoTotal * 2)) * 100;
-                document.getElementById('progreso-bar'].style.width = Math.min(porcentaje, 100) + "%";
+                actualizarDisplayTiempo(tiempoRestante);
+                
+                let porcentaje = ((tiempoTotal - tiempoRestante) / tiempoTotal) * 100;
+                document.getElementById('progreso-bar').style.width = Math.min(porcentaje, 100) + "%";
 
-                if (--tiempoRestante <= 0) {
+                if (tiempoRestante <= 0) {
                     clearInterval(timer);
                     guardarSesion();
                     coachSay("¡Tiempo terminado! Gran sesión.");
@@ -125,10 +164,16 @@
             }, 1000);
         }
 
+        function actualizarDisplayTiempo(segundos) {
+            let m = Math.floor(segundos / 60);
+            let s = segundos % 60;
+            document.getElementById('timer').innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+        }
+
         function guardarSesion() {
             let historial = JSON.parse(localStorage.getItem('historialHandleLab') || "[]");
             historial.unshift({ usuario, botes, fecha: new Date().toLocaleDateString() });
-            localStorage.setItem('historialHandleLab', JSON.stringify(historial.slice(0, 5)));
+            localStorage.setItem('historialHandleLab', JSON.stringify(historial.slice(0, 3)));
             mostrarHistorial();
         }
 
@@ -137,12 +182,12 @@
             lista.innerHTML = "";
             let historial = JSON.parse(localStorage.getItem('historialHandleLab') || "[]");
             historial.forEach(s => {
-                lista.innerHTML += `<li>${s.fecha} - ${s.usuario}: ${s.botes} botes</li>`;
+                lista.innerHTML += `<li>${s.usuario}: ${s.botes} botes (${s.fecha})</li>`;
             });
         }
 
         function compartirResultados() {
-            const programa = document.getElementById('programa').options[document.getElementById('programa'].selectedIndex].text;
+            const programa = document.getElementById('programa').options[document.getElementById('programa').selectedIndex].text;
             const texto = `🏀 ¡HandleLab! Sesión: ${programa}. Logré: ${botes} botes. ¡Atrévete a superarme!`;
             if (navigator.share) { navigator.share({ title: 'Mi récord HandleLab', text: texto }); } 
             else { prompt("Copia esto:", texto); }
