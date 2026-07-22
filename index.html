@@ -9,14 +9,15 @@
     <style>
         body { background: #060810; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; touch-action: manipulation; }
         .box { width: 95%; max-width: 400px; border: 2px solid #ff6600; padding: 20px; border-radius: 30px; background: rgba(20,20,25,0.95); text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        input, select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 16px; margin-bottom: 15px; width: 100%; box-sizing: border-box; border-radius: 12px; font-size: 16px; }
+        input, select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 14px; margin-bottom: 12px; width: 100%; box-sizing: border-box; border-radius: 12px; font-size: 16px; }
         
+        /* Contenedor de cámara en formato VERTICAL (tipo retrato) */
         .video-container {
             width: 100%;
-            height: 150px;
+            height: 280px; /* Más alto para dar espacio vertical a tus movimientos */
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid #ff6600;
+            border: 2px solid #ff6600;
             background: #000;
             margin-bottom: 15px;
             position: relative;
@@ -25,22 +26,27 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transform: scaleX(-1);
+            transform: scaleX(-1); /* Efecto espejo natural */
         }
 
-        #timer { font-size: 3rem; color: #ff6600; font-weight: 800; margin: 5px 0; }
-        #counter { font-size: 1.8rem; color: #ff9933; margin-bottom: 10px; font-weight: bold; }
+        #timer { font-size: 2.5rem; color: #ff6600; font-weight: 800; margin: 5px 0; }
+        #counter { font-size: 1.5rem; color: #ff9933; margin-bottom: 10px; font-weight: bold; }
         .btn { background: #ff6600; color: #000; padding: 16px; border-radius: 15px; border: none; font-weight: 800; width: 100%; cursor: pointer; font-size: 18px; margin-bottom: 10px; }
-        .btn-camara { background: #333; color: #ff6600; border: 1px solid #ff6600; font-size: 14px; padding: 10px; margin-bottom: 15px; }
-        .btn-share { background: #222; color: #fff; border: 1px solid #444; }
-        .progreso-container { background: #111; height: 12px; border-radius: 6px; margin-bottom: 15px; overflow: hidden; }
+        .btn-share { background: #222; color: #fff; border: 1px solid #444; font-size: 14px; padding: 12px; }
+        .progreso-container { background: #111; height: 10px; border-radius: 5px; margin-bottom: 15px; overflow: hidden; }
         .progreso-bar { height: 100%; background: #ff6600; width: 0%; transition: width 0.3s ease; }
-        #historial { margin-top: 15px; font-size: 0.85rem; text-align: left; color: #888; border-top: 1px solid #222; padding-top: 10px; }
+        #historial { margin-top: 15px; font-size: 0.8rem; text-align: left; color: #888; border-top: 1px solid #222; padding-top: 10px; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h1 style="margin-top:0; font-size: 1.5rem;">HandleLab</h1>
+        <h1 style="margin-top:0; font-size: 1.4rem;">HandleLab</h1>
+        
+        <!-- Vista de la cámara en VERTICAL arriba, para ver los movimientos de inmediato -->
+        <div class="video-container">
+            <video id="webcam" autoplay playsinline muted></video>
+        </div>
+
         <input type="text" id="username" placeholder="Nombre del jugador" onchange="usuario = this.value">
         <select id="programa">
             <option value="60">Calentamiento (60s)</option>
@@ -48,12 +54,6 @@
             <option value="180">Élite (180s)</option>
         </select>
         
-        <!-- Vista previa de la cámara y botón dedicado -->
-        <div class="video-container">
-            <video id="webcam" autoplay playsinline muted></video>
-        </div>
-        <button class="btn btn-camara" onclick="iniciarCamara()">📸 Activar Cámara</button>
-
         <div id="timer">00:00</div>
         <div class="progreso-container"><div id="progreso-bar" class="progreso-bar"></div></div>
         <div id="counter">Botes: 0</div>
@@ -67,21 +67,26 @@
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let botes = 0, usuario = "Invitado", timer = null;
         
+        // Al cargar la página, iniciamos el historial y encendemos la cámara automáticamente
         window.onload = function() {
-            mostrarHistorial(); // Solo carga el historial de forma segura sin bloquear nada
+            mostrarHistorial();
+            iniciarCamara();
         };
 
-        // Función para activar la cámara al presionar el botón
+        // Función para encender la cámara frontal en vertical de manera automática
         async function iniciarCamara() {
             const videoElement = document.getElementById('webcam');
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" }
+                    video: { 
+                        width: { ideal: 480 }, 
+                        height: { ideal: 640 }, // Resolución orientada a vertical
+                        facingMode: "user" 
+                    }
                 });
                 videoElement.srcObject = stream;
             } catch (error) {
                 console.error("Error al acceder a la cámara: ", error);
-                alert("No se pudo acceder a la cámara. Revisa los permisos de tu navegador.");
             }
         }
 
@@ -110,7 +115,7 @@
                 playSound();
                 document.getElementById('counter').innerText = "Botes: " + botes;
                 let porcentaje = (botes / (tiempoTotal * 2)) * 100;
-                document.getElementById('progreso-bar').style.width = Math.min(porcentaje, 100) + "%";
+                document.getElementById('progreso-bar'].style.width = Math.min(porcentaje, 100) + "%";
 
                 if (--tiempoRestante <= 0) {
                     clearInterval(timer);
@@ -137,7 +142,7 @@
         }
 
         function compartirResultados() {
-            const programa = document.getElementById('programa').options[document.getElementById('programa').selectedIndex].text;
+            const programa = document.getElementById('programa').options[document.getElementById('programa'].selectedIndex].text;
             const texto = `🏀 ¡HandleLab! Sesión: ${programa}. Logré: ${botes} botes. ¡Atrévete a superarme!`;
             if (navigator.share) { navigator.share({ title: 'Mi récord HandleLab', text: texto }); } 
             else { prompt("Copia esto:", texto); }
