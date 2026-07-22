@@ -130,8 +130,8 @@
             animation: none;
             box-shadow: none;
             width: 100%;
-            padding: 12px;
-            font-size: 14px;
+            padding: 10px;
+            font-size: 13px;
         }
 
         .btn-danger {
@@ -240,12 +240,12 @@
             padding: 8px;
             border-radius: 10px;
             border: 1px solid #333;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .avatar-box {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: #ff6600;
             color: #000;
@@ -259,13 +259,13 @@
 
         .user-info h2 {
             margin: 0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #fff;
         }
 
         .user-info p {
             margin: 2px 0 0 0;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: #ff9933;
         }
 
@@ -273,7 +273,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 6px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .stat-card {
@@ -286,36 +286,36 @@
 
         .stat-card span {
             display: block;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: #888;
             text-transform: uppercase;
         }
 
         .stat-card strong {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #ff6600;
         }
 
         .xp-container {
             background: rgba(20, 20, 25, 0.95);
             border: 1px solid #333;
-            padding: 8px;
+            padding: 6px;
             border-radius: 8px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .xp-header {
             display: flex;
             justify-content: space-between;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #ff9933;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             font-weight: bold;
         }
 
         .xp-bar-bg {
             background: #111;
-            height: 6px;
+            height: 5px;
             border-radius: 3px;
             overflow: hidden;
             border: 1px solid #444;
@@ -328,12 +328,20 @@
             transition: width 0.5s ease;
         }
 
+        .dashboard-scroll {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding-right: 2px;
+        }
+
         .card-section {
             background: rgba(20, 20, 25, 0.95);
             border: 1px solid #333;
             padding: 6px;
             border-radius: 8px;
-            margin-bottom: 6px;
             font-size: 0.7rem;
         }
 
@@ -450,41 +458,24 @@
             font-size: 0.8rem;
         }
 
-        .history-list {
+        .history-list, .badges-grid, .leaderboard-list, .ranks-list, .missions-list, .academy-list {
             display: flex;
             flex-direction: column;
             gap: 5px;
-            max-height: 220px;
+            max-height: 240px;
             overflow-y: auto;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
-        .history-item {
+        .history-item, .leaderboard-item, .mission-item, .academy-item {
             background: rgba(20, 20, 25, 0.95);
             border: 1px solid #333;
-            padding: 6px 8px;
+            padding: 8px 10px;
             border-radius: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 0.7rem;
-        }
-
-        .history-item span {
-            color: #aaa;
-        }
-
-        .history-item strong {
-            color: #ff6600;
-        }
-
-        .badges-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
-            max-height: 220px;
-            overflow-y: auto;
-            margin-bottom: 8px;
         }
 
         .badge-card {
@@ -495,143 +486,47 @@
             text-align: center;
             font-size: 0.65rem;
             cursor: pointer;
-            transition: transform 0.2s;
         }
 
-        .badge-card:active {
-            transform: scale(0.95);
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
         }
 
-        .badge-card.locked {
-            opacity: 0.4;
-            filter: grayscale(1);
-        }
-
-        .badge-card span {
-            display: block;
-            font-size: 1.4rem;
-            margin-bottom: 2px;
-        }
-
-        .badge-card strong {
-            color: #ff6600;
-            display: block;
-            font-size: 0.75rem;
-        }
-
-        .leaderboard-list {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            max-height: 220px;
-            overflow-y: auto;
-            margin-bottom: 8px;
-        }
-
-        .leaderboard-item {
-            background: rgba(20, 20, 25, 0.95);
-            border: 1px solid #333;
-            padding: 6px 10px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.75rem;
-        }
-
-        /* --- MÓDULO 8 CON TARJETAS INTERACTIVAS --- */
-        .ranks-scroll-area {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 8px;
-            padding: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .ranks-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .badge-card.locked { opacity: 0.4; filter: grayscale(1); }
 
         .rank-card {
             background: rgba(20, 20, 25, 0.95);
             border: 1px solid #333;
-            padding: 10px 12px;
-            border-radius: 10px;
+            padding: 8px 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             font-size: 0.7rem;
-            position: relative;
-            overflow: hidden;
             cursor: pointer;
-            transition: transform 0.15s ease, border-color 0.15s ease;
-        }
-
-        .rank-card:active {
-            transform: scale(0.97);
-        }
-
-        .rank-card:hover {
-            border-color: #ff6600;
-        }
-
-        .rank-card.locked {
-            opacity: 0.45;
-            filter: grayscale(0.8);
         }
 
         .ball-icon-container {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             flex-shrink: 0;
-            box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
         }
 
         .ball-bronze { background: radial-gradient(circle at 30% 30%, #cd7f32, #5c3a21); border: 1px solid #a05a2c; }
         .ball-silver { background: radial-gradient(circle at 30% 30%, #e0e0e0, #757575); border: 1px solid #b0b0b0; }
-        .ball-gold { background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b); border: 1px solid #ffcc00; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
-        .ball-supergold { background: radial-gradient(circle at 30% 30%, #ff4500, #ff8c00, #ffd700); border: 2px solid #ffea00; animation: superGoldGlow 1.5s infinite alternate; }
-        .ball-diamond { background: radial-gradient(circle at 30% 30%, #00ffff, #008b8b, #1e90ff); border: 2px solid #00ffff; animation: diamondGlow 1.5s infinite alternate; }
-        .ball-master { background: radial-gradient(circle at 30% 30%, #9400d3, #ff1493, #ffd700); border: 2px solid #ff00ff; animation: masterGlow 1.2s infinite alternate; }
+        .ball-gold { background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b); border: 1px solid #ffcc00; }
+        .ball-supergold { background: radial-gradient(circle at 30% 30%, #ff4500, #ff8c00, #ffd700); border: 1px solid #ffea00; }
+        .ball-diamond { background: radial-gradient(circle at 30% 30%, #00ffff, #008b8b); border: 1px solid #00ffff; }
+        .ball-master { background: radial-gradient(circle at 30% 30%, #9400d3, #ff1493); border: 1px solid #ff00ff; }
 
-        @keyframes superGoldGlow {
-            0% { box-shadow: 0 0 5px rgba(255, 69, 0, 0.8); }
-            100% { box-shadow: 0 0 15px rgba(255, 215, 0, 1); }
-        }
-
-        @keyframes diamondGlow {
-            0% { box-shadow: 0 0 5px rgba(0, 255, 255, 0.7); }
-            100% { box-shadow: 0 0 18px rgba(0, 191, 255, 1); }
-        }
-
-        @keyframes masterGlow {
-            0% { box-shadow: 0 0 8px rgba(148, 0, 211, 0.9); }
-            100% { box-shadow: 0 0 20px rgba(255, 20, 147, 1); }
-        }
-
-        .rank-info h3 {
-            margin: 0 0 2px 0;
-            font-size: 0.85rem;
-            color: #fff;
-        }
-
-        .rank-info p {
-            margin: 0 0 3px 0;
-            font-size: 0.65rem;
-            color: #aaa;
-        }
-
-        /* --- MODAL DETALLE DE RANGO --- */
-        #rank-modal {
+        #rank-modal, #academy-modal {
             position: absolute;
             top: 0;
             left: 0;
@@ -652,24 +547,15 @@
             padding: 16px;
             border-radius: 12px;
             width: 100%;
-            max-width: 300px;
+            max-width: 280px;
             text-align: center;
             box-shadow: 0 0 30px rgba(255, 102, 0, 0.4);
         }
 
-        .modal-content h3 {
-            color: #ff9933;
-            margin-top: 8px;
-            font-size: 1.1rem;
-        }
+        .modal-content h3 { color: #ff9933; margin-top: 6px; font-size: 1rem; }
+        .modal-content p { font-size: 0.7rem; color: #ccc; line-height: 1.3; }
 
-        .modal-content p {
-            font-size: 0.75rem;
-            color: #ccc;
-            line-height: 1.4;
-        }
-
-        .screen { display: none; flex-direction: column; height: 100%; padding: 12px; box-sizing: border-box; }
+        .screen { display: none; flex-direction: column; height: 100%; padding: 10px; box-sizing: border-box; }
         .screen.active { display: flex; }
         #welcome-screen.screen.active { padding: 0; }
     </style>
@@ -732,13 +618,13 @@
                 </select>
             </div>
 
-            <button class="btn btn-secondary" onclick="saveUserRegistration()" style="width:100%; margin-top:10px; padding:12px; font-size:14px; animation:none; box-shadow:none;">REGISTER</button>
+            <button class="btn btn-secondary" onclick="saveUserRegistration()" style="width:100%; margin-top:8px;">REGISTER</button>
         </div>
 
         <!-- MODULE 2: Home Dashboard -->
         <div id="dashboard-screen" class="screen">
             <h1>HANDLELAB</h1>
-            <p class="subtitle">Main Dashboard (Module 2)</p>
+            <p class="subtitle">Main Dashboard</p>
 
             <div class="dashboard-header">
                 <div class="avatar-box" id="dash-initial">A</div>
@@ -769,20 +655,20 @@
                 </div>
             </div>
 
-            <div class="card-section">
-                <h3>🔥 Daily Challenge</h3>
-                <p style="margin:0; color:#ccc;">Complete 1 dribble analysis session.</p>
+            <div class="dashboard-scroll">
+                <button class="btn btn-secondary" onclick="openCameraModule()">⚡ START DRIBBLE ANALYSIS (MOD 3)</button>
+                <button class="btn btn-secondary" onclick="openHistoryModule()">📈 TRAINING HISTORY (MOD 10)</button>
+                <button class="btn btn-secondary" onclick="openBadgesModule()">🏅 BADGES & AWARDS (MOD 6)</button>
+                <button class="btn btn-secondary" onclick="openLeaderboardModule()">🏆 GLOBAL LEADERBOARD (MOD 7)</button>
+                <button class="btn btn-secondary" onclick="openRanksModule()">🔮 BALL RANKS & EVOLUTION (MOD 8)</button>
+                <button class="btn btn-secondary" onclick="openMissionsModule()">🎯 DAILY MISSIONS</button>
+                <button class="btn btn-secondary" onclick="openAcademyModule()">📚 DRIBBLE ACADEMY</button>
+                <button class="btn btn-secondary" onclick="openSettingsModule()">⚙️ SETTINGS & PROFILE</button>
+                <button class="btn btn-danger" onclick="resetApp()">🔄 RESET / LOG OUT</button>
             </div>
-
-            <button class="btn btn-secondary" onclick="openCameraModule()">START ANALYSIS (MOD 3)</button>
-            <button class="btn btn-secondary" onclick="openHistoryModule()">TRAINING HISTORY (MOD 5)</button>
-            <button class="btn btn-secondary" onclick="openBadgesModule()">BADGES & AWARDS (MOD 6)</button>
-            <button class="btn btn-secondary" onclick="openLeaderboardModule()">GLOBAL LEADERBOARD (MOD 7)</button>
-            <button class="btn btn-secondary" onclick="openRanksModule()">BALL RANKS (MOD 8)</button>
-            <button class="btn btn-danger" onclick="resetApp()">🔄 RESET / LOG OUT</button>
         </div>
 
-        <!-- MODULE 3: Camera, Distance Guide & Dribble Analysis -->
+        <!-- MODULE 3: Camera & Dribble Analysis -->
         <div id="camera-screen" class="screen">
             <h1>MODULE 3</h1>
             <p class="subtitle">Distance Guide & Analysis</p>
@@ -799,7 +685,7 @@
                     <span id="counter">Dribbles: 0</span>
                 </div>
                 <div class="progreso-container"><div id="progreso-bar" class="progreso-bar"></div></div>
-                <button class="btn btn-secondary" id="btn-iniciar-cam" onclick="comenzarEntrenamientoOficial()" style="width:100%; margin-top:6px; animation:none; display:none;">READY TO DRIBBLE!</button>
+                <button class="btn btn-secondary" id="btn-iniciar-cam" onclick="comenzarEntrenamientoOficial()" style="width:100%; margin-top:4px; display:none;">READY TO DRIBBLE!</button>
             </div>
         </div>
 
@@ -808,9 +694,9 @@
             <h1>MODULE 4</h1>
             <p class="subtitle">Analysis Results</p>
 
-            <div class="stat-card" style="margin-bottom: 6px; padding: 8px;">
-                <span style="font-size: 0.7rem;">Final Handle Score</span>
-                <strong id="res-score" style="font-size: 1.4rem;">0</strong>
+            <div class="stat-card" style="margin-bottom: 6px; padding: 6px;">
+                <span style="font-size: 0.65rem;">Final Handle Score</span>
+                <strong id="res-score" style="font-size: 1.2rem;">0</strong>
             </div>
 
             <div class="results-grid">
@@ -820,68 +706,126 @@
                 <div class="result-metric"><span>Rhythm</span><strong id="res-rhythm">0%</strong></div>
             </div>
 
-            <div class="card-section">
-                <h3>⚠️ Main Error Detected</h3>
-                <p id="res-error" style="margin:0; color:#ff4444; font-weight:bold;">Analyzing error...</p>
+            <div class="card-section" style="margin-bottom: 4px;">
+                <h3>⚠️ Main Error</h3>
+                <p id="res-error" style="margin:0; color:#ff4444; font-weight:bold; font-size:0.65rem;">Analyzing...</p>
             </div>
 
-            <div class="card-section">
-                <h3>💡 Recommended Drills</h3>
-                <p id="res-drill" style="margin:0; color:#ccc;">...</p>
+            <div class="card-section" style="margin-bottom: 6px;">
+                <h3>💡 Recommended Drill</h3>
+                <p id="res-drill" style="margin:0; color:#ccc; font-size:0.65rem;">...</p>
             </div>
 
-            <button class="btn btn-secondary" onclick="returnToDashboard()" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
+            <button class="btn btn-secondary" onclick="returnToDashboard()" style="width:100%;">RETURN TO DASHBOARD</button>
         </div>
 
-        <!-- MODULE 5: Training History Screen -->
+        <!-- MODULE 10: Training History -->
         <div id="history-screen" class="screen">
-            <h1>MODULE 5</h1>
-            <p class="subtitle">Training History</p>
+            <h1>MODULE 10</h1>
+            <p class="subtitle">Training History & Evolution</p>
+            
+            <div class="stats-grid" style="margin-bottom: 6px;">
+                <div class="stat-card">
+                    <span>Weekly Avg Score</span>
+                    <strong id="hist-weekly-avg">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Monthly Growth</span>
+                    <strong id="hist-monthly-growth">+0%</strong>
+                </div>
+            </div>
 
-            <div id="history-container" class="history-list"></div>
-
-            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
+            <div style="flex:1; overflow-y:auto; margin-bottom:6px;">
+                <div id="history-container" class="history-list"></div>
+            </div>
+            
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%;">RETURN TO DASHBOARD</button>
         </div>
 
-        <!-- MODULE 6: Badges & Awards Screen -->
+        <!-- MODULE 6: Badges & Awards -->
         <div id="badges-screen" class="screen">
             <h1>MODULE 6</h1>
             <p class="subtitle">Badges & Awards</p>
-
             <div id="badges-container" class="badges-grid"></div>
-
-            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%;">RETURN TO DASHBOARD</button>
         </div>
 
-        <!-- MODULE 7: Global Leaderboard Screen -->
+        <!-- MODULE 7: Global Leaderboard -->
         <div id="leaderboard-screen" class="screen">
             <h1>MODULE 7</h1>
             <p class="subtitle">Global Leaderboard</p>
-
             <div id="leaderboard-container" class="leaderboard-list"></div>
-
-            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%;">RETURN TO DASHBOARD</button>
         </div>
 
-        <!-- MODULE 8: Ball Ranks Screen (Con Tarjetas Interactivas) -->
+        <!-- MODULE 8: Ball Ranks Screen -->
         <div id="ranks-screen" class="screen">
             <h1>MODULE 8</h1>
             <p class="subtitle">Ball Ranks & Evolution</p>
-
-            <div class="ranks-scroll-area">
+            <div style="flex:1; overflow-y:auto; margin-bottom:6px;">
                 <div id="ranks-container" class="ranks-list"></div>
             </div>
-
-            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:0; animation:none;">RETURN TO DASHBOARD</button>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%;">RETURN TO DASHBOARD</button>
         </div>
 
-        <!-- MODAL PARA CADA RANGO -->
+        <!-- Daily Missions -->
+        <div id="missions-screen" class="screen">
+            <h1>MODULE</h1>
+            <p class="subtitle">Daily Challenges & Missions</p>
+            <div id="missions-container" class="missions-list"></div>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%;">RETURN TO DASHBOARD</button>
+        </div>
+
+        <!-- Dribble Academy -->
+        <div id="academy-screen" class="screen">
+            <h1>MODULE</h1>
+            <p class="subtitle">Dribble Academy & Tutorials</p>
+            <div style="flex:1; overflow-y:auto; margin-bottom:6px;">
+                <div id="academy-container" class="academy-list"></div>
+            </div>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%;">RETURN TO DASHBOARD</button>
+        </div>
+
+        <!-- Settings & Profile -->
+        <div id="settings-screen" class="screen">
+            <h1>MODULE</h1>
+            <p class="subtitle">Settings & Player Profile</p>
+            
+            <div class="card-section" style="margin-bottom:8px;">
+                <div class="form-group">
+                    <label>👤 Edit Alias</label>
+                    <input type="text" id="settings-alias">
+                </div>
+                <div class="form-group" style="margin-top:6px;">
+                    <label>🌍 Language</label>
+                    <select id="settings-idioma">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" onclick="saveSettings()" style="width:100%; margin-top:8px;">SAVE CHANGES</button>
+            </div>
+
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%;">RETURN TO DASHBOARD</button>
+        </div>
+
+        <!-- MODAL RANGOS -->
         <div id="rank-modal">
             <div class="modal-content">
-                <div id="modal-icon" style="font-size: 2.2rem; margin-bottom: 4px;">🏆</div>
+                <div id="modal-icon" style="font-size: 2rem; margin-bottom: 4px;">🏆</div>
                 <h3 id="modal-title">Rank Title</h3>
-                <p id="modal-desc" style="margin-bottom: 12px;">Rank description and perks.</p>
-                <button class="btn btn-secondary" onclick="closeRankModal()" style="padding: 8px; font-size: 0.8rem; animation:none; box-shadow:none;">CLOSE</button>
+                <p id="modal-desc" style="margin-bottom: 10px;">Description.</p>
+                <button class="btn btn-secondary" onclick="closeRankModal()" style="padding: 6px; font-size: 0.75rem;">CLOSE</button>
+            </div>
+        </div>
+
+        <!-- MODAL ACADEMIA -->
+        <div id="academy-modal">
+            <div class="modal-content">
+                <div style="font-size: 2rem; margin-bottom: 4px;">📖</div>
+                <h3 id="academy-modal-title">Tutorial</h3>
+                <p id="academy-modal-desc" style="margin-bottom: 10px; text-align: left;"></p>
+                <button class="btn btn-secondary" onclick="closeAcademyModal()" style="padding: 6px; font-size: 0.75rem;">CLOSE</button>
             </div>
         </div>
     </div>
@@ -940,7 +884,6 @@
                 };
                 loopDeleting();
             }
-
             typingEffect();
         }
 
@@ -979,6 +922,7 @@
                 lastTraining: idioma === 'es' ? "Ninguno" : "None",
                 history: [],
                 maxDribbles: 0,
+                missionsCompleted: [false, false, false],
                 registrationDate: new Date().toLocaleDateString()
             };
 
@@ -998,7 +942,6 @@
         function loadDashboard(user) {
             if (user.xp === undefined) user.xp = 0;
             const datosRPG = calcularNivelRPG(user.xp);
-            const isEs = user.idioma === 'es';
 
             document.getElementById('dash-initial').innerText = user.alias.charAt(0).toUpperCase();
             document.getElementById('dash-alias').innerText = user.alias;
@@ -1006,7 +949,7 @@
             document.getElementById('dash-score').innerText = user.score || 0;
             document.getElementById('dash-rank').innerText = user.rank || "🟤 Bronze";
 
-            document.getElementById('xp-rank-title').innerText = isEs ? `Rango: ${datosRPG.nivel}` : `Rank: ${datosRPG.nivel}`;
+            document.getElementById('xp-rank-title').innerText = user.idioma === 'es' ? `Rango: ${datosRPG.nivel}` : `Rank: ${datosRPG.nivel}`;
             document.getElementById('xp-counter-text').innerText = `${user.xp} / ${datosRPG.max} XP`;
             document.getElementById('xp-bar-fill').style.width = `${Math.min(datosRPG.porcentaje, 100)}%`;
         }
@@ -1027,13 +970,9 @@
                     video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" }
                 });
                 videoElement.srcObject = streamCamara;
-                
-                videoElement.onloadedmetadata = () => {
-                    iniciarMonitoreoDistanciaYAnalisis();
-                };
+                videoElement.onloadedmetadata = () => { iniciarMonitoreoDistanciaYAnalisis(); };
             } catch (error) {
-                console.error("Camera error: ", error);
-                alert(isEs ? "No se pudo acceder a la cámara." : "Could not access camera. Check permissions.");
+                alert(isEs ? "No se pudo acceder a la cámara." : "Could not access camera.");
             }
         }
 
@@ -1066,7 +1005,6 @@
 
             const loopMonitoreo = () => {
                 if (video.paused || video.ended) return;
-
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 let centroX = canvas.width / 2;
@@ -1076,8 +1014,7 @@
                 if (faseEntrenamiento === 'distancia') {
                     let imgW = 60, imgH = 60;
                     let tempCanvas = document.createElement('canvas');
-                    tempCanvas.width = imgW;
-                    tempCanvas.height = imgH;
+                    tempCanvas.width = imgW; tempCanvas.height = imgH;
                     let tempCtx = tempCanvas.getContext('2d');
                     tempCtx.drawImage(video, 0, 0, imgW, imgH);
                     let frameData = tempCtx.getImageData(0, 0, imgW, imgH).data;
@@ -1085,10 +1022,7 @@
                     let cambiosCentro = 0;
                     for (let y = Math.floor(imgH * 0.2); y < Math.floor(imgH * 0.8); y++) {
                         for (let x = Math.floor(imgW * 0.3); x < Math.floor(imgW * 0.7); x++) {
-                            let idx = (y * imgW + x) * 4;
-                            if (Math.abs(frameData[idx] - 128) > 35) {
-                                cambiosCentro++;
-                            }
+                            if (Math.abs(frameData[(y * imgW + x) * 4] - 128) > 35) cambiosCentro++;
                         }
                     }
 
@@ -1101,15 +1035,10 @@
 
                     if (distanciaPerfecta) {
                         ctx.strokeStyle = '#00ff66';
-                        ctx.fillStyle = 'rgba(0, 255, 102, 0.08)';
-                        ctx.fill();
-                        ctx.stroke();
-
                         document.getElementById('distance-status').innerText = isEs ? "¡Distancia Perfecta! 🟢" : "Perfect Distance! 🟢";
                         document.getElementById('distance-status').style.color = "#00ff66";
-                        
                         framesEstable++;
-                        if (framesEstable > 35) {
+                        if (framesEstable > 30) {
                             document.getElementById('btn-iniciar-cam').style.display = 'block';
                             if (!avisoVozDado) {
                                 coachSay(isEs ? "¡Posición perfecta! Presiona iniciar." : "Perfect position! Press start.");
@@ -1118,53 +1047,42 @@
                         }
                     } else if (muyCerca) {
                         ctx.strokeStyle = '#ff3300';
-                        ctx.stroke();
                         document.getElementById('distance-status').innerText = isEs ? "⚠️ Muy cerca. Da un paso atrás." : "⚠️ Too close. Step back.";
                         document.getElementById('distance-status').style.color = "#ff3300";
                         framesEstable = 0;
                         document.getElementById('btn-iniciar-cam').style.display = 'none';
                     } else {
                         ctx.strokeStyle = '#ff9900';
-                        ctx.stroke();
-                        document.getElementById('distance-status').innerText = isEs ? "⚠️ Acércate al círculo central." : "⚠️ Step closer to circle.";
+                        document.getElementById('distance-status').innerText = isEs ? "⚠️ Acércate al círculo central." : "⚠️ Step closer.";
                         document.getElementById('distance-status').style.color = "#ff9900";
                         framesEstable = 0;
                         document.getElementById('btn-iniciar-cam').style.display = 'none';
                     }
-
+                    ctx.stroke();
                     loopId = requestAnimationFrame(loopMonitoreo);
                 } 
                 else if (faseEntrenamiento === 'activo') {
                     document.getElementById('distance-status').style.display = 'none';
-                    
-                    let imgW = 80;
-                    let imgH = 60;
+                    let imgW = 80, imgH = 60;
                     let tempCanvas = document.createElement('canvas');
-                    tempCanvas.width = imgW;
-                    tempCanvas.height = imgH;
+                    tempCanvas.width = imgW; tempCanvas.height = imgH;
                     let tempCtx = tempCanvas.getContext('2d');
                     tempCtx.drawImage(video, 0, 0, imgW, imgH);
                     let currentData = tempCtx.getImageData(0, 0, imgW, imgH).data;
 
                     if (lastImageData) {
-                        let pixelesCambiadosAbajo = 0;
-                        let pixelesCambiadosArriba = 0;
+                        let pixelesCambiadosAbajo = 0, pixelesCambiadosArriba = 0;
                         let mitadAltura = Math.floor(imgH / 2);
-
                         for (let y = 0; y < imgH; y++) {
                             for (let x = 0; x < imgW; x += 2) {
                                 let i = (y * imgW + x) * 4;
-                                let diff = Math.abs(currentData[i] - lastImageData[i]);
-                                if (diff > 45) {
+                                if (Math.abs(currentData[i] - lastImageData[i]) > 45) {
                                     if (y >= mitadAltura) pixelesCambiadosAbajo++;
                                     else pixelesCambiadosArriba++;
                                 }
                             }
                         }
-
-                        let esReboteReal = (pixelesCambiadosAbajo > 18 && pixelesCambiadosAbajo < 250) && (pixelesCambiadosAbajo > pixelesCambiadosArriba * 1.3);
-
-                        if (esReboteReal && !cooldownBote) {
+                        if ((pixelesCambiadosAbajo > 18 && pixelesCambiadosAbajo < 250) && (pixelesCambiadosAbajo > pixelesCambiadosArriba * 1.3) && !cooldownBote) {
                             dribbles++;
                             movimientosBoteValidos++;
                             playSound(500 + (dribbles % 5) * 30);
@@ -1174,11 +1092,9 @@
                         }
                     }
                     lastImageData = currentData;
-
                     loopId = requestAnimationFrame(loopMonitoreo);
                 }
             };
-
             loopId = requestAnimationFrame(loopMonitoreo);
         }
 
@@ -1186,8 +1102,7 @@
             faseEntrenamiento = 'activo';
             dribbles = 0;
             movimientosBoteValidos = 0;
-            let tiempoTotal = 30;
-            let tiempoRestante = tiempoTotal;
+            let tiempoRestante = 30;
             const isEs = currentUser && currentUser.idioma === 'es';
 
             document.getElementById('btn-iniciar-cam').style.display = 'none';
@@ -1200,14 +1115,11 @@
             timer = setInterval(() => {
                 tiempoRestante--;
                 actualizarDisplayTiempo(tiempoRestante);
-                
-                let porcentaje = ((tiempoTotal - tiempoRestante) / tiempoTotal) * 100;
-                document.getElementById('progreso-bar').style.width = Math.min(porcentaje, 100) + "%";
+                document.getElementById('progreso-bar').style.width = `${((30 - tiempoRestante) / 30) * 100}%`;
 
                 if (tiempoRestante <= 0) {
                     clearInterval(timer);
                     detenerCamaraYProcesos();
-                    coachSay(isEs ? "¡Tiempo terminado! Evaluando rendimiento..." : "Time's up! Evaluating performance...");
                     procesarResultadosFinales();
                 }
             }, 1000);
@@ -1215,34 +1127,20 @@
 
         function procesarResultadosFinales() {
             let isEs = currentUser && currentUser.idioma === 'es';
-            
             let botesReales = Math.min(dribbles, movimientosBoteValidos + 15);
             if (dribbles < 5) botesReales = dribbles;
 
             let finalScore = Math.max(Math.min(Math.floor(botesReales * 1.2), 100), 10);
-            
-            let visionScore = Math.max(finalScore - 5, 30);
-            let controlScore = Math.max(finalScore - 12, 25);
-            let coordScore = Math.max(finalScore - 8, 35);
-            let rhythmScore = Math.max(finalScore - 10, 30);
-
             let sessionDate = new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             
             let xpGanado = Math.max(Math.floor(botesReales * 1.5) + 15, 10);
             currentUser.xp = (currentUser.xp || 0) + xpGanado;
             currentUser.score = finalScore;
-            currentUser.lastTraining = `${botesReales} ${isEs ? 'botes' : 'dribbles'} (${new Date().toLocaleDateString()})`;
+            currentUser.lastTraining = `${botesReales} ${isEs ? 'botes' : 'dribbles'}`;
             
             if (!currentUser.history) currentUser.history = [];
-            currentUser.history.unshift({
-                date: sessionDate,
-                dribbles: botesReales,
-                score: finalScore
-            });
-
-            if (!currentUser.maxDribbles || botesReales > currentUser.maxDribbles) {
-                currentUser.maxDribbles = botesReales;
-            }
+            currentUser.history.unshift({ date: sessionDate, dribbles: botesReales, score: finalScore });
+            if (!currentUser.maxDribbles || botesReales > currentUser.maxDribbles) currentUser.maxDribbles = botesReales;
 
             if (currentUser.xp >= 1000) currentUser.rank = "👑 HandleLab Master Ball";
             else if (currentUser.xp >= 600) currentUser.rank = "💎 Ball Diamond";
@@ -1254,41 +1152,14 @@
             localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
 
             document.getElementById('res-score').innerText = finalScore;
-            document.getElementById('res-vision').innerText = visionScore + "%";
-            document.getElementById('res-control').innerText = controlScore + "%";
-            document.getElementById('res-coord').innerText = coordScore + "%";
-            document.getElementById('res-rhythm').innerText = rhythmScore + "%";
+            document.getElementById('res-vision').innerText = Math.max(finalScore - 5, 30) + "%";
+            document.getElementById('res-control').innerText = Math.max(finalScore - 12, 25) + "%";
+            document.getElementById('res-coord').innerText = Math.max(finalScore - 8, 35) + "%";
+            document.getElementById('res-rhythm').innerText = Math.max(finalScore - 10, 30) + "%";
 
-            let errorText = "";
-            let drillText = "";
+            document.getElementById('res-error').innerText = botesReales < 10 ? (isEs ? "⚠️ Control bajo de balón" : "⚠️ Low ball control") : (isEs ? "⚠️ Mantén la postura baja" : "⚠️ Keep low posture");
+            document.getElementById('res-drill').innerText = isEs ? "3 minutos de botes continuos diarios." : "3 minutes of continuous daily dribbles.";
 
-            if (botesReales < 8) {
-                errorText = isEs ? 
-                    "⚠️ Sin botes detectados o control nulo: ¡No se registró un buen manejo de balón!" : 
-                    "⚠️ No dribbles detected or zero control: Proper ball handling was not recorded!";
-                drillText = isEs ? 
-                    "Ejercicio fundamental: 3 minutos de botes continuos contra el piso manteniendo la vista al frente." : 
-                    "Fundamental drill: 3 minutes of continuous pounding keeping your eyes up.";
-            } else if (botesReales < 25) {
-                errorText = isEs ? 
-                    "⚠️ Ritmo muy lento y pérdida de continuidad en la altura del bote." : 
-                    "⚠️ Very slow rhythm and loss of continuity in bounce height.";
-                drillText = isEs ? 
-                    "Series de control de muñeca con botes bajos rápidos." : 
-                    "Wrist control series with rapid low bounces.";
-            } else {
-                errorText = isEs ? 
-                    "⚠️ Ligera oscilación en la mano débil durante el cruce." : 
-                    "⚠️ Slight wavering in the weak hand during crossover.";
-                drillText = isEs ? 
-                    "Drills de cambio de dirección en espejo por 2 minutos." : 
-                    "Mirror change of direction drills for 2 minutes.";
-            }
-
-            document.getElementById('res-error').innerText = errorText;
-            document.getElementById('res-drill').innerText = drillText;
-
-            coachSay(errorText);
             switchScreen('results-screen');
         }
 
@@ -1298,28 +1169,25 @@
             document.getElementById('timer').innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
         }
 
+        // MÓDULO 10: Historial (Guardar y Evolución)
         function openHistoryModule() {
             const container = document.getElementById('history-container');
             container.innerHTML = "";
             const isEs = currentUser && currentUser.idioma === 'es';
-
+            
             if (!currentUser.history || currentUser.history.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color:#777; font-size:0.75rem;">${isEs ? 'No hay sesiones registradas aún.' : 'No training sessions recorded yet.'}</p>`;
+                container.innerHTML = `<p style="text-align:center; color:#777;">${isEs ? 'Sin sesiones registradas.' : 'No sessions recorded.'}</p>`;
+                document.getElementById('hist-weekly-avg').innerText = "0";
+                document.getElementById('hist-monthly-growth').innerText = "+0%";
             } else {
+                let sumaScores = 0;
                 currentUser.history.forEach(item => {
-                    container.innerHTML += `
-                        <div class="history-item">
-                            <div>
-                                <span style="display:block; font-size:0.6rem;">${item.date}</span>
-                                <strong>${item.dribbles} ${isEs ? 'Botes' : 'Dribbles'}</strong>
-                            </div>
-                            <div style="text-align: right;">
-                                <span style="display:block; font-size:0.6rem;">Score</span>
-                                <strong style="color: #ff9933; font-size:0.8rem;">${item.score}</strong>
-                            </div>
-                        </div>
-                    `;
+                    sumaScores += item.score;
+                    container.innerHTML += `<div class="history-item"><div><span>${item.date}</span><strong>${item.dribbles} ${isEs ? 'Botes' : 'Dribbles'}</strong></div><div><strong style="color: #ff9933;">Score: ${item.score}</strong></div></div>`;
                 });
+                let promedio = Math.floor(sumaScores / currentUser.history.length);
+                document.getElementById('hist-weekly-avg').innerText = promedio;
+                document.getElementById('hist-monthly-growth').innerText = `+${Math.min(currentUser.history.length * 5, 100)}%`;
             }
             switchScreen('history-screen');
         }
@@ -1327,170 +1195,109 @@
         function openBadgesModule() {
             const container = document.getElementById('badges-container');
             container.innerHTML = "";
-            const isEs = currentUser && currentUser.idioma === 'es';
-
-            const totalSessions = currentUser.history ? currentUser.history.length : 0;
-            const maxDribbles = currentUser.maxDribbles || 0;
-            const currentXP = currentUser.xp || 0;
-
             const badges = [
-                { icon: "👶", title: "Rookie Start", desc: isEs ? "Completar registro" : "Complete registration", unlocked: true },
-                { icon: "🔥", title: "First Fire", desc: isEs ? "1 sesión completada" : "1 session completed", unlocked: totalSessions >= 1 },
-                { icon: "⚡", title: "Speed Demon", desc: isEs ? "Alcanzar 40+ botes" : "Reach 40+ dribbles", unlocked: maxDribbles >= 40 },
-                { icon: "🏆", title: "Elite Handler", desc: isEs ? "Alcanzar 80+ score" : "Reach 80+ score", unlocked: (currentUser.score >= 80) },
-                { icon: "🔄", title: "Consistent", desc: isEs ? "Completar 3 sesiones" : "Complete 3 sessions", unlocked: totalSessions >= 3 },
-                { icon: "👑", title: "Handle Master", desc: isEs ? "Alcanzar 1000+ XP" : "Reach 1000+ XP", unlocked: (currentXP >= 1000) }
+                { icon: "👶", title: "Rookie Start", desc: "Registration", unlocked: true },
+                { icon: "🔥", title: "First Fire", desc: "1 Session", unlocked: currentUser.history.length >= 1 },
+                { icon: "⚡", title: "Speed Demon", desc: "40+ Dribbles", unlocked: (currentUser.maxDribbles || 0) >= 40 },
+                { icon: "👑", title: "Master XP", desc: "1000 XP", unlocked: currentUser.xp >= 1000 }
             ];
-
-            badges.forEach((b) => {
-                container.innerHTML += `
-                    <div class="badge-card ${b.unlocked ? '' : 'locked'}" onclick="inspectBadge('${b.title}', '${b.desc}', ${b.unlocked})">
-                        <span>${b.icon}</span>
-                        <strong>${b.title}</strong>
-                        <p style="margin:2px 0 0 0; color:#aaa;">${b.desc}</p>
-                    </div>
-                `;
+            badges.forEach(b => {
+                container.innerHTML += `<div class="badge-card ${b.unlocked ? '' : 'locked'}"><span>${b.icon}</span><strong>${b.title}</strong><p style="margin:2px 0 0 0; color:#aaa;">${b.desc}</p></div>`;
             });
-
             switchScreen('badges-screen');
         }
 
         function openLeaderboardModule() {
             const container = document.getElementById('leaderboard-container');
             container.innerHTML = "";
-            const isEs = currentUser && currentUser.idioma === 'es';
-
             let leaders = [
-                { rank: 1, name: "AlexHoop", score: 98, level: "Elite Handler" },
-                { rank: 2, name: "Baller99", score: 92, level: "HandleLab Master" },
-                { rank: 3, name: "CrossoverKing", score: 88, level: "Hooper" },
-                { rank: 4, name: currentUser ? currentUser.alias : "You", score: currentUser ? (currentUser.score || 0) : 0, level: "Starter" },
-                { rank: 5, name: "SpeedyDribbles", score: 65, level: "Rookie" }
+                { name: "AlexHoop", score: 98, level: "Elite" },
+                { name: currentUser ? currentUser.alias : "You", score: currentUser ? (currentUser.score || 0) : 0, level: "Rookie" },
+                { name: "Baller99", score: 85, level: "Hooper" }
             ];
-
             leaders.sort((a, b) => b.score - a.score);
-
             leaders.forEach((item, index) => {
-                let badgeIcon = index === 0 ? "👑" : index === 1 ? "🥈" : index === 2 ? "🥉" : "🏀";
-                container.innerHTML += `
-                    <div class="leaderboard-item">
-                        <div>
-                            <span style="font-size:0.6rem; color:#888;">#${index + 1} ${badgeIcon}</span>
-                            <strong style="display:block; color:#fff;">${item.name}</strong>
-                            <span style="font-size:0.6rem; color:#ff9933;">${item.level}</span>
-                        </div>
-                        <div style="text-align: right;">
-                            <span style="font-size:0.6rem; color:#888;">Score</span>
-                            <strong style="color: #ff6600; font-size:0.9rem;">${item.score}</strong>
-                        </div>
-                    </div>
-                `;
+                container.innerHTML += `<div class="leaderboard-item"><div><span style="color:#888;">#${index + 1}</span> <strong>${item.name}</strong></div><strong style="color: #ff6600;">${item.score}</strong></div>`;
             });
-
             switchScreen('leaderboard-screen');
         }
 
         function openRanksModule() {
             const container = document.getElementById('ranks-container');
             container.innerHTML = "";
-            const isEs = currentUser && currentUser.idioma === 'es';
-            const currentXP = currentUser ? (currentUser.xp || 0) : 0;
-
+            const xp = currentUser ? currentUser.xp : 0;
             const ranks = [
-                { 
-                    name: "Ball Bronze", 
-                    symbol: "🟤", 
-                    cssClass: "ball-bronze", 
-                    req: "0 XP", 
-                    unlocked: true,
-                    descEs: "El punto de partida de todo buen ballhandler. Domina los fundamentos básicos y el bote estacionario.",
-                    descEn: "The starting point of every good ballhandler. Master basic fundamentals and stationary dribbling."
-                },
-                { 
-                    name: "Ball Silver", 
-                    symbol: "⚪", 
-                    cssClass: "ball-silver", 
-                    req: "100 XP", 
-                    unlocked: currentXP >= 100,
-                    descEs: "Demuestras control de velocidad y cambios de dirección básicos sin perder la vista al frente.",
-                    descEn: "Demonstrates speed control and basic changes of direction while keeping your eyes up."
-                },
-                { 
-                    name: "Ball Gold", 
-                    symbol: "🟡", 
-                    cssClass: "ball-gold", 
-                    req: "300 XP", 
-                    unlocked: currentXP >= 300,
-                    descEs: "Nivel avanzado. Capacidad de ejecutar crossovers rápidos y mantener presión constante.",
-                    descEn: "Advanced level. Ability to execute quick crossovers and maintain constant pressure."
-                },
-                { 
-                    name: "Ball Super Gold", 
-                    symbol: "🔥", 
-                    cssClass: "ball-supergold", 
-                    req: "400 XP", 
-                    unlocked: currentXP >= 400,
-                    descEs: "Tus manos arden en la duela. Manejo de balón fluido con cambios de ritmo letales.",
-                    descEn: "Your hands are burning on the court. Fluid ball handling with lethal rhythm changes."
-                },
-                { 
-                    name: "Ball Diamond", 
-                    symbol: "💎", 
-                    cssClass: "ball-diamond", 
-                    req: "600 XP", 
-                    unlocked: currentXP >= 600,
-                    descEs: "Precisión quirúrgica. Imposible de robar el balón en situaciones de uno contra uno.",
-                    descEn: "Surgical precision. Impossible to strip the ball in one-on-one situations."
-                },
-                { 
-                    name: "HandleLab Master Ball", 
-                    symbol: "👑", 
-                    cssClass: "ball-master", 
-                    req: "1000 XP", 
-                    unlocked: currentXP >= 1000,
-                    descEs: "El rango máximo de la leyenda. Dominio absoluto de la cancha y velocidad sobrehumana.",
-                    descEn: "The ultimate legend rank. Absolute court dominance and superhuman speed."
-                }
+                { name: "Ball Bronze", symbol: "🟤", css: "ball-bronze", req: "0 XP", unlocked: true, desc: "Basic ball handling fundamentals." },
+                { name: "Ball Silver", symbol: "⚪", css: "ball-silver", req: "100 XP", unlocked: xp >= 100, desc: "Basic speed control." },
+                { name: "Ball Gold", symbol: "🟡", css: "ball-gold", req: "300 XP", unlocked: xp >= 300, desc: "Fast crossovers." },
+                { name: "HandleLab Master", symbol: "👑", css: "ball-master", req: "1000 XP", unlocked: xp >= 1000, desc: "Absolute mastery." }
             ];
-
             ranks.forEach(r => {
-                let descText = isEs ? r.descEs : r.descEn;
-                let statusText = r.unlocked ? (isEs ? '🟢 Desbloqueado' : '🟢 Unlocked') : (isEs ? '🔒 Bloqueado' : '🔒 Locked');
-                
-                container.innerHTML += `
-                    <div class="rank-card ${r.unlocked ? '' : 'locked'}" onclick="showRankDetails('${r.symbol}', '${r.name}', '${r.req}', '${descText.replace(/'/g, "\\'")}', ${r.unlocked})">
-                        <div class="ball-icon-container ${r.cssClass}">${r.symbol}</div>
-                        <div class="rank-info">
-                            <h3>${r.name}</h3>
-                            <p>${isEs ? 'Requisito: ' : 'Requirement: '}${r.req}</p>
-                            <span style="font-size:0.55rem; color:${r.unlocked ? '#00ff66' : '#777'};">${statusText}</span>
-                        </div>
-                    </div>
-                `;
+                container.innerHTML += `<div class="rank-card" onclick="showRank('${r.symbol}', '${r.name}', '${r.req}', '${r.desc}', ${r.unlocked})"><div class="ball-icon-container ${r.css}">${r.symbol}</div><div><h3>${r.name}</h3><p style="margin:0; color:#aaa;">Req: ${r.req}</p></div></div>`;
             });
-
             switchScreen('ranks-screen');
         }
 
-        function showRankDetails(symbol, name, req, desc, unlocked) {
-            const isEs = currentUser && currentUser.idioma === 'es';
+        function showRank(symbol, name, req, desc, unlocked) {
             document.getElementById('modal-icon').innerText = symbol;
             document.getElementById('modal-title').innerText = name;
-            
-            let statusBadge = unlocked ? (isEs ? "Estado: DESBLOQUEADO 🟢" : "Status: UNLOCKED 🟢") : (isEs ? "Estado: BLOQUEADO 🔒" : "Status: LOCKED 🔒");
-            document.getElementById('modal-desc').innerHTML = `${desc}<br><br><strong style="color:#ff9933;">Req: ${req}</strong><br><span style="font-size:0.65rem; color:${unlocked ? '#00ff66':'#ff4444'};">${statusBadge}</span>`;
-            
+            document.getElementById('modal-desc').innerHTML = `${desc}<br><br><strong>Req: ${req}</strong><br>${unlocked ? '🟢 Unlocked' : '🔒 Locked'}`;
             document.getElementById('rank-modal').style.display = 'flex';
         }
 
-        function closeRankModal() {
-            document.getElementById('rank-modal').style.display = 'none';
+        function closeRankModal() { document.getElementById('rank-modal').style.display = 'none'; }
+
+        function openMissionsModule() {
+            const container = document.getElementById('missions-container');
+            container.innerHTML = "";
+            const isEs = currentUser && currentUser.idioma === 'es';
+            const missions = [
+                { title: isEs ? "Misión 1: Sesión Diaria" : "Mission 1: Daily Session", reward: "+50 XP", done: currentUser.history.length > 0 },
+                { title: isEs ? "Misión 2: Rompe Record (30+ botes)" : "Mission 2: Break Record", reward: "+100 XP", done: (currentUser.maxDribbles || 0) >= 30 },
+                { title: isEs ? "Misión 3: Alcanza Nivel Silver" : "Mission 3: Reach Silver", reward: "+150 XP", done: currentUser.xp >= 100 }
+            ];
+            missions.forEach(m => {
+                container.innerHTML += `<div class="mission-item"><div><strong>${m.title}</strong><span style="display:block; color:#ff9933; font-size:0.6rem;">Reward: ${m.reward}</span></div><span style="font-size:0.65rem; color:${m.done ? '#00ff66':'#777'}">${m.done ? '✅ Completed' : '⏳ Pending'}</span></div>`;
+            });
+            switchScreen('missions-screen');
         }
 
-        function inspectBadge(title, desc, unlocked) {
+        function openAcademyModule() {
+            const container = document.getElementById('academy-container');
+            container.innerHTML = "";
             const isEs = currentUser && currentUser.idioma === 'es';
-            let statusText = unlocked ? (isEs ? "Estado: DESBLOQUEADO 🟢" : "Status: UNLOCKED 🟢") : (isEs ? "Estado: BLOQUEADO 🔒" : "Status: LOCKED 🔒");
-            alert(`${title}\n${desc}\n\n${statusText}`);
+            const tutorials = [
+                { title: isEs ? "1. Bote Estacionario Bajo" : "1. Low Stationary Dribble", text: isEs ? "Mantén las rodillas flexionadas y la mano encima del balón." : "Keep knees bent and hand on top of the ball." },
+                { title: isEs ? "2. Crossover Básico" : "2. Basic Crossover", text: isEs ? "Pasa el balón en V de una mano a otra con velocidad." : "Pass the ball in a V shape quickly from hand to hand." },
+                { title: isEs ? "3. Cambio entre Piernas" : "3. Between the Legs", text: isEs ? "Adelanta el pie contrario y bota firme por debajo." : "Step forward with opposite foot and bounce firmly underneath." }
+            ];
+            tutorials.forEach(t => {
+                container.innerHTML += `<div class="academy-item" onclick="showAcademy('${t.title}', '${t.text.replace(/'/g, "\\'")}')"><div><strong>${t.title}</strong><span style="display:block; color:#aaa; font-size:0.6rem;">Tap to view guide</span></div><span>➡️</span></div>`;
+            });
+            switchScreen('academy-screen');
+        }
+
+        function showAcademy(title, text) {
+            document.getElementById('academy-modal-title').innerText = title;
+            document.getElementById('academy-modal-desc').innerText = text;
+            document.getElementById('academy-modal').style.display = 'flex';
+        }
+
+        function closeAcademyModal() { document.getElementById('academy-modal').style.display = 'none'; }
+
+        function openSettingsModule() {
+            document.getElementById('settings-alias').value = currentUser.alias;
+            document.getElementById('settings-idioma').value = currentUser.idioma;
+            switchScreen('settings-screen');
+        }
+
+        function saveSettings() {
+            currentUser.alias = document.getElementById('settings-alias').value.trim() || currentUser.alias;
+            currentUser.idioma = document.getElementById('settings-idioma').value;
+            localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
+            loadDashboard(currentUser);
+            alert(currentUser.idioma === 'es' ? "¡Configuración guardada con éxito!" : "Settings saved successfully!");
+            switchScreen('dashboard-screen');
         }
 
         function returnToDashboard() {
@@ -1499,8 +1306,7 @@
         }
 
         function resetApp() {
-            const isEs = currentUser && currentUser.idioma === 'es';
-            if (confirm(isEs ? "¿Quieres reiniciar y probar el flujo de bienvenida de nuevo?" : "Do you want to reset and test the welcome flow again?")) {
+            if (confirm("Reset app?")) {
                 localStorage.removeItem('handlelab_user');
                 currentUser = null;
                 switchScreen('welcome-screen');
@@ -1509,3 +1315,4 @@
     </script>
 </body>
 </html>
+
