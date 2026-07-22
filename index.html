@@ -519,7 +519,6 @@
             font-size: 0.75rem;
         }
 
-        /* Leaderboard styles for Module 7 */
         .leaderboard-list {
             display: flex;
             flex-direction: column;
@@ -538,6 +537,81 @@
             justify-content: space-between;
             align-items: center;
             font-size: 0.75rem;
+        }
+
+        /* Ball Ranks styles for Module 8 */
+        .ranks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 230px;
+            overflow-y: auto;
+            margin-bottom: 8px;
+        }
+
+        .rank-card {
+            background: rgba(20, 20, 25, 0.95);
+            border: 1px solid #333;
+            padding: 8px 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.7rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rank-card.locked {
+            opacity: 0.45;
+            filter: grayscale(0.8);
+        }
+
+        .ball-icon-container {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+        }
+
+        /* Unique designs for each ball rank */
+        .ball-bronze { background: radial-gradient(circle at 30% 30%, #cd7f32, #5c3a21); border: 1px solid #a05a2c; }
+        .ball-silver { background: radial-gradient(circle at 30% 30%, #e0e0e0, #757575); border: 1px solid #b0b0b0; }
+        .ball-gold { background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b); border: 1px solid #ffcc00; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        .ball-supergold { background: radial-gradient(circle at 30% 30%, #ff4500, #ff8c00, #ffd700); border: 2px solid #ffea00; animation: superGoldGlow 1.5s infinite alternate; }
+        .ball-diamond { background: radial-gradient(circle at 30% 30%, #00ffff, #008b8b, #1e90ff); border: 2px solid #00ffff; animation: diamondGlow 1.5s infinite alternate; }
+        .ball-master { background: radial-gradient(circle at 30% 30%, #9400d3, #ff1493, #ffd700); border: 2px solid #ff00ff; animation: masterGlow 1.2s infinite alternate; }
+
+        @keyframes superGoldGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 69, 0, 0.8); }
+            100% { box-shadow: 0 0 15px rgba(255, 215, 0, 1); }
+        }
+
+        @keyframes diamondGlow {
+            0% { box-shadow: 0 0 5px rgba(0, 255, 255, 0.7); }
+            100% { box-shadow: 0 0 18px rgba(0, 191, 255, 1); }
+        }
+
+        @keyframes masterGlow {
+            0% { box-shadow: 0 0 8px rgba(148, 0, 211, 0.9); }
+            100% { box-shadow: 0 0 20px rgba(255, 20, 147, 1); }
+        }
+
+        .rank-info h3 {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #fff;
+        }
+
+        .rank-info p {
+            margin: 2px 0 0 0;
+            font-size: 0.62rem;
+            color: #aaa;
         }
 
         .screen { display: none; flex-direction: column; height: 100%; padding: 12px; box-sizing: border-box; }
@@ -649,6 +723,7 @@
             <button class="btn btn-secondary" onclick="openHistoryModule()">TRAINING HISTORY (MOD 5)</button>
             <button class="btn btn-secondary" onclick="openBadgesModule()">BADGES & AWARDS (MOD 6)</button>
             <button class="btn btn-secondary" onclick="openLeaderboardModule()">GLOBAL LEADERBOARD (MOD 7)</button>
+            <button class="btn btn-secondary" onclick="openRanksModule()">BALL RANKS (MOD 8)</button>
             <button class="btn btn-danger" onclick="resetApp()">🔄 RESET / LOG OUT</button>
         </div>
 
@@ -729,6 +804,16 @@
             <p class="subtitle">Global Leaderboard</p>
 
             <div id="leaderboard-container" class="leaderboard-list"></div>
+
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
+        </div>
+
+        <!-- MODULE 8: Ball Ranks Screen -->
+        <div id="ranks-screen" class="screen">
+            <h1>MODULE 8</h1>
+            <p class="subtitle">Ball Ranks & Evolution</p>
+
+            <div id="ranks-container" class="ranks-list"></div>
 
             <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">RETURN TO DASHBOARD</button>
         </div>
@@ -1092,9 +1177,13 @@
                 currentUser.maxDribbles = botesReales;
             }
 
-            if (finalScore >= 80) currentUser.rank = "🟡 Gold Ball";
-            else if (finalScore >= 50) currentUser.rank = "⚪ Silver Ball";
-            else currentUser.rank = "🟤 Bronze Ball";
+            // Assign ball rank based on score or XP
+            if (currentUser.xp >= 1000) currentUser.rank = "👑 HandleLab Master Ball";
+            else if (currentUser.xp >= 600) currentUser.rank = "💎 Ball Diamond";
+            else if (currentUser.xp >= 400) currentUser.rank = "🔥 Ball Super Gold";
+            else if (currentUser.score >= 80) currentUser.rank = "🟡 Ball Gold";
+            else if (currentUser.score >= 50) currentUser.rank = "⚪ Ball Silver";
+            else currentUser.rank = "🟤 Ball Bronze";
 
             localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
 
@@ -1205,7 +1294,6 @@
             container.innerHTML = "";
             const isEs = currentUser && currentUser.idioma === 'es';
 
-            // Global mock leaderboard combined with user current score
             let leaders = [
                 { rank: 1, name: "AlexHoop", score: 98, level: "Elite Handler" },
                 { rank: 2, name: "Baller99", score: 92, level: "HandleLab Master" },
@@ -1214,7 +1302,6 @@
                 { rank: 5, name: "SpeedyDribbles", score: 65, level: "Rookie" }
             ];
 
-            // Sort leaderboard by score descending
             leaders.sort((a, b) => b.score - a.score);
 
             leaders.forEach((item, index) => {
@@ -1235,6 +1322,37 @@
             });
 
             switchScreen('leaderboard-screen');
+        }
+
+        function openRanksModule() {
+            const container = document.getElementById('ranks-container');
+            container.innerHTML = "";
+            const isEs = currentUser && currentUser.idioma === 'es';
+            const currentXP = currentUser ? (currentUser.xp || 0) : 0;
+
+            const ranks = [
+                { name: "Ball Bronze", symbol: "🟤", cssClass: "ball-bronze", req: "0 XP", unlocked: true },
+                { name: "Ball Silver", symbol: "⚪", cssClass: "ball-silver", req: "100 XP", unlocked: currentXP >= 100 },
+                { name: "Ball Gold", symbol: "🟡", cssClass: "ball-gold", req: "300 XP", unlocked: currentXP >= 300 },
+                { name: "Ball Super Gold", symbol: "🔥", cssClass: "ball-supergold", req: "400 XP", unlocked: currentXP >= 400 },
+                { name: "Ball Diamond", symbol: "💎", cssClass: "ball-diamond", req: "600 XP", unlocked: currentXP >= 600 },
+                { name: "HandleLab Master Ball", symbol: "👑", cssClass: "ball-master", req: "1000 XP", unlocked: currentXP >= 1000 }
+            ];
+
+            ranks.forEach(r => {
+                container.innerHTML += `
+                    <div class="rank-card ${r.unlocked ? '' : 'locked'}">
+                        <div class="ball-icon-container ${r.cssClass}">${r.symbol}</div>
+                        <div class="rank-info">
+                            <h3>${r.name}</h3>
+                            <p>${isEs ? 'Requisito: ' : 'Requirement: '}${r.req}</p>
+                            <span style="font-size:0.55rem; color:${r.unlocked ? '#00ff66' : '#777'};">${r.unlocked ? (isEs ? '🟢 Desbloqueado' : '🟢 Unlocked') : (isEs ? '🔒 Bloqueado' : '🔒 Locked')}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            switchScreen('ranks-screen');
         }
 
         function inspectBadge(title, desc, unlocked) {
