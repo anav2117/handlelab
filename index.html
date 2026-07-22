@@ -7,16 +7,16 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>HandleLab</title>
     <style>
-        body { background: #060810; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 10px 0; box-sizing: border-box; touch-action: manipulation; }
-        .box { width: 95%; max-width: 400px; border: 2px solid #ff6600; padding: 10px; border-radius: 18px; background: rgba(10,10,15,0.98); display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        body { background: #060810; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 5px; box-sizing: border-box; touch-action: manipulation; }
+        .box { width: 100%; max-width: 380px; border: 2px solid #ff6600; padding: 8px; border-radius: 16px; background: rgba(10,10,15,0.98); display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         
-        h1 { margin: 0 0 5px 0; font-size: 1.1rem; text-align: center; }
+        h1 { margin: 0 0 3px 0; font-size: 1rem; text-align: center; }
 
-        /* Cámara con altura controlada para dejar espacio libre abajo */
+        /* Cámara más compacta para garantizar que todo lo demás sea visible sin scroll */
         .video-container {
             width: 100%;
-            height: 250px; 
-            border-radius: 12px;
+            height: 160px; 
+            border-radius: 10px;
             overflow: hidden;
             border: 2px solid #ff6600;
             background: #000;
@@ -24,7 +24,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         video {
             width: 100%;
@@ -36,12 +36,12 @@
         /* Reloj flotando en la parte superior dentro de la cámara */
         .timer-overlay {
             position: absolute;
-            top: 8px;
+            top: 6px;
             background: rgba(0, 0, 0, 0.75);
             border: 1px solid #ff6600;
-            padding: 3px 12px;
-            border-radius: 12px;
-            font-size: 1.5rem;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 1.3rem;
             color: #ff6600;
             font-weight: 800;
             letter-spacing: 1px;
@@ -49,36 +49,36 @@
 
         .controls-panel {
             background: rgba(20, 20, 25, 0.95);
-            padding: 8px;
-            border-radius: 12px;
+            padding: 6px;
+            border-radius: 10px;
             border: 1px solid #333;
         }
 
-        input, select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 8px; margin-bottom: 6px; width: 100%; box-sizing: border-box; border-radius: 8px; font-size: 13px; }
+        input, select { background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 6px; margin-bottom: 5px; width: 100%; box-sizing: border-box; border-radius: 6px; font-size: 12px; }
         
-        .stats-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 0.95rem; font-weight: bold; color: #ff9933; }
+        .stats-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; font-size: 0.9rem; font-weight: bold; color: #ff9933; }
         
-        .progreso-container { background: #111; height: 6px; border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
+        .progreso-container { background: #111; height: 5px; border-radius: 3px; margin-bottom: 6px; overflow: hidden; }
         .progreso-bar { height: 100%; background: #ff6600; width: 0%; transition: width 0.3s ease; }
 
-        .bottom-bar { display: flex; gap: 8px; }
-        .btn { background: #ff6600; color: #000; padding: 10px; border-radius: 8px; border: none; font-weight: 800; flex: 2; cursor: pointer; font-size: 14px; text-align: center; }
-        .btn-share { background: #222; color: #fff; border: 1px solid #444; flex: 1; font-size: 12px; padding: 10px; }
+        .bottom-bar { display: flex; gap: 6px; }
+        .btn { background: #ff6600; color: #000; padding: 8px; border-radius: 6px; border: none; font-weight: 800; flex: 2; cursor: pointer; font-size: 13px; text-align: center; }
+        .btn-share { background: #222; color: #fff; border: 1px solid #444; flex: 1; font-size: 11px; padding: 8px; }
         
-        #historial { font-size: 0.7rem; text-align: left; color: #888; border-top: 1px solid #222; padding-top: 4px; margin-top: 6px; max-height: 35px; overflow-y: auto; }
+        #historial { font-size: 0.65rem; text-align: left; color: #888; border-top: 1px solid #222; padding-top: 2px; margin-top: 4px; max-height: 25px; overflow-y: auto; }
     </style>
 </head>
 <body>
     <div class="box">
         <h1>HandleLab</h1>
         
-        <!-- Cámara en vertical optimizada -->
+        <!-- Cámara compactada para asegurar visibilidad total -->
         <div class="video-container">
             <video id="webcam" autoplay playsinline muted></video>
             <div id="timer" class="timer-overlay">00:00</div>
         </div>
 
-        <!-- Panel de control completamente visible -->
+        <!-- Panel de control completamente a la vista -->
         <div class="controls-panel">
             <input type="text" id="username" placeholder="Nombre del jugador" onchange="usuario = this.value">
             <select id="programa">
@@ -97,7 +97,7 @@
                 <button class="btn btn-share" onclick="compartirResultados()">COMPARTIR</button>
             </div>
             
-            <div id="historial"><ul id="lista-sesiones" style="margin:0; padding-left:12px;"></ul></div>
+            <div id="historial"><ul id="lista-sesiones" style="margin:0; padding-left:10px;"></ul></div>
         </div>
     </div>
 
