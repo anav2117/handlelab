@@ -172,7 +172,6 @@
             <div id="timer" class="timer-overlay">00:00</div>
         </div>
 
-        <!-- Canvas oculto para procesar los pixeles de la cámara -->
         <canvas id="canvas-process" style="display:none;"></canvas>
 
         <div class="controls-panel">
@@ -212,12 +211,15 @@
         async function iniciarCamara() {
             const videoElement = document.getElementById('webcam');
             try {
+                // Forzamos compatibilidad general solicitando video frontal básico
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { width: { ideal: 320 }, height: { ideal: 240 }, facingMode: "user" }
+                    video: true,
+                    audio: false
                 });
                 videoElement.srcObject = stream;
             } catch (error) {
                 console.error("Error al acceder a la cámara: ", error);
+                alert("No se pudo acceder a la cámara. Por favor, verifica los permisos en tu navegador.");
             }
         }
 
@@ -236,7 +238,13 @@
             window.speechSynthesis.speak(msg);
         }
 
-        function iniciarEntrenamiento() {
+        async function iniciarEntrenamiento() {
+            // Asegurar que la cámara esté activa al presionar iniciar por si falló al cargar
+            const videoElement = document.getElementById('webcam');
+            if (!videoElement.srcObject) {
+                await iniciarCamara();
+            }
+
             botes = 0;
             entrenando = true;
             let tiempoTotal = parseInt(document.getElementById('programa').value);
@@ -246,8 +254,6 @@
             actualizarDisplayTiempo(tiempoRestante);
             coachSay("¡Comenzamos!");
 
-            // Bucle de análisis de movimiento por fotogramas
-            const video = document.getElementById('webcam');
             const canvas = document.getElementById('canvas-process');
             const ctx = canvas.getContext('2d');
             canvas.width = 100;
@@ -256,35 +262,34 @@
             const procesarMovimiento = () => {
                 if (!entrenando) return;
 
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const currentData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+                if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+                    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                    const currentData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
-                if (lastImageData) {
-                    let cambios = 0;
-                    // Analizamos los pixeles para detectar cambios bruscos (el bote del balón)
-                    for (let i = 0; i < currentData.length; i += 16) { // Muestreo optimizado para velocidad
-                        let diff = Math.abs(currentData[i] - lastImageData[i]);
-                        if (diff > 45) { // Sensibilidad de cambio de luz/color
-                            cambios++;
+                    if (lastImageData) {
+                        let cambios = 0;
+                        for (let i = 0; i < currentData.length; i += 16) {
+                            let diff = Math.abs(currentData[i] - lastImageData[i]);
+                            if (diff > 45) {
+                                cambios++;
+                            }
+                        }
+
+                        if (cambios > 120 && !cooldownBote) {
+                            botes++;
+                            playSound();
+                            document.getElementById('counter').innerText = "Botes: " + botes;
+                            cooldownBote = true;
+                            setTimeout(() => { cooldownBote = false; }, 180);
                         }
                     }
-
-                    // Si detectamos suficiente movimiento y pasó el breve cooldown para evitar doble conteo
-                    if (cambios > 120 && !cooldownBote) {
-                        botes++;
-                        playSound();
-                        document.getElementById('counter').innerText = "Botes: " + botes;
-                        cooldownBote = true;
-                        setTimeout(() => { cooldownBote = false; }, 180); // Pausa mínima de 180ms entre botes
-                    }
+                    lastImageData = currentData;
                 }
-                lastImageData = currentData;
                 if (entrenando) requestAnimationFrame(procesarMovimiento);
             };
 
             requestAnimationFrame(procesarMovimiento);
             
-            // Reloj principal de la sesión
             timer = setInterval(() => {
                 tiempoRestante--;
                 actualizarDisplayTiempo(tiempoRestante);
@@ -332,3 +337,4 @@
     </script>
 </body>
 </html>
+
