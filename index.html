@@ -280,7 +280,8 @@
         }
 
         function compartirResultados() {
-            const programa = document.getElementById('programa'].options[document.getElementById('programa'].selectedIndex].text;
+            const selectProg = document.getElementById('programa');
+            const programa = selectProg.options[selectProg.selectedIndex].text;
             const texto = `🏀 ¡HandleLab! Sesión: ${programa}. Logré: ${botes} botes. ¡Atrévete a superarme!`;
             if (navigator.share) { navigator.share({ title: 'Mi récord HandleLab', text: texto }); } 
             else { prompt("Copia esto:", texto); }
@@ -288,4 +289,3 @@
     </script>
 </body>
 </html>
-
