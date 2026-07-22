@@ -11,7 +11,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            background: #060810;
+            background: #000;
             color: #fff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             overflow: hidden;
@@ -25,18 +25,20 @@
         }
 
         .box {
-            width: 92%;
-            max-width: 360px;
-            height: 94vh;
-            border: 2px solid #ff6600;
-            padding: 8px;
-            border-radius: 16px;
-            background: rgba(10,10,15,0.98);
+            width: 100vw;
+            height: 100vh;
+            max-width: none;
+            max-height: none;
+            border: none;
+            padding: 0;
+            border-radius: 0;
+            background: #000;
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            box-shadow: none;
             overflow-y: auto;
+            position: relative;
         }
         
         h1 { 
@@ -78,26 +80,46 @@
         }
 
         .btn { 
-            background: linear-gradient(135deg, #ff6600, #ff3300);
+            background: linear-gradient(135deg, #ff3300, #ff6600, #ffcc00);
             color: #fff; 
-            padding: 12px; 
-            border-radius: 10px; 
-            border: 1px solid #ff9933; 
+            padding: 16px 24px; 
+            border-radius: 14px; 
+            border: 2px solid #ffcc00; 
             font-weight: 900; 
-            width: 100%; 
+            width: 85%; 
+            max-width: 320px;
             cursor: pointer; 
-            font-size: 14px; 
+            font-size: 1.1rem; 
             text-align: center;
-            margin-top: 8px;
-            letter-spacing: 1px;
-            box-shadow: 0 0 15px rgba(255, 102, 0, 0.6);
-            animation: firePulse 2s infinite ease-in-out;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 0 25px rgba(255, 69, 0, 0.9), 0 0 50px rgba(255, 140, 0, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.5);
+            animation: franticFire 1.2s infinite ease-in-out;
+            position: relative;
+            z-index: 10;
         }
 
-        @keyframes firePulse {
-            0% { box-shadow: 0 0 10px rgba(255, 102, 0, 0.5); transform: scale(1); }
-            50% { box-shadow: 0 0 22px rgba(255, 153, 0, 0.9), inset 0 0 10px rgba(255, 255, 255, 0.3); transform: scale(1.02); }
-            100% { box-shadow: 0 0 10px rgba(255, 102, 0, 0.5); transform: scale(1); }
+        @keyframes franticFire {
+            0% { 
+                box-shadow: 0 0 20px rgba(255, 50, 0, 0.8), 0 0 40px rgba(255, 120, 0, 0.5); 
+                transform: scale(1) translateY(0); 
+                filter: brightness(1);
+            }
+            30% { 
+                box-shadow: 0 0 35px rgba(255, 100, 0, 1), 0 0 65px rgba(255, 200, 0, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.8); 
+                transform: scale(1.05) translateY(-2px); 
+                filter: brightness(1.2);
+            }
+            60% { 
+                box-shadow: 0 0 45px rgba(255, 30, 0, 0.9), 0 0 80px rgba(255, 150, 0, 0.9); 
+                transform: scale(1.03) translateY(1px); 
+                filter: brightness(1.15);
+            }
+            100% { 
+                box-shadow: 0 0 20px rgba(255, 50, 0, 0.8), 0 0 40px rgba(255, 120, 0, 0.5); 
+                transform: scale(1) translateY(0); 
+                filter: brightness(1);
+            }
         }
 
         .btn-secondary {
@@ -107,6 +129,9 @@
             margin-top: 6px;
             animation: none;
             box-shadow: none;
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
         }
 
         .btn-danger {
@@ -118,33 +143,43 @@
             padding: 6px;
             animation: none;
             box-shadow: none;
+            width: 100%;
         }
 
         .welcome-hero {
-            flex: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-end;
             align-items: center;
             text-align: center;
-            gap: 6px;
+            padding-bottom: 40px;
+            box-sizing: border-box;
+            z-index: 2;
         }
 
         .flash-title-container {
-            height: 35px;
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 2px;
+            z-index: 10;
         }
 
         .flash-typing-text {
-            font-size: 1.05rem;
+            font-size: 1.5rem;
             font-weight: 900;
             color: #ff6600;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(255, 102, 0, 0.6);
-            border-right: 2px solid #ff9933;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 15px rgba(255, 102, 0, 0.9), 0 0 30px rgba(255, 69, 0, 0.8);
+            border-right: 3px solid #ffcc00;
             white-space: nowrap;
             overflow: hidden;
             animation: blinkCaret 0.75s step-end infinite;
@@ -152,30 +187,49 @@
 
         @keyframes blinkCaret {
             from, to { border-color: transparent }
-            50% { border-color: #ff9933; }
+            50% { border-color: #ffcc00; }
         }
 
         .welcome-img-container {
-            width: 100%;
-            height: 350px;
-            border-radius: 12px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
-            border: 2px solid #ff6600;
             background: #000;
-            position: relative;
-            box-shadow: 0 0 25px rgba(255, 102, 0, 0.5);
+            z-index: 1;
         }
 
         .welcome-img-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            animation: interactiveZoom 3s infinite alternate ease-in-out;
+            animation: intenseBallZoom 4s infinite alternate ease-in-out;
         }
 
-        @keyframes interactiveZoom {
-            0% { transform: scale(1) translateY(0); filter: brightness(1); }
-            100% { transform: scale(1.06) translateY(-2px); filter: brightness(1.15) drop-shadow(0 0 10px rgba(255, 102, 0, 0.7)); }
+        @keyframes intenseBallZoom {
+            0% { transform: scale(1) translate(0, 0); filter: brightness(0.9) contrast(1.1); }
+            50% { transform: scale(1.12) translate(-1%, -1%) rotate(0.5deg); filter: brightness(1.2) drop-shadow(0 0 25px rgba(255, 69, 0, 0.8)); }
+            100% { transform: scale(1.08) translate(1%, 1%) rotate(-0.5deg); filter: brightness(1.1) drop-shadow(0 0 20px rgba(255, 140, 0, 0.7)); }
+        }
+
+        .fire-aura-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 45vh;
+            background: linear-gradient(to top, rgba(255, 40, 0, 0.75), rgba(255, 140, 0, 0.35), transparent);
+            pointer-events: none;
+            z-index: 5;
+            animation: flameFlicker 1.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes flameFlicker {
+            0% { opacity: 0.6; transform: scaleY(0.95); }
+            50% { opacity: 0.95; transform: scaleY(1.05); }
+            100% { opacity: 0.75; transform: scaleY(1); }
         }
 
         .dashboard-header {
@@ -436,8 +490,9 @@
             font-size: 0.75rem;
         }
 
-        .screen { display: none; flex-direction: column; height: 100%; }
+        .screen { display: none; flex-direction: column; height: 100%; padding: 12px; box-sizing: border-box; }
         .screen.active { display: flex; }
+        #welcome-screen.screen.active { padding: 0; }
     </style>
 </head>
 <body>
@@ -447,10 +502,11 @@
             <div class="flash-title-container">
                 <span id="flash-text" class="flash-typing-text"></span>
             </div>
+            <div class="welcome-img-container">
+                <img src="Screenshot_20260714_122304_ChatGPT.jpg" alt="HandleLab Welcome">
+            </div>
+            <div class="fire-aura-overlay"></div>
             <div class="welcome-hero">
-                <div class="welcome-img-container">
-                    <img src="Screenshot_20260715_094703_ChatGPT.jpg" alt="HandleLab Welcome">
-                </div>
                 <button class="btn" onclick="switchScreen('register-screen')">START / INICIAR</button>
             </div>
         </div>
@@ -497,7 +553,7 @@
                 </select>
             </div>
 
-            <button class="btn" onclick="saveUserRegistration()">REGISTER</button>
+            <button class="btn btn-secondary" onclick="saveUserRegistration()" style="width:100%; margin-top:10px; padding:12px; font-size:14px; animation:none; box-shadow:none;">REGISTER</button>
         </div>
 
         <!-- MODULE 2: Home Dashboard -->
@@ -539,7 +595,7 @@
                 <p style="margin:0; color:#ccc;">Complete 1 session of 30s drible analysis.</p>
             </div>
 
-            <button class="btn" onclick="openCameraModule()">START ANALYSIS (MOD 3)</button>
+            <button class="btn btn-secondary" onclick="openCameraModule()">START ANALYSIS (MOD 3)</button>
             <button class="btn btn-secondary" onclick="openHistoryModule()">TRAINING HISTORY (MOD 5)</button>
             <button class="btn btn-secondary" onclick="openBadgesModule()">BADGES & AWARDS (MOD 6)</button>
             <button class="btn btn-danger" onclick="resetApp()">🔄 RESTART INTRO / LOGOUT</button>
@@ -562,7 +618,7 @@
                     <span id="counter">Dribbles: 0</span>
                 </div>
                 <div class="progreso-container"><div id="progreso-bar" class="progreso-bar"></div></div>
-                <button class="btn" id="btn-iniciar-cam" onclick="iniciarAnalisisCamara()">START DRIBBLE</button>
+                <button class="btn btn-secondary" id="btn-iniciar-cam" onclick="iniciarAnalisisCamara()" style="width:100%; margin-top:6px; animation:none;">START DRIBBLE</button>
             </div>
         </div>
 
@@ -593,7 +649,7 @@
                 <p id="res-drill" style="margin:0; color:#ccc;">Pound dribble with eyes up.</p>
             </div>
 
-            <button class="btn" onclick="returnToDashboard()">BACK TO DASHBOARD</button>
+            <button class="btn btn-secondary" onclick="returnToDashboard()" style="width:100%; margin-top:6px; animation:none;">BACK TO DASHBOARD</button>
         </div>
 
         <!-- MODULE 5: Training History Screen -->
@@ -603,7 +659,7 @@
 
             <div id="history-container" class="history-list"></div>
 
-            <button class="btn" onclick="switchScreen('dashboard-screen')">BACK TO DASHBOARD</button>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">BACK TO DASHBOARD</button>
         </div>
 
         <!-- MODULE 6: Badges & Awards Screen -->
@@ -613,7 +669,7 @@
 
             <div id="badges-container" class="badges-grid"></div>
 
-            <button class="btn" onclick="switchScreen('dashboard-screen')">BACK TO DASHBOARD</button>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; margin-top:6px; animation:none;">BACK TO DASHBOARD</button>
         </div>
     </div>
 
@@ -638,7 +694,6 @@
         function iniciarEfectoFlash() {
             const words = ["Welcome to HandleLab", "Master Your Handle", "Ignite Your Game"];
             let i = 0;
-            let timerTyping;
 
             function typingEffect() {
                 let word = words[i].split("");
@@ -649,7 +704,7 @@
                         setTimeout(deletingEffect, 1500);
                         return;
                     }
-                    timerTyping = setTimeout(loopTyping, 90);
+                    setTimeout(loopTyping, 90);
                 };
                 loopTyping();
             }
@@ -665,7 +720,7 @@
                         setTimeout(typingEffect, 500);
                         return;
                     }
-                    timerTyping = setTimeout(loopDeleting, 45);
+                    setTimeout(loopDeleting, 45);
                 };
                 loopDeleting();
             }
