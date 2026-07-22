@@ -255,7 +255,6 @@
             font-size: 0.8rem;
         }
 
-        /* History List Styles (Module 5) */
         .history-list {
             display: flex;
             flex-direction: column;
@@ -284,6 +283,42 @@
             color: #ff6600;
         }
 
+        /* Module 6: Badges Styles */
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            max-height: 220px;
+            overflow-y: auto;
+            margin-bottom: 8px;
+        }
+
+        .badge-card {
+            background: rgba(20, 20, 25, 0.95);
+            border: 1px solid #333;
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.65rem;
+        }
+
+        .badge-card.locked {
+            opacity: 0.4;
+            filter: grayscale(1);
+        }
+
+        .badge-card span {
+            display: block;
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+        }
+
+        .badge-card strong {
+            color: #ff6600;
+            display: block;
+            font-size: 0.75rem;
+        }
+
         .screen { display: none; flex-direction: column; height: 100%; }
         .screen.active { display: flex; }
     </style>
@@ -292,14 +327,15 @@
     <div class="box">
         <!-- MODULE 1: Welcome Screen -->
         <div id="welcome-screen" class="screen active">
+            <h1>MODULE 1</h1>
+            <p class="subtitle">Welcome to HandleLab</p>
             <div style="margin: auto; text-align: center;">
-                <h1>🏀 HANDLELAB</h1>
                 <p style="font-size: 0.8rem; color: #ccc; margin: 15px 0;">Master your handle, elevate your game, and become an elite handler.</p>
                 <button class="btn" onclick="switchScreen('register-screen')">GET STARTED</button>
             </div>
         </div>
 
-        <!-- MODULE 1: Registration Form -->
+        <!-- MODULE 1B: Registration Form -->
         <div id="register-screen" class="screen">
             <h1>MODULE 1</h1>
             <p class="subtitle">Player Registration</p>
@@ -380,6 +416,7 @@
 
             <button class="btn" onclick="openCameraModule()">START ANALYSIS</button>
             <button class="btn btn-secondary" onclick="openHistoryModule()">VIEW TRAINING HISTORY</button>
+            <button class="btn btn-secondary" onclick="openBadgesModule()">VIEW BADGES & AWARDS</button>
         </div>
 
         <!-- MODULE 3: Camera & Dribble Analysis -->
@@ -444,6 +481,18 @@
 
             <button class="btn" onclick="switchScreen('dashboard-screen')">BACK TO DASHBOARD</button>
         </div>
+
+        <!-- MODULE 6: Badges & Awards Screen -->
+        <div id="badges-screen" class="screen">
+            <h1>MODULE 6</h1>
+            <p class="subtitle">Badges & Awards</p>
+
+            <div id="badges-container" class="badges-grid">
+                <!-- Se llena dinámicamente -->
+            </div>
+
+            <button class="btn" onclick="switchScreen('dashboard-screen')">BACK TO DASHBOARD</button>
+        </div>
     </div>
 
     <script>
@@ -486,6 +535,7 @@
                 rank: "🟤 Bronze Ball",
                 lastTraining: "None",
                 history: [],
+                maxDribbles: 0,
                 registrationDate: new Date().toLocaleDateString()
             };
 
@@ -613,6 +663,16 @@
                         score: finalScore
                     });
 
+                    if (!currentUser.maxDribbles || dribbles > currentUser.maxDribbles) {
+                        currentUser.maxDribbles = dribbles;
+                    }
+
+                    if (finalScore >= 80) {
+                        currentUser.rank = "🟡 Gold Ball";
+                    } else if (finalScore >= 50) {
+                        currentUser.rank = "⚪ Silver Ball";
+                    }
+
                     localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
 
                     document.getElementById('res-score').innerText = finalScore;
@@ -665,6 +725,35 @@
             switchScreen('history-screen');
         }
 
+        function openBadgesModule() {
+            const container = document.getElementById('badges-container');
+            container.innerHTML = "";
+
+            const totalSessions = currentUser.history ? currentUser.history.length : 0;
+            const maxDribbles = currentUser.maxDribbles || 0;
+
+            const badges = [
+                { icon: "👶", title: "Rookie Start", desc: "Complete registration", unlocked: true },
+                { icon: "🔥", title: "First Fire", desc: "Complete 1 session", unlocked: totalSessions >= 1 },
+                { icon: "⚡", title: "Speed Demon", desc: "Reach 50+ dribbles", unlocked: maxDribbles >= 50 },
+                { icon: "🏆", title: "Elite Handler", desc: "Reach 80+ score", unlocked: (currentUser.score >= 80) },
+                { icon: "🔄", title: "Consistent", desc: "Complete 3 sessions", unlocked: totalSessions >= 3 },
+                { icon: "👑", title: "Handle Master", desc: "Reach 95+ score", unlocked: (currentUser.score >= 95) }
+            ];
+
+            badges.forEach(b => {
+                container.innerHTML += `
+                    <div class="badge-card ${b.unlocked ? '' : 'locked'}">
+                        <span>${b.icon}</span>
+                        <strong>${b.title}</strong>
+                        <p style="margin:2px 0 0 0; color:#aaa;">${b.desc}</p>
+                    </div>
+                `;
+            });
+
+            switchScreen('badges-screen');
+        }
+
         function returnToDashboard() {
             loadDashboard(currentUser);
             switchScreen('dashboard-screen');
@@ -672,3 +761,4 @@
     </script>
 </body>
 </html>
+
