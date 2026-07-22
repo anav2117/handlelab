@@ -1352,3 +1352,28 @@
     </script>
 </body>
 </html>
+
+// MÓDULO 12: Control de Sesión y Persistencia Avanzada de Pantallas
+function gestionarEstadoSesion() {
+    const savedUser = localStorage.getItem('handlelab_user');
+    const privacyAccepted = localStorage.getItem('handlelab_privacy');
+
+    if (savedUser && privacyAccepted === 'true') {
+        currentUser = JSON.parse(savedUser);
+        loadDashboard(currentUser);
+        switchScreen('dashboard-screen');
+    } else {
+        switchScreen('welcomescreen');
+    }
+}
+
+// Validación de salida y limpieza de tokens locales
+function cerrarSesionCompleta() {
+    if (confirm("¿Estás seguro de cerrar sesión y reiniciar el progreso actual?")) {
+        localStorage.removeItem('handlelab_user');
+        localStorage.removeItem('handlelab_privacy');
+        currentUser = null;
+        location.reload();
+    }
+}
+
