@@ -462,8 +462,6 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
-            max-height: 240px;
-            overflow-y: auto;
             margin-bottom: 6px;
         }
 
@@ -779,10 +777,10 @@
         <!-- MODULE 8: Ball Ranks Screen -->
         <div id="ranks-screen" class="screen">
             <h1>Ball Ranks & Evolution</h1>
-            <div style="flex:1; overflow-y:auto; margin-bottom:6px;">
+            <div style="flex: 1; overflow-y: auto; margin-bottom: 6px; max-height: calc(100vh - 120px); padding-right: 2px;">
                 <div id="ranks-container" class="ranks-list"></div>
             </div>
-            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%;">RETURN TO DASHBOARD</button>
+            <button class="btn btn-secondary" onclick="switchScreen('dashboard-screen')" style="width:100%; flex-shrink: 0;">RETURN TO DASHBOARD</button>
         </div>
 
         <!-- Daily Missions -->
@@ -1353,4 +1351,3 @@
     </script>
 </body>
 </html>
-
