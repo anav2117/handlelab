@@ -978,7 +978,7 @@
             document.getElementById('dash-alias').innerText = user.alias;
             document.getElementById('dash-level').innerText = (isEs ? "Nivel: " : "Level: ") + datosRPG.nivel;
             document.getElementById('dash-score').innerText = user.score || 0;
-            document.getElementById('dash-rank').innerText = user.rank || "🟤 Bronze";
+            document.getElementById('dash-rank').innerText = user.rank || "🟤 Ball Bronze";
 
             document.getElementById('xp-rank-title').innerText = isEs ? `Rango: ${datosRPG.nivel}` : `Rank: ${datosRPG.nivel}`;
             document.getElementById('xp-counter-text').innerText = `${user.xp} / ${datosRPG.max} XP`;
@@ -1261,9 +1261,9 @@
             const ranks = [
                 { name: "Ball Bronze", symbol: "🟤", css: "ball-bronze", req: "0 XP", unlocked: true },
                 { name: "Ball Silver", symbol: "⚪", css: "ball-silver", req: "100 XP", unlocked: xp >= 100 },
-                { name: "Ball Gold", symbol: "🟡", css: "ball-gold", req: "300 XP", unlocked: xp >= 300 },
+                { name: "Ball Gold (Bola de Oro)", symbol: "🟡", css: "ball-gold", req: "300 XP", unlocked: xp >= 300 },
                 { name: "Ball Super Gold", symbol: "🔥", css: "ball-supergold", req: "400 XP", unlocked: xp >= 400 },
-                { name: "Ball Diamond", symbol: "💎", css: "ball-diamond", req: "600 XP", unlocked: xp >= 600 },
+                { name: "Ball Diamond (Diamante)", symbol: "💎", css: "ball-diamond", req: "600 XP", unlocked: xp >= 600 },
                 { name: "HandleLab Master Ball", symbol: "👑", css: "ball-master", req: "1000 XP", unlocked: xp >= 1000 }
             ];
 
@@ -1353,3 +1353,4 @@
     </script>
 </body>
 </html>
+
