@@ -841,9 +841,9 @@
     </div>
 
     <script>
-        // Configuración de Supabase
+        // Configuración de Supabase con la nueva llave Publishable integrada
         const SUPABASE_URL = 'https://fhruunueysytbiislijw.supabase.co';
-        const SUPABASE_ANON_KEY = 'Sb_publishable_wLNkgSsUsfcqznbJA2hQYw_X2VfsiLW';
+        const SUPABASE_ANON_KEY = 'sb_publishable_wLNkgSsUsfcqznbJA2hQYw_X2VfsiLW';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function saveUserProfile(userData) {
@@ -1383,4 +1383,3 @@
     </script>
 </body>
 </html>
-
