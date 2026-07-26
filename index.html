@@ -851,7 +851,7 @@
                 .from('profiles')
                 .upsert([
                     {
-                        alias: userData.alias,
+                        Alias: userData.alias,
                         xp: userData.xp,
                         score: userData.score,
                         rank: userData.rank,
@@ -930,7 +930,7 @@
             };
 
             localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
-            saveUserProfile(currentUser); // Sincroniza con Supabase al registrarse
+            saveUserProfile(currentUser); 
             loadDashboard(currentUser);
             switchScreen('dashboard-screen');
         }
@@ -1209,7 +1209,7 @@
             else currentUser.rank = "🟤 Ball Bronze";
 
             localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
-            saveUserProfile(currentUser); // Guarda automáticamente los datos en Supabase
+            saveUserProfile(currentUser);
 
             document.getElementById('res-score').innerText = finalScore;
             document.getElementById('res-vision').innerText = Math.max(finalScore - 5, 30) + "%";
@@ -1361,7 +1361,7 @@
             currentUser.alias = document.getElementById('settings-alias').value.trim() || currentUser.alias;
             currentUser.idioma = document.getElementById('settings-idioma').value;
             localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
-            saveUserProfile(currentUser); // Sincroniza cambios en Supabase
+            saveUserProfile(currentUser);
             loadDashboard(currentUser);
             alert(currentUser.idioma === 'es' ? "¡Configuración guardada con éxito!" : "Settings saved successfully!");
             switchScreen('dashboard-screen');
