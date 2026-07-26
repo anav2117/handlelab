@@ -862,7 +862,8 @@
                 ]);
 
             if (error) {
-                console.error('Error al guardar en Supabase:', error.message);
+                console.error('Error detallado de Supabase:', error);
+                alert('Error al guardar en Supabase: ' + error.message);
             } else {
                 console.log('¡Progreso sincronizado en la nube con éxito!', data);
             }
@@ -1290,9 +1291,9 @@
             const ranks = [
                 { name: "Ball Bronze", symbol: "🟤", css: "ball-bronze", req: "0 XP", unlocked: true },
                 { name: "Ball Silver", symbol: "⚪", css: "ball-silver", req: "100 XP", unlocked: xp >= 100 },
-                { name: "Ball Gold (Bola de Oro)", symbol: "🟡", css: "ball-gold", req: "300 XP", unlocked: xp >= 300 },
+                { name: "Ball Gold", symbol: "🟡", css: "ball-gold", req: "300 XP", unlocked: xp >= 300 },
                 { name: "Ball Super Gold", symbol: "🔥", css: "ball-supergold", req: "400 XP", unlocked: xp >= 400 },
-                { name: "Ball Diamond (Diamante)", symbol: "💎", css: "ball-diamond", req: "600 XP", unlocked: xp >= 600 },
+                { name: "Ball Diamond", symbol: "💎", css: "ball-diamond", req: "600 XP", unlocked: xp >= 600 },
                 { name: "HandleLab Master Ball", symbol: "👑", css: "ball-master", req: "1000 XP", unlocked: xp >= 1000 }
             ];
 
