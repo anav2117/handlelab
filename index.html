@@ -6,6 +6,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>HandleLab</title>
+    <!-- Librería oficial de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         html, body {
             height: 100%;
@@ -839,6 +841,33 @@
     </div>
 
     <script>
+        // Configuración de Supabase
+        const SUPABASE_URL = 'https://fhruunueysytbiislijw.supabase.co';
+        const SUPABASE_ANON_KEY = 'Sb_publishable_wLNkgSsUsfcqznbJA2hQYw_X2VfsiLW';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function saveUserProfile(userData) {
+            const { data, error } = await supabaseClient
+                .from('profiles')
+                .upsert([
+                    {
+                        alias: userData.alias,
+                        xp: userData.xp,
+                        score: userData.score,
+                        rank: userData.rank,
+                        streak_count: userData.streakCount || 0,
+                        last_training_date: userData.lastTraining || 'None',
+                        history: userData.history || []
+                    }
+                ]);
+
+            if (error) {
+                console.error('Error al guardar en Supabase:', error.message);
+            } else {
+                console.log('¡Progreso sincronizado en la nube con éxito!', data);
+            }
+        }
+
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let currentUser = null;
         let dribbles = 0, timer = null, faseEntrenamiento = 'distancia'; 
@@ -901,6 +930,7 @@
             };
 
             localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
+            saveUserProfile(currentUser); // Sincroniza con Supabase al registrarse
             loadDashboard(currentUser);
             switchScreen('dashboard-screen');
         }
@@ -1179,6 +1209,7 @@
             else currentUser.rank = "🟤 Ball Bronze";
 
             localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
+            saveUserProfile(currentUser); // Guarda automáticamente los datos en Supabase
 
             document.getElementById('res-score').innerText = finalScore;
             document.getElementById('res-vision').innerText = Math.max(finalScore - 5, 30) + "%";
@@ -1330,6 +1361,7 @@
             currentUser.alias = document.getElementById('settings-alias').value.trim() || currentUser.alias;
             currentUser.idioma = document.getElementById('settings-idioma').value;
             localStorage.setItem('handlelab_user', JSON.stringify(currentUser));
+            saveUserProfile(currentUser); // Sincroniza cambios en Supabase
             loadDashboard(currentUser);
             alert(currentUser.idioma === 'es' ? "¡Configuración guardada con éxito!" : "Settings saved successfully!");
             switchScreen('dashboard-screen');
@@ -1351,3 +1383,4 @@
     </script>
 </body>
 </html>
+
